@@ -1,0 +1,16 @@
+echo = print string
+	-n = sans sat de ligne
+les "" analyse les caracteres $ pour les variables d'environnement et `
+les '' non
+pout "''" c'est " qui prend le dessus et vice versa
+pour `commande` lance la commande et affiche le res avec echo
+
+PAS DE STDIN
+
+cd = change de directory 
+meme regles pour les " ' ` aue echo 
+PAS DE STDIN NI DE STDOUT
+
+
+echo $? -> 0 = true
+		-> !=0 = false
