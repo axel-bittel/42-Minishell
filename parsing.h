@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/10 16:56:11 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/13 17:11:29 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_cmd
 {
 	char			***cmd;
 	char			**in;
+	char			**hear_doc;
 	char			**out_add;
 	char			**out_replace;
 }				t_cmd;

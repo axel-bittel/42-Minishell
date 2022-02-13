@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/10 17:33:56 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/13 17:13:20 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -182,9 +182,9 @@ t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 	while (cmd->cmd[idx])
 	{
 		if (*cmd->token[idx] == TOKEN_INDIR && next_is_input(cmd, idx))
-			res->in = ft_tabjoin(res->in, cmd->cmd[idx++]);
+			res->in = ft_tabjoin(res->in, cmd->cmd[idx++ + 1]);
 		else if (*cmd->token[idx] == TOKEN_DINDIR && next_is_input(cmd, idx))
-			res->in = ft_tabjoin(res->in, cmd->cmd[idx++]);
+			res->hear_doc = ft_tabjoin(res->hear_doc, cmd->cmd[idx++ + 1]);
 		else if (*cmd->token[idx] == TOKEN_REDIR && next_is_input(cmd, idx))
 			res->out_replace = ft_tabjoin(res->out_replace, cmd->cmd[idx++ + 1]);
 		else if (*cmd->token[idx] == TOKEN_ARG)
@@ -210,7 +210,7 @@ t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 			inter = 0;
 			break ;
 		}
-		else if(*cmd->token[idx] == TOKEN_BRACK_CL || next_is_token(cmd, idx, TOKEN_BRACK_CL))
+		else if(*cmd->token[idx] == TOKEN_BRACK_CL)// || next_is_token(cmd, idx, TOKEN_BRACK_CL))
 			break ;
 		else 
 			return ((print_parse_error(cmd, idx), NULL));
@@ -300,10 +300,8 @@ t_tree	*parser(t_cmd_token *cmd, int *i, int is_sub)
 			inter_a = parser(cmd, i, 1);
 			if (!inter_a)
 				return (NULL);
-			while (cmd->cmd[*i] && cmd->cmd[*i + 1] && *cmd->token[*i] != TOKEN_BRACK_CL)
-				*i = idx_end_cmd(cmd, *i) + 0;
-			if (cmd->cmd[*i] && cmd->cmd[*i + 1])
-				(*i)++;
+			while (cmd->cmd[*i] && cmd->cmd[*i + 1] && *cmd->token[*i - 1] != TOKEN_BRACK_CL)
+				*i = idx_end_cmd(cmd, *i) + 1;
 			set_tree_cmd(cmd, i, &inter_a, &final);
 		}
 		else

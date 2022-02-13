@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/02/12 19:37:31 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/13 20:19:16 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -34,7 +34,6 @@ t_cmd	*parse_cmd (char *cmd, t_list *env)
 	if (final)
 		print_tree(final);
 	//cd_bi(env, ((t_cmd *)(final->content))->cmd[0]);
-	printf("%s\n", get_val_var(env, "PWD"));
 	return (0);
 }
 void	sig_sigint(int sig)
