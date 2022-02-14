@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:27:48 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/10 17:44:14 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/14 12:52:51 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -167,6 +167,6 @@ void	expander(t_cmd_token *cmd, t_list *env)
 		if (*cmd->token[i] == TOKEN_REST)
 			expand_star(cmd->cmd + i, env);
 		if (*cmd->token[i] == TOKEN_DQUOTE || *cmd->token[i] == TOKEN_QUOTE)
-			*cmd->cmd[i] |= TOKEN_REST;
+			*cmd->token[i] |= TOKEN_REST;
 	}
 }
