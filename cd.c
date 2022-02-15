@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 20:47:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/14 23:39:16 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/15 12:24:38 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "build_in.h"
@@ -93,13 +93,11 @@ char	*get_absolute_path(t_list *env, char *path)
 	return (res);
 }
 
-int	cd_bi(t_list *env, char **cmd)
+int	is_error(char **cmd)
 {
-	DIR				*folder;
-	int				size;
-	char			*path;
-	char			**inter;
-
+	int		size;
+	char	**inter;
+	
 	size = size_tabstr(cmd);
 	if (size > 2 || size < 2)
 		return (1);
@@ -111,21 +109,34 @@ int	cd_bi(t_list *env, char **cmd)
 		return (1);
 	}
 	free_tabstr(inter);
-	path = ft_strdup(cmd[1]);
+	return (0);
+}
+
+int	cd_bi(t_list *env, char **cmd)
+{
+	DIR		*folder;
+	char	*path;
+	int		res;
+
+	if (is_error(cmd))
+		return (1);
+	path = ft_strtrim(cmd[1], " ");
 	if (!is_absolute_path(cmd[1]))
 	{
 		free (path);
 		path = get_absolute_path(env, cmd[1]);
 	}
 	folder = opendir(path);
+	res = errno;
 	if (folder)
 	{
 		add_val(env, "OLDPWD", get_val_var(env, "PWD")); 
 		add_val(env, "PWD", path); 
+		res = 0;
 	}
 	else
 		perror("BISCUIT:cd");
 	closedir(folder);
 	free (path);
-	return (errno);
+	return (res);
 }

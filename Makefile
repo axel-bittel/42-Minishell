@@ -6,7 +6,7 @@
 #    By: abittel <abittel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/18 10:24:03 by abittel           #+#    #+#              #
-#    Updated: 2022/02/15 10:12:47 by abittel          ###   ########.fr        #
+#    Updated: 2022/02/15 12:06:12 by abittel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ all : ${NAME_S}
 %.o: %.c 
 	gcc -Wall -Werror -Wextra -c -I./libft -o $@ $< -g
 ${NAME_S} :	${OSRCS} libft/libft.a 
-	gcc ${OSRCS} -Llibft -lft -lreadline -o ${NAME_S} -g
+	gcc ${OSRCS} -Llibft -lft -lreadline -lncurses -o ${NAME_S} -g
 libft/libft.a :
 	$(MAKE) -C libft/ bonus
 clean :

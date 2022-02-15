@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/14 17:54:04 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/15 19:08:21 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -168,17 +168,29 @@ int	next_is_token(t_cmd_token *cmd, int idx, int token)
 	return (0);
 }
 
+t_cmd	*init_cmd(void)
+{
+	t_cmd	*res;
+
+	res = malloc (sizeof(t_cmd));
+	res->cmd = 0;
+	res->in = 0;
+	res->out_replace = 0;
+	res->out_add = 0;
+	res->fd_out_add = 0;
+	res->fd_hear_doc = 0;
+	res->fd_out_replace = 0;
+	res->fd_in= 0;
+	return (res);
+}
+
 t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 {
 	t_cmd	*res;
 	char	**inter;
 
 	inter = 0;
-	res = malloc (sizeof(t_cmd));
-	res->cmd = 0;
-	res->in = 0;
-	res->out_replace = 0;
-	res->out_add = 0;
+	res = init_cmd();
 	while (cmd->cmd[idx])
 	{
 		if (*cmd->token[idx] == TOKEN_INDIR && next_is_input(cmd, idx))

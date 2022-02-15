@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 02:55:39 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/10 16:55:29 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/15 18:49:47 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -122,4 +122,15 @@ void	free_tabstr(char **tab_str)
 	while (tab_str[++i])
 		free(tab_str[i]);
 	free(tab_str);
+}
+
+void	free_tabint(int **tab_int)
+{
+	int	i;
+
+	i = -1;
+	while (tab_int && tab_int[++i])
+		free(tab_int[i]);
+	if(tab_int)
+		free(tab_int);
 }

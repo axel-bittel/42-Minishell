@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/02/15 00:16:40 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/15 12:23:45 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -20,6 +20,7 @@
 #include <readline/readline.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <term.h>
 
 t_sig	g_sig;
 
@@ -33,17 +34,21 @@ t_cmd	*parse_cmd (char *cmd, t_list *env)
 	res = tokenisation(cmd);
 	expander(res, env);
 	final = parser(res, &i, 0);
-	//if (final)
-		//print_tree(final);
-	exec_tree_cmd(final, env);
+	if (final)
+	{
+		print_tree (final);
+		exec_tree_cmd(final, env);
+	}
 	return (0);
 }
 void	sig_sigint(int sig)
 {
 	if (sig == SIGINT)
 		g_sig.stop_cmd = 1;
-	rl_replace_line("", 0);
-	rl_on_new_line ();
+	write(1, "\n", 1);
+	rl_replace_line("", 1);
+	rl_on_new_line();
+	rl_redisplay();
 }
 
 void	signal_catching(void)
