@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 02:52:24 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/03 17:12:02 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/14 17:40:00 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -49,6 +49,21 @@ int	get_idx_until_c(char *cmd, int start, char c)
 	return (-1);
 }
 
+int	get_idx_until_c_and_space(char *cmd, int start, char c)
+{
+	int	i;
+
+	i = get_idx_until_c(cmd, start, c);
+	while (cmd[++i])
+	{
+		if (cmd[i] == ' ' && cmd[i + 1] != ' ')
+			return (i);
+		else if(cmd[i] != ' ')
+			return (i - 1);
+	}
+	return (-1);
+}
+
 int	get_idx_until_new_tok(char *cmd, int start)
 {
 	int	i;
@@ -78,8 +93,8 @@ int	get_end_tok(char *cmd, int i)
 	tok = is_token(cmd[i]);
 	if (tok == TOKEN_DQUOTE || tok == TOKEN_QUOTE)
 	{
-		if (get_idx_until_c(cmd, i, cmd[i]) != -1)
-			return (get_idx_until_c(cmd, i, cmd[i]));
+		if (get_idx_until_c_and_space(cmd, i, cmd[i]) != -1)
+			return (get_idx_until_c_and_space(cmd, i, cmd[i]));
 	}
 	else if (tok == TOKEN_ARG)
 	{

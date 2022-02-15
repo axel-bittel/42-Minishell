@@ -6,12 +6,13 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/02/14 12:54:04 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/15 00:16:40 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
 #include "build_in.h"
 #include "env_manager.h"
+#include "exec_cmd.h"
 #include "libft.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -32,8 +33,9 @@ t_cmd	*parse_cmd (char *cmd, t_list *env)
 	res = tokenisation(cmd);
 	expander(res, env);
 	final = parser(res, &i, 0);
-	if (final)
-		print_tree(final);
+	//if (final)
+		//print_tree(final);
+	exec_tree_cmd(final, env);
 	return (0);
 }
 void	sig_sigint(int sig)

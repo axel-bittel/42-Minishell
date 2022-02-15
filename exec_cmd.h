@@ -1,21 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   build_in.h                                         :+:      :+:    :+:   */
+/*   exec_cmd.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/09 21:19:32 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/15 10:11:50 by abittel          ###   ########.fr       */
+/*   Created: 2022/02/14 20:16:47 by abittel           #+#    #+#             */
+/*   Updated: 2022/02/14 20:18:15 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILD_IN_H
-# define BUILD_IN_H
-#include "libft.h"
+#ifndef EXEC_CMD_H
+# define EXEC_CMD_H
 
-int	cd_bi(t_list *env, char **cmd);
-int	echo_bi(char **cmd);
-int	pwd_bi(t_list *env);
-int	env_bi(char **env);
+int	exec_tree_cmd(t_tree *cmd, t_list *env);
 #endif

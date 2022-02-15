@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   build_in.h                                         :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/09 21:19:32 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/15 10:11:50 by abittel          ###   ########.fr       */
+/*   Created: 2022/02/15 10:09:32 by abittel           #+#    #+#             */
+/*   Updated: 2022/02/15 10:13:23 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-#ifndef BUILD_IN_H
-# define BUILD_IN_H
 #include "libft.h"
+#include "build_in.h"
+#include <unistd.h>
 
-int	cd_bi(t_list *env, char **cmd);
-int	echo_bi(char **cmd);
-int	pwd_bi(t_list *env);
-int	env_bi(char **env);
-#endif
+int	env_bi(char **env)
+{
+	int	i;
+
+	while (env[++i])
+	{
+		ft_putstr_fd(env[i], 1);
+		write (1, "\n", 1);
+	}
+	return (1);
+}

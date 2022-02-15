@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/13 17:11:29 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/15 10:17:13 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,5 @@ t_tree		*parser(t_cmd_token *cmd, int *i, int is_sub);
 char		***ft_tabtabjoin(char ***tab, char **tab_add);
 void		print_tree(t_tree *tree);
 void		expander(t_cmd_token *cmd, t_list *env);
+void		free_tabstr(char **tab_str);
 #endif

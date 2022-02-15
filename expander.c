@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:27:48 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/14 12:52:51 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/14 16:40:59 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -148,6 +148,35 @@ void	expand_star(char **cmd, t_list *env)
 	}
 }
 
+int	nb_chr_in_str(char *str, char chr)
+{
+	int	i;
+	int	res;
+
+	i = -1;
+	res = 0;
+	while (str[++i])
+		if (str[i] == chr)
+			res++;
+	return (res);
+}
+
+char	*delete_chr_in_str(char *str, char chr)
+{
+	int		i;
+	int		j;
+	char	*res;
+
+	i = -1;
+	j = -1;
+	res = malloc(sizeof(char) * (ft_strlen(str) - nb_chr_in_str(str, chr) + 1));
+	while (str[++i])
+		if (str[i] != chr)
+			res[++j] = str[i];
+	res[(ft_strlen(str) - nb_chr_in_str(str, chr))] = 0;
+	return (res);
+}
+
 void	expander(t_cmd_token *cmd, t_list *env)
 {
 	int		i;
@@ -159,7 +188,10 @@ void	expander(t_cmd_token *cmd, t_list *env)
 		if (*cmd->token[i] == TOKEN_DQUOTE || *cmd->token[i] == TOKEN_QUOTE)
 		{
 			inter = cmd->cmd[i];
-			cmd->cmd[i] = ft_substrdup(cmd->cmd[i], 1, ft_strlen(cmd->cmd[i]) - 2);
+			if (*cmd->token[i] == TOKEN_DQUOTE)
+				cmd->cmd[i] = delete_chr_in_str(cmd->cmd[i], '\"');
+			if (*cmd->token[i] == TOKEN_QUOTE)
+				cmd->cmd[i] = delete_chr_in_str(cmd->cmd[i], '\'');
 			free(inter);
 		}
 		if (*cmd->token[i] == TOKEN_REST || *cmd->token[i] == TOKEN_DQUOTE)

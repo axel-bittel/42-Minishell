@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 20:47:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/12 20:03:19 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/14 23:39:16 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "build_in.h"
@@ -93,7 +93,7 @@ char	*get_absolute_path(t_list *env, char *path)
 	return (res);
 }
 
-void	cd_bi(t_list *env, char **cmd)
+int	cd_bi(t_list *env, char **cmd)
 {
 	DIR				*folder;
 	int				size;
@@ -102,13 +102,13 @@ void	cd_bi(t_list *env, char **cmd)
 
 	size = size_tabstr(cmd);
 	if (size > 2 || size < 2)
-		return ;
+		return (1);
 	inter = ft_split(cmd[1], ' ');
 	if (size_tabstr(inter) > 1)
 	{
 		ft_putstr_fd("cd: Too mutch argument", 2);
 		free_tabstr(inter);
-		return ;
+		return (1);
 	}
 	free_tabstr(inter);
 	path = ft_strdup(cmd[1]);
@@ -127,4 +127,5 @@ void	cd_bi(t_list *env, char **cmd)
 		perror("BISCUIT:cd");
 	closedir(folder);
 	free (path);
+	return (errno);
 }

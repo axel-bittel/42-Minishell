@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/13 17:13:20 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/14 17:54:04 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -31,7 +31,7 @@ int	idx_end_cmd(t_cmd_token *cmd, int idx)
 
 int	is_input(t_cmd_token *cmd, int idx)
 {
-	if (*cmd->cmd[idx] && ((*cmd->token[idx] & TOKEN_REST) || \
+	if (cmd->cmd[idx] && ((*cmd->token[idx] & TOKEN_REST) || \
 *cmd->token[idx] == TOKEN_DQUOTE || *cmd->token[idx] == TOKEN_QUOTE))
 		return (1);
 	return (0);
@@ -204,7 +204,7 @@ t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 			res->cmd = ft_tabtabjoin(res->cmd, inter);
 			inter = 0;
 		}
-		else if (!is_input(cmd, idx) && !is_redir(cmd, idx) && ft_strncmp(cmd->cmd[idx], "|", 2) && (next_is_input(cmd, idx) || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
+		else if (!is_input(cmd, idx) && !is_redir(cmd, idx) && ft_strcmp(cmd->cmd[idx], "|") && (next_is_input(cmd, idx) || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
 		{
 			res->cmd = ft_tabtabjoin(res->cmd, inter);
 			inter = 0;
