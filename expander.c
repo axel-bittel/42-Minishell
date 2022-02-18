@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:27:48 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/14 16:40:59 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/18 17:52:48 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -23,7 +23,7 @@ char	*insert_str(char *str, char *str_ins, int *deb, int end)
 
 	i = -1;
 	j = -1;
-	k = end - 1;
+	k = end;
 	res = malloc (sizeof(char) * (ft_strlen(str_ins) + ft_strlen(str) - (*deb - end + 1) + 1));
 	while (++i < *deb)
 		res[i] = str[i];
@@ -31,9 +31,10 @@ char	*insert_str(char *str, char *str_ins, int *deb, int end)
 		res[i + j] = str_ins[j];
 	while (str[++k])
 		res[i + j++] = str[k];
+	res[i + j] = 0;
+	*deb += ft_strlen(str_ins) - 1;
 	free(str);
 	free(str_ins);
-	*deb += ft_strlen(str_ins);
 	return (res);
 }
 
@@ -41,15 +42,21 @@ int	get_end_VAR(char *cmd, int i)
 {
 	int	idx_dollard;
 	int	idx_space;
+	int	idx_slash;
 
 	idx_space = get_idx_until_c(cmd, i, ' ');
 	idx_dollard = get_idx_until_c(cmd, i, '$');
-	if ((idx_dollard < idx_space) && idx_dollard != -1)
-		return (idx_dollard);
-	if (idx_dollard != -1)
-		return (idx_dollard);
+	idx_slash= get_idx_until_c(cmd, i, '/');
+	if ((idx_dollard <= idx_space || idx_space == -1) && \
+(idx_dollard <= idx_slash || idx_slash == -1) && idx_dollard != -1)
+		return (idx_dollard - 1);
+	else if (idx_space != -1 && (idx_space <= idx_slash || idx_slash == -1) \
+&& (idx_space <= idx_dollard || idx_dollard == -1))
+		return (idx_space - 1);
+	else if (idx_slash != -1)
+		return (idx_slash - 1);
 	else
-		return (ft_strlen(cmd));
+		return (ft_strlen(cmd) - 1);
 }
 
 void	expand_VAR(char **cmd, t_list *env)
@@ -70,7 +77,7 @@ void	expand_VAR(char **cmd, t_list *env)
 
 int	get_begin_word(char *cmd, int i)
 {
-	while (i >= 0 && is_token(cmd[i]) != TOKEN_SPACE)
+	while (i >= 0 && (is_token(cmd[i]) != TOKEN_SPACE && cmd[i] != ' '))
 		i--;
 	return (i + 1);
 }
@@ -121,9 +128,6 @@ char	*get_corespond_words(t_list *env, char *corres)
 		}
 		f_read = readdir(folder);
 	}
-	inter = res;
-	res = ft_strtrim(res, " ");
-	free(inter);
 	return (res);
 }
 
@@ -141,7 +145,7 @@ void	expand_star(char **cmd, t_list *env)
 			end_w = get_idx_until_c(*cmd, i, ' '); 
 			if (end_w == -1)
 				end_w = ft_strlen(*cmd) - 1;
-			inter = ft_substrdup(*cmd, get_begin_word(*cmd, i), end_w);
+			inter = ft_substrdup(*cmd, get_begin_word(*cmd, i), get_end_VAR(*cmd, i));
 			i = get_begin_word(*cmd, i);
 			*cmd = insert_str(*cmd, get_corespond_words(env, inter), &i, get_end_VAR(*cmd, i));
 		}
@@ -171,9 +175,12 @@ char	*delete_chr_in_str(char *str, char chr)
 	j = -1;
 	res = malloc(sizeof(char) * (ft_strlen(str) - nb_chr_in_str(str, chr) + 1));
 	while (str[++i])
+	{
 		if (str[i] != chr)
 			res[++j] = str[i];
+	}
 	res[(ft_strlen(str) - nb_chr_in_str(str, chr))] = 0;
+	free(str);
 	return (res);
 }
 

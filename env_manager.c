@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/13 20:16:54 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/18 17:23:51 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -89,10 +89,12 @@ void	ft_lst_add_back_var(t_list *lst, char *name, char *val)
 
 void	add_val(t_list *lst, char *name, char *val)
 {
+	char	*res;
 	t_list	*inter;
 
 	inter = lst;
-	if (!get_val_var(lst, name))
+	res = get_val_var(lst, name);
+	if (!res[0])
 		ft_lst_add_back_var(lst, ft_strdup(name), ft_strdup(val));
 	else
 	{

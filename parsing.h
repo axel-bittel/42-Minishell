@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/15 18:55:35 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/17 15:02:16 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@
 # define TOKEN_PIPE 16384 
 # define OP_AND 1
 # define OP_OR 2
+# define OP_PIPE 3
+# define OP_BRACK 4
 # include "ft_tree.h"
 # include "libft.h"
 
@@ -38,17 +40,19 @@ typedef struct s_cmd_token
 	int				**token;
 }				t_cmd_token;
 
-typedef struct s_cmd
+typedef struct	s_cmd
 {
-	char			***cmd;
-	char			**in;
-	int				**fd_in;
-	char			**hear_doc;
-	int				**fd_hear_doc;
-	char			**out_add;
-	int				**fd_out_add;
-	char			**out_replace;
-	int				**fd_out_replace;
+	char	***cmd;
+	char	**in;
+	int		**fd_in;
+	char	**hear_doc;
+	int		**fd_hear_doc;
+	char	**out_add;
+	int		**fd_out_add;
+	char	**out_replace;
+	int		**fd_out_replace;
+	int		last_is_add;
+	int		last_is_in;
 }				t_cmd;
 
 typedef struct s_sig

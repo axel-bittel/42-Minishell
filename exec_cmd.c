@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/15 22:00:16 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/17 17:44:19 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -28,7 +28,7 @@ int	is_build_in(char *str)
 	res = 0;
 	str_trim = ft_strtrim(str, " ");
 	if(!ft_strcmp(str_trim, "cd") || !ft_strcmp(str_trim, "env") || \
-!ft_strcmp(str_trim, "pwd") || !ft_strcmp(str_trim, "echo"))
+!ft_strcmp(str_trim, "pwd") || !ft_strcmp(str_trim, "echo") || !ft_strcmp(str_trim, "export"))
 		res = 1;
 	free(str_trim);
 	return (res);
@@ -100,19 +100,29 @@ int	exec_build_in(char **cmd, t_list *env)
 		res = echo_bi(cmd);
 	if (!ft_strcmp("env", cmd_trim))
 		res = env_bi(env_chr);
+	if (!ft_strcmp("export", cmd_trim))
+		res = export_bi(cmd, env);
 	free_tabstr(env_chr);
 	free (cmd_trim);
 	return (res);
 }
 
+int	exec_sub_cmd(char **cmd, t_list *env, int *pipe)
+{
+	(void)cmd;
+	(void)env;
+	(void)pipe;
+	return (0);
+}
+
 int	exec_cmd(t_cmd *cmd, t_list *env)
 {
 	int	i;
+	int	old_pipe;
+	int	pipe_proc[2];
 	int	status;
-	struct rusage	*rus;
 
 	i = -1;
-	rus = 0;
 	check_file(cmd->in, &(cmd->fd_in), O_APPEND);
 	check_file(cmd->out_replace, &(cmd->fd_out_replace), O_APPEND | O_TRUNC | O_CREAT);
 	check_file(cmd->out_add, &(cmd->fd_out_add), O_APPEND | O_CREAT);
@@ -121,7 +131,16 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 		if(is_build_in(cmd->cmd[i][0]))
 			status = exec_build_in(cmd->cmd[i], env);
 		else 
-			exec_sub_cmd(cmd->cmd[i], get_env_in_char(env));
+		{
+			if (cmd->cmd[i + 1])
+			{
+				(void)old_pipe;
+				old_pipe = pipe_proc[1];
+				pipe(pipe_proc);
+			}
+			if (fork() == 0)
+				exec_sub_cmd(cmd->cmd[i], env, pipe_proc);
+		}
 	}
 	return (status);
 }

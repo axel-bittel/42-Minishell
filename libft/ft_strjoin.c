@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 10:17:18 by abittel           #+#    #+#             */
-/*   Updated: 2021/08/06 02:09:20 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/16 21:10:29 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -17,6 +17,8 @@ static size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
+	if (!s)
+		return (0);
 	while (s[i])
 		i = i + 1;
 	return (i);

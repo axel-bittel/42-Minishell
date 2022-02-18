@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/15 19:08:21 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/17 16:24:19 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -33,6 +33,14 @@ int	is_input(t_cmd_token *cmd, int idx)
 {
 	if (cmd->cmd[idx] && ((*cmd->token[idx] & TOKEN_REST) || \
 *cmd->token[idx] == TOKEN_DQUOTE || *cmd->token[idx] == TOKEN_QUOTE))
+		return (1);
+	return (0);
+}
+
+int	is_op(t_cmd_token *cmd, int idx)
+{
+	if (cmd->cmd[idx] && ((*cmd->token[idx] == TOKEN_AND) || \
+*cmd->token[idx] == TOKEN_PIPE || *cmd->token[idx] == TOKEN_OR))
 		return (1);
 	return (0);
 }
@@ -92,8 +100,15 @@ void	print_tree(t_tree *tree)
 			printf("||\n");
 		else if (*(int *)tree->content == OP_AND)
 			printf("&&\n");
-		printf("TREE B :\n");
-		print_tree(tree->f_b);
+		else if (*(int *)tree->content == OP_PIPE)
+			printf("|\n");
+		else if (*(int *)tree->content == OP_BRACK)
+			printf("()\n");
+		if (*(int *)tree->content != OP_BRACK)
+		{
+			printf("TREE B :\n");
+			print_tree(tree->f_b);
+		}
 	}
 }
 
@@ -184,48 +199,85 @@ t_cmd	*init_cmd(void)
 	return (res);
 }
 
+int	get_cmd_cond_elem_token(t_cmd_token *cmd, int idx, t_cmd *res, char **inter)
+{
+	if (*cmd->token[idx] == TOKEN_INDIR && next_is_input(cmd, idx))
+	{
+		res->in = ft_tabjoin(res->in, cmd->cmd[idx++ + 1]);
+		res->last_is_in = 1;
+	}
+	else if (*cmd->token[idx] == TOKEN_DINDIR && next_is_input(cmd, idx))
+	{
+		res->hear_doc = ft_tabjoin(res->hear_doc, cmd->cmd[idx++ + 1]);
+		res->last_is_in = 0;
+	}
+	else if (*cmd->token[idx] == TOKEN_REDIR && next_is_input(cmd, idx))
+	{
+		res->out_replace = ft_tabjoin(res->out_replace, cmd->cmd[idx++ + 1]);
+		res->last_is_add = 0;
+	}
+	else if (*cmd->token[idx] == TOKEN_ARG)
+		inter = ft_tabjoin(inter, cmd->cmd[idx]);
+	else if (*cmd->token[idx] == TOKEN_DREDIR && next_is_input(cmd, idx))
+	{
+		res->out_add = ft_tabjoin(res->out_add, cmd->cmd[idx++ + 1]);
+		res->last_is_add = 1;
+	}
+	else
+		return (0);
+	return (1);
+}
+
+int	get_cmd_cond_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, char ***inter)
+{
+	if ((*cmd->token[idx] & TOKEN_REST) && idx && (*cmd->token[idx - 1] & TOKEN_REST))
+		str_join_to_last(*inter, cmd->cmd[idx]);
+	else if (is_input(cmd, idx))
+	{
+		if (!(*inter))
+			*cmd->token[idx] = TOKEN_CMD;
+		*inter = ft_tabjoin(*inter, cmd->cmd[idx]);
+	}
+	else if (*cmd->token[idx] == TOKEN_PIPE && (next_is_input(cmd, idx) \
+|| next_is_token(cmd, idx, TOKEN_BRACK_OP)))
+	{
+		res->cmd = ft_tabtabjoin(res->cmd, *inter);
+		*inter = 0;
+	}
+	else if (!is_input(cmd, idx) && !is_redir(cmd, idx) && is_op(cmd, idx) &&\
+(next_is_input(cmd, idx) || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
+	{
+		res->cmd = ft_tabtabjoin(res->cmd, *inter);
+		*inter = 0;
+		return (2);
+	}
+	else if(*cmd->token[idx] == TOKEN_BRACK_CL)// || next_is_token(cmd, idx, TOKEN_BRACK_CL))
+		return (2);
+	else
+		return (0);
+	return (1);
+}
+
 t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 {
 	t_cmd	*res;
 	char	**inter;
+	int		inter_res;
 
 	inter = 0;
 	res = init_cmd();
 	while (cmd->cmd[idx])
 	{
-		if (*cmd->token[idx] == TOKEN_INDIR && next_is_input(cmd, idx))
-			res->in = ft_tabjoin(res->in, cmd->cmd[idx++ + 1]);
-		else if (*cmd->token[idx] == TOKEN_DINDIR && next_is_input(cmd, idx))
-			res->hear_doc = ft_tabjoin(res->hear_doc, cmd->cmd[idx++ + 1]);
-		else if (*cmd->token[idx] == TOKEN_REDIR && next_is_input(cmd, idx))
-			res->out_replace = ft_tabjoin(res->out_replace, cmd->cmd[idx++ + 1]);
-		else if (*cmd->token[idx] == TOKEN_ARG)
-			inter = ft_tabjoin(inter, cmd->cmd[idx]);
-		else if (*cmd->token[idx] == TOKEN_DREDIR && next_is_input(cmd, idx))
-			res->out_add = ft_tabjoin(res->out_add, cmd->cmd[idx++ + 1]);
-		else if ((*cmd->token[idx] & TOKEN_REST) && idx && (*cmd->token[idx - 1] & TOKEN_REST))
-			str_join_to_last(inter, cmd->cmd[idx]);
-		else if (is_input(cmd, idx))
+		if (get_cmd_cond_elem_token(cmd, idx, res, inter))
+			continue ;
+		else
 		{
-			if (!inter)
-				*cmd->token[idx] = TOKEN_CMD;
-			inter = ft_tabjoin(inter, cmd->cmd[idx]);
+			inter_res = get_cmd_cond_add_rest(cmd, idx, res, &inter);
+			if(inter_res == 2)
+				break ;
+			else if(!inter_res)
+				return ((print_parse_error(cmd, idx), NULL));
 		}
-		else if (*cmd->token[idx] == TOKEN_PIPE && (next_is_input(cmd, idx) || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
-		{
-			res->cmd = ft_tabtabjoin(res->cmd, inter);
-			inter = 0;
-		}
-		else if (!is_input(cmd, idx) && !is_redir(cmd, idx) && ft_strcmp(cmd->cmd[idx], "|") && (next_is_input(cmd, idx) || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
-		{
-			res->cmd = ft_tabtabjoin(res->cmd, inter);
-			inter = 0;
-			break ;
-		}
-		else if(*cmd->token[idx] == TOKEN_BRACK_CL)// || next_is_token(cmd, idx, TOKEN_BRACK_CL))
-			break ;
-		else 
-			return ((print_parse_error(cmd, idx), NULL));
 		idx++;
 	}
 	if (inter)
@@ -241,9 +293,8 @@ int	set_tree_cmd(t_cmd_token *cmd, int *i, t_tree **inter_a, t_tree **final)
 		ft_treeadd_f(*final, *inter_a, 0);
 	else
 		*final = *inter_a;
-	if (cmd->token[*i] && ((*cmd->token[*i] == TOKEN_OR && \
-!ft_strncmp(cmd->cmd[*i], "||", 2)) || (*cmd->token[*i] == TOKEN_AND && \
-!ft_strncmp(cmd->cmd[*i], "&&", 2))))
+	if (cmd->token[*i] && (*cmd->token[*i] == TOKEN_OR || \
+*cmd->token[*i] == TOKEN_AND || *cmd->token[*i] == TOKEN_PIPE || (*cmd->token[*i] == TOKEN_BRACK_CL && *cmd->token[*i - 1] == TOKEN_BRACK_CL)))
 	{
 		if (*final)
 			*inter_a = *final;
@@ -252,8 +303,14 @@ int	set_tree_cmd(t_cmd_token *cmd, int *i, t_tree **inter_a, t_tree **final)
 			*op_inter = OP_AND;
 		else if (*cmd->token[*i] == TOKEN_OR)
 			*op_inter = OP_OR;
+		else if (*cmd->token[*i] == TOKEN_PIPE)
+			*op_inter = OP_PIPE;
+		else if (*cmd->token[*i] == TOKEN_BRACK_CL && *cmd->token[*i - 1] == TOKEN_BRACK_CL)
+			*op_inter = OP_BRACK;
 		*final = ft_treenew(op_inter);
 		ft_treeadd_f(*final, *inter_a, 1);
+		if (*cmd->token[*i] == TOKEN_BRACK_CL)
+			ft_treeadd_f(*final, 0, 0);
 	}
 	return (1);
 }
@@ -314,7 +371,10 @@ t_tree	*parser(t_cmd_token *cmd, int *i, int is_sub)
 				return (NULL);
 			while (cmd->cmd[*i] && cmd->cmd[*i + 1] && *cmd->token[*i - 1] != TOKEN_BRACK_CL)
 				*i = idx_end_cmd(cmd, *i) + 1;
-			set_tree_cmd(cmd, i, &inter_a, &final);
+			if (is_sub)
+				set_tree_cmd(cmd, i, &inter_a, &final);
+			else
+				final = inter_a;
 		}
 		else
 			return (print_parse_error(cmd, *i), free_tree(inter_a), free_tree(final), NULL);
