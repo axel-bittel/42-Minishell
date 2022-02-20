@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/17 17:44:19 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/18 17:57:51 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -123,6 +123,7 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 	int	status;
 
 	i = -1;
+	old_pipe = 0;
 	check_file(cmd->in, &(cmd->fd_in), O_APPEND);
 	check_file(cmd->out_replace, &(cmd->fd_out_replace), O_APPEND | O_TRUNC | O_CREAT);
 	check_file(cmd->out_add, &(cmd->fd_out_add), O_APPEND | O_CREAT);
@@ -134,7 +135,7 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 		{
 			if (cmd->cmd[i + 1])
 			{
-				(void)old_pipe;
+				if (old_pipe)
 				old_pipe = pipe_proc[1];
 				pipe(pipe_proc);
 			}
