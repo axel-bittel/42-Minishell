@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/21 14:34:44 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 21:47:31 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -115,16 +115,21 @@ int	exec_sys_cmd(char **args, t_list *envp)
 	char	*inter_path;
 
 	i = -1;
-	paths = ft_split(get_val_var(envp, "PATH"), ':');
-	while (paths[++i])
+	if (!is_absolute_path(args[0]))
 	{
-		inter_path = ft_strjoin(paths[i], "/");
-		f_cmd = ft_strjoin(inter_path, args[0]);
-		if (access(f_cmd, F_OK | X_OK) == 0)
-			execve(f_cmd, args, get_env_in_char(envp));
-		free(inter_path);
-		free(f_cmd);
+		paths = ft_split(get_val_var(envp, "PATH"), ':');
+		while (paths[++i])
+		{
+			inter_path = ft_strjoin(paths[i], "/");
+			f_cmd = ft_strjoin(inter_path, args[0]);
+			if (access(f_cmd, F_OK | X_OK) == 0)
+				execve(f_cmd, args, get_env_in_char(envp));
+			free(inter_path);
+			free(f_cmd);
+		}
 	}
+	else
+		execve(args[0], args, get_env_in_char(envp));
 	f_cmd = ft_strjoin("BISCUIT:", args[0]);
 	perror(f_cmd);
 	free(f_cmd);
@@ -142,11 +147,13 @@ void	close_pipes(t_cmd *cmd, int idx)
 
 int	exec_sub_cmd(t_cmd *cmd, int i, t_list *env)
 {
-	close_pipes(cmd, i);
+	//close_pipes(cmd, i);
 	if (cmd->cmd[i]->fd_in)
 		dup2(*cmd->cmd[i]->fd_in[size_tabint(cmd->cmd[i]->fd_in) - 1], 0);
 	else if(i)
-		dup2(cmd->pipes[i][0], 0);
+		dup2(cmd->pipes[i - 1][1], 0);
+	else
+		close(0);
 	if (cmd->cmd[i]->fd_out_add || cmd->cmd[i]->fd_out_replace)
 	{
 		if(cmd->cmd[i]->last_is_add == 1)
@@ -154,8 +161,7 @@ int	exec_sub_cmd(t_cmd *cmd, int i, t_list *env)
 		if(cmd->cmd[i]->last_is_add == 0)
 			dup2(*cmd->cmd[i]->fd_out_replace[size_tabint(cmd->cmd[i]->fd_out_replace) - 1], 1);
 	}
-	else if (i)
-		dup2(cmd->pipes[i][1], 0);
+	cmd->cmd[i]->cmd = ft_tabstrtrim(cmd->cmd[i]->cmd);
 	exec_sys_cmd(cmd->cmd[i]->cmd, env);
 	return (0);
 }
@@ -185,19 +191,22 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 	get_pipes(cmd);
 	while (cmd->cmd[++i])
 	{
-		check_file(cmd->cmd[i]->in, &(cmd->cmd[i]->fd_in), O_APPEND);
-		check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), O_APPEND | O_TRUNC | O_CREAT);
-		check_file(cmd->cmd[i]->out_add, &(cmd->cmd[i]->fd_out_add), O_APPEND | O_CREAT);
+		cmd->cmd[i]->in = ft_tabstrtrim(cmd->cmd[i]->in);
+		cmd->cmd[i]->out_replace = ft_tabstrtrim(cmd->cmd[i]->out_replace);
+		cmd->cmd[i]->out_add = ft_tabstrtrim(cmd->cmd[i]->out_add);
+		if(check_file(cmd->cmd[i]->in, &(cmd->cmd[i]->fd_in), O_APPEND) || \
+check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), O_APPEND | O_TRUNC | O_CREAT) || \
+check_file(cmd->cmd[i]->out_add, &(cmd->cmd[i]->fd_out_add), O_APPEND | O_CREAT))
+			return (127);
 		if(is_build_in(cmd->cmd[i]->cmd[0]))
 			status = exec_build_in(cmd->cmd[i]->cmd, env);
 		else 
 		{
 			if (fork() == 0)
 				exec_sub_cmd(cmd, i, env);
-			else
-				waitpid(-1, 0, 0);
 		}
 	}
+	waitpid(-1, 0, 0);
 	return (status);
 }
 

@@ -6,34 +6,14 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/18 17:23:51 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 16:22:22 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
 #include "libft.h"
 #include "env_manager.h"
+#include "parsing.h"
 
-char	*ft_tabstrjoin(char **tab)
-{
-	int		i;
-	char	*inter;
-	char	*res;
-
-	i = -1;
-	inter = 0;
-	res = 0;
-	while (tab[++i])
-	{
-		inter = res;
-		if (res)
-			res = ft_strjoin(res, tab[i]);
-		else
-			res = ft_strdup(tab[i]);
-		if (inter)
-			free(inter);
-	}
-	return (res);
-}
 
 t_list	*get_fst_env(char **envp)
 {

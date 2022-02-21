@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/02/15 12:23:45 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 21:42:09 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -36,7 +36,7 @@ t_cmd	*parse_cmd (char *cmd, t_list *env)
 	final = parser(res, &i, 0);
 	if (final)
 	{
-		print_tree (final);
+		//print_tree (final);
 		exec_tree_cmd(final, env);
 	}
 	return (0);

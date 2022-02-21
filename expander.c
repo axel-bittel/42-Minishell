@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:27:48 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/18 17:52:48 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 16:01:20 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -187,19 +187,19 @@ char	*delete_chr_in_str(char *str, char chr)
 void	expander(t_cmd_token *cmd, t_list *env)
 {
 	int		i;
-	char	*inter;
+	//char	*inter;
 
 	i = -1;
 	while (++i < size_tabint(cmd->token))
 	{
 		if (*cmd->token[i] == TOKEN_DQUOTE || *cmd->token[i] == TOKEN_QUOTE)
 		{
-			inter = cmd->cmd[i];
+			//inter = cmd->cmd[i];
 			if (*cmd->token[i] == TOKEN_DQUOTE)
 				cmd->cmd[i] = delete_chr_in_str(cmd->cmd[i], '\"');
 			if (*cmd->token[i] == TOKEN_QUOTE)
 				cmd->cmd[i] = delete_chr_in_str(cmd->cmd[i], '\'');
-			free(inter);
+			//free(inter);
 		}
 		if (*cmd->token[i] == TOKEN_REST || *cmd->token[i] == TOKEN_DQUOTE)
 			expand_VAR(cmd->cmd + i, env);

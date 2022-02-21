@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 20:47:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/15 12:24:38 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 17:18:14 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "build_in.h"
@@ -99,9 +99,9 @@ int	is_error(char **cmd)
 	char	**inter;
 	
 	size = size_tabstr(cmd);
-	if (size > 2 || size < 2)
+	if (size < 2)
 		return (1);
-	inter = ft_split(cmd[1], ' ');
+	inter = ft_split(ft_tabstrjoin(cmd + 1), ' ');
 	if (size_tabstr(inter) > 1)
 	{
 		ft_putstr_fd("cd: Too mutch argument", 2);
@@ -120,7 +120,7 @@ int	cd_bi(t_list *env, char **cmd)
 
 	if (is_error(cmd))
 		return (1);
-	path = ft_strtrim(cmd[1], " ");
+	path = ft_strtrim(ft_tabstrjoin(cmd + 1), " ");
 	if (!is_absolute_path(cmd[1]))
 	{
 		free (path);

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/21 13:24:30 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 15:35:29 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -241,9 +241,9 @@ int	get_cmd_cond_elem_token(t_cmd_token *cmd, int *idx, t_sub_cmd **inter)
 
 int	get_cmd_cond_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, t_sub_cmd **inter)
 {
-	if ((*cmd->token[idx] & TOKEN_REST) && idx && (*cmd->token[idx - 1] & TOKEN_REST))
-		str_join_to_last((*inter)->cmd, cmd->cmd[idx]);
-	else if (is_input(cmd, idx))
+	//if ((*cmd->token[idx] & TOKEN_REST) && idx && (*cmd->token[idx - 1] & TOKEN_REST))
+	//	str_join_to_last((*inter)->cmd, cmd->cmd[idx]);
+	if (is_input(cmd, idx))
 	{
 		if (!(*inter)->cmd)
 			*cmd->token[idx] = TOKEN_CMD;
@@ -252,7 +252,6 @@ int	get_cmd_cond_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, t_sub_cmd **int
 	else if (*cmd->token[idx] == TOKEN_PIPE && (next_is_input(cmd, idx) \
 || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
 	{
-		//(*inter)->cmd = ft_tabjoin((*inter)->cmd, cmd->cmd[idx]);
 		res->cmd = ft_cmdjoin(res->cmd, *inter);
 		*inter = init_sub_cmd();
 	}

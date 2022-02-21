@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 02:55:39 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/21 11:44:57 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 21:34:27 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -165,4 +165,44 @@ void	free_tabint(int **tab_int)
 		free(tab_int[i]);
 	if(tab_int)
 		free(tab_int);
+}
+
+char	*ft_tabstrjoin(char **tab)
+{
+	int		i;
+	char	*inter;
+	char	*res;
+
+	i = -1;
+	inter = 0;
+	res = 0;
+	while (tab[++i])
+	{
+		inter = res;
+		if (res)
+			res = ft_strjoin(res, tab[i]);
+		else
+			res = ft_strdup(tab[i]);
+		if (inter)
+			free(inter);
+	}
+	return (res);
+}
+
+char	**ft_tabstrtrim(char **tab)
+{
+	int		i;
+	char	**res;
+
+	i = 0;
+	res = malloc (sizeof(char *) * (size_tabstr(tab) + 1));
+	while(tab && tab[i])
+	{
+		res[i] = ft_strtrim(tab[i], " ");
+		i++;
+	}
+	res[i] = NULL;
+	if (tab)
+		free_tabstr(tab);
+	return (res);
 }
