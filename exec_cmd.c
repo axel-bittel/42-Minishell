@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/21 21:47:31 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 22:20:03 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -57,6 +57,17 @@ char	*read_heardoc(char *end)
 		}
 	}
 	return (res);
+}
+
+int	read_heardoc(t_sub_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (hear_doc && hear_doc[i])
+	{
+		open("/tmp/")
+	}
 }
 
 int	check_file(char **names, int ***fd_tab, int ARG)

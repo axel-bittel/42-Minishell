@@ -1,16 +1,10 @@
-echo = print string
-	-n = sans sat de ligne
-les "" analyse les caracteres $ pour les variables d'environnement et `
-les '' non
-pout "''" c'est " qui prend le dessus et vice versa
-pour `commande` lance la commande et affiche le res avec echo
+TO DO :
 
-PAS DE STDIN
-
-cd = change de directory 
-meme regles pour les " ' ` aue echo 
-PAS DE STDIN NI DE STDOUT
-
-
-echo $? -> 0 = true
-		-> !=0 = false
+Finish Hear Doc : create files and return fd.
+Make exit code for process
+Find how to fork build_in : remake cd and export
+Make unset build in
+Manage signals
+Add history
+find leaks
+Norm
