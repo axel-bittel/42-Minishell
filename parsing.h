@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/17 15:02:16 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 13:52:13 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ typedef struct s_cmd_token
 	int				**token;
 }				t_cmd_token;
 
-typedef struct	s_cmd
+typedef struct	s_sub_cmd
 {
-	char	***cmd;
+	char	**cmd;
 	char	**in;
 	int		**fd_in;
 	char	**hear_doc;
@@ -53,6 +53,12 @@ typedef struct	s_cmd
 	int		**fd_out_replace;
 	int		last_is_add;
 	int		last_is_in;
+}			t_sub_cmd;
+
+typedef struct	s_cmd
+{
+	t_sub_cmd	**cmd;
+	int			**pipes;
 }				t_cmd;
 
 typedef struct s_sig
@@ -72,9 +78,12 @@ char		**ft_tabjoin(char **tab, char *str);
 void		free_tabstr(char **tab_str);
 int			size_tabint(int **str);
 int			size_tabstr(char **str);
+int			size_tabtabstr(char ***str);
 t_tree		*parser(t_cmd_token *cmd, int *i, int is_sub);
 char		***ft_tabtabjoin(char ***tab, char **tab_add);
+t_sub_cmd	**ft_cmdjoin(t_sub_cmd **cmd, t_sub_cmd *add);
 void		print_tree(t_tree *tree);
 void		expander(t_cmd_token *cmd, t_list *env);
 void		free_tabstr(char **tab_str);
+int			size_tabcmd(t_sub_cmd **tab);
 #endif

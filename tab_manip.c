@@ -6,10 +6,11 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 02:55:39 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/15 18:49:47 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 11:44:57 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
+#include "parsing.h"
 
 int	size_tabstr(char **str)
 {
@@ -98,6 +99,37 @@ int	**ft_tabintjoin(int **tab, int* num)
 	res[i] = NULL;
 	if (tab)
 		free (tab);
+	return (res);
+}
+
+int	size_tabcmd(t_sub_cmd **tab)
+{
+	int	i;
+
+	i = 0;
+	if(!tab)
+		return (0);
+	while(tab[i])
+		i++;
+	return (i);
+}
+
+t_sub_cmd	**ft_cmdjoin(t_sub_cmd **cmd, t_sub_cmd *add)
+{
+	t_sub_cmd	**res;
+	int			i;
+
+	i = 0;
+	res = malloc (sizeof(t_sub_cmd *) * (size_tabcmd(cmd) + 2));
+	while (cmd && cmd[i])
+	{
+		res[i] = cmd[i];
+		i++;
+	}
+	res[i++] = add;
+	res[i] = NULL;
+	if (cmd)
+		free(cmd);
 	return (res);
 }
 

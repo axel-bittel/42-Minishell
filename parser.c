@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/17 16:24:19 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/21 13:24:30 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -70,22 +70,22 @@ void	print_cmd(t_cmd *cmd)
 	while (cmd->cmd[++i])
 	{
 		j = -1;
-		while (cmd->cmd[i][++j])
-			printf("%s\n", cmd->cmd[i][j]);
+		while (cmd->cmd[i]->cmd[++j])
+			printf("%s\n", cmd->cmd[i]->cmd[j]);
 		printf("\n");
+		j = -1;
+		while (cmd->cmd[i]->in && cmd->cmd[i]->in[++j])
+			printf("%s", cmd->cmd[i]->in[j]);
+		printf("\n------------------------\n");
+		j = -1;
+		while (cmd->cmd[i]->out_add && cmd->cmd[i]->out_add[++j])
+			printf("%s", cmd->cmd[i]->out_add[j]);
+		printf("\n------------------------\n");
+		j = -1;
+		while (cmd->cmd[i]->out_replace && cmd->cmd[i]->out_replace[++j])
+			printf("%s", cmd->cmd[i]->out_replace[j]);
+		printf("\n*************************************\n");
 	}
-	i = -1;
-	while (cmd->in && cmd->in[++i])
-		printf("%s", cmd->in[i]);
-	printf("\n------------------------\n");
-	i = -1;
-	while (cmd->out_add && cmd->out_add[++i])
-		printf("%s", cmd->out_add[i]);
-	printf("\n------------------------\n");
-	i = -1;
-	while (cmd->out_replace && cmd->out_replace[++i])
-		printf("%s", cmd->out_replace[i]);
-	printf("\n");
 }
 
 void	print_tree(t_tree *tree)
@@ -121,27 +121,27 @@ t_cmd	*free_cmd(t_cmd *cmd)
 	while (cmd->cmd[++i])
 	{
 		j = -1;
-		while (cmd->cmd[i][++j])
-			free (cmd->cmd[i][j]);
+		while (cmd->cmd[i]->cmd[++j])
+			free (cmd->cmd[i]->cmd[j]);
+		free(cmd->cmd[i]);
+		j = -1;
+		while (cmd->cmd[i]->in && cmd->cmd[i]->in[++j])
+			free(cmd->cmd[i]->in[j]);
+		if (cmd->cmd[i]->in)
+			free(cmd->cmd[i]->in);
+		j = -1;
+		while (cmd->cmd[i]->out_add && cmd->cmd[i]->out_add[++j])
+			free(cmd->cmd[i]->out_add[j]);
+		if (cmd->cmd[i]->out_add)
+			free(cmd->cmd[i]->out_add);
+		j = -1;
+		while (cmd->cmd[i]->out_replace && cmd->cmd[i]->out_replace[++j])
+			free(cmd->cmd[i]->out_replace[j]);
+		if (cmd->cmd[i]->out_replace)
+			free(cmd->cmd[i]->out_replace);
 		free(cmd->cmd[i]);
 	}
-	if (cmd->cmd)
-		free(cmd->cmd);
-	i = -1;
-	while (cmd->in && cmd->in[++i])
-		free(cmd->in[i]);
-	if (cmd->in)
-		free(cmd->in);
-	i = -1;
-	while (cmd->out_add && cmd->out_add[++i])
-		free(cmd->out_add[i]);
-	if (cmd->out_add)
-		free(cmd->out_add);
-	i = -1;
-	while (cmd->out_replace && cmd->out_replace[++i])
-		free(cmd->out_replace[i]);
-	if (cmd->out_replace)
-		free(cmd->out_replace);
+	free(cmd);
 	return (NULL);
 }
 
@@ -188,67 +188,79 @@ t_cmd	*init_cmd(void)
 	t_cmd	*res;
 
 	res = malloc (sizeof(t_cmd));
-	res->cmd = 0;
-	res->in = 0;
-	res->out_replace = 0;
-	res->out_add = 0;
-	res->fd_out_add = 0;
-	res->fd_hear_doc = 0;
-	res->fd_out_replace = 0;
-	res->fd_in= 0;
+	res->cmd = malloc(sizeof(t_cmd *));
+	res->cmd = NULL;
+	res->pipes = 0;
 	return (res);
 }
 
-int	get_cmd_cond_elem_token(t_cmd_token *cmd, int idx, t_cmd *res, char **inter)
+t_sub_cmd	*init_sub_cmd(void)
 {
-	if (*cmd->token[idx] == TOKEN_INDIR && next_is_input(cmd, idx))
+	t_sub_cmd	*res;
+
+	res = malloc (sizeof(t_sub_cmd));
+	res->cmd = 0;
+	res->in= 0;
+	res->fd_in = 0;
+	res->hear_doc = 0;
+	res->out_add = 0;
+	res->fd_out_add = 0;
+	res->out_replace = 0;
+	res->fd_out_replace = 0;
+	return (res);
+}
+
+int	get_cmd_cond_elem_token(t_cmd_token *cmd, int *idx, t_sub_cmd **inter)
+{
+	if (*cmd->token[*idx] == TOKEN_INDIR && next_is_input(cmd, *idx))
 	{
-		res->in = ft_tabjoin(res->in, cmd->cmd[idx++ + 1]);
-		res->last_is_in = 1;
+		(*inter)->in = ft_tabjoin((*inter)->in, cmd->cmd[(*idx)++ + 1]);
+		(*inter)->last_is_in = 1;
 	}
-	else if (*cmd->token[idx] == TOKEN_DINDIR && next_is_input(cmd, idx))
+	else if (*cmd->token[*idx] == TOKEN_DINDIR && next_is_input(cmd, *idx))
 	{
-		res->hear_doc = ft_tabjoin(res->hear_doc, cmd->cmd[idx++ + 1]);
-		res->last_is_in = 0;
+		(*inter)->hear_doc = ft_tabjoin((*inter)->hear_doc, cmd->cmd[(*idx)++ + 1]);
+		(*inter)->last_is_in = 0;
 	}
-	else if (*cmd->token[idx] == TOKEN_REDIR && next_is_input(cmd, idx))
+	else if (*cmd->token[*idx] == TOKEN_REDIR && next_is_input(cmd, *idx))
 	{
-		res->out_replace = ft_tabjoin(res->out_replace, cmd->cmd[idx++ + 1]);
-		res->last_is_add = 0;
+		(*inter)->out_replace = ft_tabjoin((*inter)->out_replace, cmd->cmd[(*idx)++ + 1]);
+		(*inter)->last_is_add = 0;
 	}
-	else if (*cmd->token[idx] == TOKEN_ARG)
-		inter = ft_tabjoin(inter, cmd->cmd[idx]);
-	else if (*cmd->token[idx] == TOKEN_DREDIR && next_is_input(cmd, idx))
+	else if (*cmd->token[*idx] == TOKEN_ARG)
+		(*inter)->cmd = ft_tabjoin((*inter)->cmd, cmd->cmd[*idx]);
+	else if (*cmd->token[*idx] == TOKEN_DREDIR && next_is_input(cmd, *idx))
 	{
-		res->out_add = ft_tabjoin(res->out_add, cmd->cmd[idx++ + 1]);
-		res->last_is_add = 1;
+		(*inter)->out_add = ft_tabjoin((*inter)->out_add, cmd->cmd[(*idx)++ + 1]);
+		(*inter)->last_is_add = 1;
 	}
 	else
 		return (0);
 	return (1);
 }
 
-int	get_cmd_cond_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, char ***inter)
+int	get_cmd_cond_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, t_sub_cmd **inter)
 {
 	if ((*cmd->token[idx] & TOKEN_REST) && idx && (*cmd->token[idx - 1] & TOKEN_REST))
-		str_join_to_last(*inter, cmd->cmd[idx]);
+		str_join_to_last((*inter)->cmd, cmd->cmd[idx]);
 	else if (is_input(cmd, idx))
 	{
-		if (!(*inter))
+		if (!(*inter)->cmd)
 			*cmd->token[idx] = TOKEN_CMD;
-		*inter = ft_tabjoin(*inter, cmd->cmd[idx]);
+		(*inter)->cmd = ft_tabjoin((*inter)->cmd, cmd->cmd[idx]);
 	}
 	else if (*cmd->token[idx] == TOKEN_PIPE && (next_is_input(cmd, idx) \
 || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
 	{
-		res->cmd = ft_tabtabjoin(res->cmd, *inter);
-		*inter = 0;
+		//(*inter)->cmd = ft_tabjoin((*inter)->cmd, cmd->cmd[idx]);
+		res->cmd = ft_cmdjoin(res->cmd, *inter);
+		*inter = init_sub_cmd();
 	}
 	else if (!is_input(cmd, idx) && !is_redir(cmd, idx) && is_op(cmd, idx) &&\
 (next_is_input(cmd, idx) || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
 	{
-		res->cmd = ft_tabtabjoin(res->cmd, *inter);
-		*inter = 0;
+		res->cmd = ft_cmdjoin(res->cmd, *inter);
+		*inter = init_sub_cmd();
 		return (2);
 	}
 	else if(*cmd->token[idx] == TOKEN_BRACK_CL)// || next_is_token(cmd, idx, TOKEN_BRACK_CL))
@@ -260,17 +272,16 @@ int	get_cmd_cond_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, char ***inter)
 
 t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 {
-	t_cmd	*res;
-	char	**inter;
-	int		inter_res;
+	t_cmd		*res;
+	t_sub_cmd	*inter;
+	int			inter_res;
 
 	inter = 0;
 	res = init_cmd();
+	inter = init_sub_cmd();
 	while (cmd->cmd[idx])
 	{
-		if (get_cmd_cond_elem_token(cmd, idx, res, inter))
-			continue ;
-		else
+		if (!get_cmd_cond_elem_token(cmd, &idx, &inter))
 		{
 			inter_res = get_cmd_cond_add_rest(cmd, idx, res, &inter);
 			if(inter_res == 2)
@@ -280,8 +291,10 @@ t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 		}
 		idx++;
 	}
-	if (inter)
-		res->cmd = ft_tabtabjoin(res->cmd, inter);
+	if (inter->cmd)
+		res->cmd = ft_cmdjoin(res->cmd, inter);
+	else
+		free(inter);
 	return (res);
 }
 
