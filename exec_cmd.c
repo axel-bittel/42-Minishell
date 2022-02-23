@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/21 22:20:03 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/23 19:13:25 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -59,15 +59,24 @@ char	*read_heardoc(char *end)
 	return (res);
 }
 
-int	read_heardoc(t_sub_cmd *cmd)
+int	read_heardocs(t_sub_cmd *cmd)
 {
-	int	i;
+	int		i;
+	int		*fd;
+	char	*line_heardoc;
 
 	i = 0;
-	while (hear_doc && hear_doc[i])
+	while (cmd->hear_doc && cmd->hear_doc[i])
 	{
-		open("/tmp/")
+		fd = malloc(sizeof(int));
+		*fd = open("/tmp/.biscuit_hd", O_CREAT | O_TRUNC, 0666);
+		if (!*fd)
+			return (1);
+		line_heardoc = read_heardoc(cmd->hear_doc[i]);
+		write (*fd, line_heardoc, ft_strlen(line_heardoc));
+		cmd->fd_hear_doc = ft_tabintjoin(cmd->fd_hear_doc, fd);
 	}
+	return (0);
 }
 
 int	check_file(char **names, int ***fd_tab, int ARG)
