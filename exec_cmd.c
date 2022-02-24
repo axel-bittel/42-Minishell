@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/23 19:13:25 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/25 00:14:42 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -41,25 +41,36 @@ char	*read_heardoc(char *end)
 	char	*line;
 	int		find_end;
 
+	res = malloc(sizeof(char));\
+	*res = 0;
+	inter = 0;
 	find_end = 0;
 	while (!find_end)
 	{
 		rl_on_new_line();
-		line = readline(" >");
-		if (!ft_strcmp(res, end))
+		line = readline(">");
+		if (!ft_strcmp(line, end))
 			find_end = 1;
 		else
 		{
+			if (*res)
+			{
+				inter = res;
+				res = ft_strjoin(res, "\n");
+				free(inter);
+			}
 			inter = res;
 			res = ft_strjoin(res, line);
-			free(inter);
-			free(line);
+			if(inter)
+				free(inter);
+			if (line)
+				free(line);
 		}
 	}
 	return (res);
 }
 
-int	read_heardocs(t_sub_cmd *cmd)
+int	read_heardocs(t_sub_cmd *cmd, t_list *env)
 {
 	int		i;
 	int		*fd;
@@ -69,12 +80,16 @@ int	read_heardocs(t_sub_cmd *cmd)
 	while (cmd->hear_doc && cmd->hear_doc[i])
 	{
 		fd = malloc(sizeof(int));
-		*fd = open("/tmp/.biscuit_hd", O_CREAT | O_TRUNC, 0666);
+		*fd = open("/tmp/.biscuit_hd", O_CREAT | O_TRUNC | O_WRONLY, 0666);
 		if (!*fd)
 			return (1);
 		line_heardoc = read_heardoc(cmd->hear_doc[i]);
-		write (*fd, line_heardoc, ft_strlen(line_heardoc));
+		expand_VAR(&line_heardoc, env);
+		ft_putstr_fd (line_heardoc, *fd);
+		close(*fd);
+		*fd = open("/tmp/.biscuit_hd", O_RDWR);
 		cmd->fd_hear_doc = ft_tabintjoin(cmd->fd_hear_doc, fd);
+		i++;
 	}
 	return (0);
 }
@@ -135,25 +150,24 @@ int	exec_sys_cmd(char **args, t_list *envp)
 	char	*inter_path;
 
 	i = -1;
-	if (!is_absolute_path(args[0]))
+	paths = ft_split(get_val_var(envp, "PATH"), ':');
+	while (paths[++i])
 	{
-		paths = ft_split(get_val_var(envp, "PATH"), ':');
-		while (paths[++i])
-		{
-			inter_path = ft_strjoin(paths[i], "/");
-			f_cmd = ft_strjoin(inter_path, args[0]);
-			if (access(f_cmd, F_OK | X_OK) == 0)
-				execve(f_cmd, args, get_env_in_char(envp));
-			free(inter_path);
-			free(f_cmd);
-		}
+		inter_path = ft_strjoin(paths[i], "/");
+		f_cmd = ft_strjoin(inter_path, args[0]);
+		if (access(f_cmd, F_OK | X_OK) == 0)
+			execve(f_cmd, args, get_env_in_char(envp));
+		free(inter_path);
+		free(f_cmd);
 	}
+	if (!is_absolute_path(args[0]))
+		execve(get_absolute_path(envp, args[0]), args, get_env_in_char(envp));
 	else
 		execve(args[0], args, get_env_in_char(envp));
 	f_cmd = ft_strjoin("BISCUIT:", args[0]);
 	perror(f_cmd);
 	free(f_cmd);
-	return (0);
+	return (127);
 }
 
 void	close_pipes(t_cmd *cmd, int idx)
@@ -161,28 +175,50 @@ void	close_pipes(t_cmd *cmd, int idx)
 	int	i;
 
 	i = -1;
-	while (cmd->pipes[i] && ++i < idx)
+	while (cmd->pipes[++i] && i < idx)
+	{
 		close(cmd->pipes[i][0]);
+		close(cmd->pipes[i][1]);
+	}
 }
 
-int	exec_sub_cmd(t_cmd *cmd, int i, t_list *env)
+void	dup_manager(t_cmd *cmd, int i)
 {
-	//close_pipes(cmd, i);
-	if (cmd->cmd[i]->fd_in)
-		dup2(*cmd->cmd[i]->fd_in[size_tabint(cmd->cmd[i]->fd_in) - 1], 0);
+	if (cmd->cmd[i]->fd_in || cmd->cmd[i]->fd_hear_doc)
+	{
+		if(cmd->cmd[i]->last_is_in == 1)
+			dup2(*cmd->cmd[i]->fd_in[size_tabint(cmd->cmd[i]->fd_in) - 1], 0);
+		else
+			dup2(*cmd->cmd[i]->fd_hear_doc[size_tabint(cmd->cmd[i]->fd_hear_doc) - 1], 0);
+	}
 	else if(i)
-		dup2(cmd->pipes[i - 1][1], 0);
-	else
-		close(0);
+		dup2(cmd->pipes[i - 1][0], 0);
+	else if(size_tabcmd(cmd->cmd) > 1)
+		close(cmd->pipes[i][0]);
 	if (cmd->cmd[i]->fd_out_add || cmd->cmd[i]->fd_out_replace)
 	{
 		if(cmd->cmd[i]->last_is_add == 1)
 			dup2(*cmd->cmd[i]->fd_out_add[size_tabint(cmd->cmd[i]->fd_out_add) - 1], 1);
 		if(cmd->cmd[i]->last_is_add == 0)
 			dup2(*cmd->cmd[i]->fd_out_replace[size_tabint(cmd->cmd[i]->fd_out_replace) - 1], 1);
+		if(size_tabcmd(cmd->cmd) > 1)
+			close(cmd->pipes[i - 1][1]);
 	}
+	else if (i != size_tabint(cmd->pipes))
+		dup2(cmd->pipes[i][1], 1);
+	else if(size_tabcmd(cmd->cmd) > 1)
+		close(cmd->pipes[i - 1][1]);
+}
+
+int	exec_sub_cmd(t_cmd *cmd, int i, t_list *env)
+{
+	dup_manager(cmd, i);
 	cmd->cmd[i]->cmd = ft_tabstrtrim(cmd->cmd[i]->cmd);
-	exec_sys_cmd(cmd->cmd[i]->cmd, env);
+	close_pipes(cmd, i);
+	if(is_build_in(cmd->cmd[i]->cmd[0]))
+		exit(exec_build_in(cmd->cmd[i]->cmd, env));
+	else
+		exec_sys_cmd(cmd->cmd[i]->cmd, env);
 	return (0);
 }
 
@@ -214,19 +250,19 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 		cmd->cmd[i]->in = ft_tabstrtrim(cmd->cmd[i]->in);
 		cmd->cmd[i]->out_replace = ft_tabstrtrim(cmd->cmd[i]->out_replace);
 		cmd->cmd[i]->out_add = ft_tabstrtrim(cmd->cmd[i]->out_add);
+		cmd->cmd[i]->hear_doc= ft_tabstrtrim(cmd->cmd[i]->hear_doc);
 		if(check_file(cmd->cmd[i]->in, &(cmd->cmd[i]->fd_in), O_APPEND) || \
-check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), O_APPEND | O_TRUNC | O_CREAT) || \
-check_file(cmd->cmd[i]->out_add, &(cmd->cmd[i]->fd_out_add), O_APPEND | O_CREAT))
-			return (127);
-		if(is_build_in(cmd->cmd[i]->cmd[0]))
-			status = exec_build_in(cmd->cmd[i]->cmd, env);
-		else 
-		{
-			if (fork() == 0)
-				exec_sub_cmd(cmd, i, env);
-		}
+check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), O_WRONLY | O_TRUNC | O_CREAT) || \
+check_file(cmd->cmd[i]->out_add, &(cmd->cmd[i]->fd_out_add), O_WRONLY | O_APPEND | O_CREAT) ||
+read_heardocs(cmd->cmd[i], env))
+			return (1);
+		if (fork() == 0)
+			exec_sub_cmd(cmd, i, env);
 	}
-	waitpid(-1, 0, 0);
+	close_pipes(cmd, size_tabcmd(cmd->cmd));
+	i = -1;
+	while(cmd->cmd[++i])
+		waitpid(-1, &status, 0);
 	return (status);
 }
 
@@ -247,7 +283,5 @@ int	exec_tree_cmd(t_tree *cmd, t_list *env)
 		return (res_a);
 	}
 	else
-	{
 		return (exec_cmd((t_cmd *)(cmd->content), env));
-	}
 }

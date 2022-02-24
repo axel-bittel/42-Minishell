@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 #include "libft/libft.h"
 
 char	*insert_str(char *str, char *str_ins, int *deb, int end)
@@ -24,12 +27,16 @@ char	*insert_str(char *str, char *str_ins, int *deb, int end)
 	return (res);
 }
 
-int	main()
+int	main(int argc, char **argv, char **envp)
 {
 	int	i;
 
-	i = 10;
-	char	*chr = ft_strdup("Pute, est Axel");
-	char	*chr_ins = ft_strdup("Tommy");
-	chr = insert_str(chr, chr_ins, &i, 13);
+	if (fork() == 0)
+		envp[0] = "bite=test=nonouiouiouio";
+	else
+	{
+		envp[0] = "bite=test=nonouiouiouio";
+		waitpid(-1, 0, 0);
+		printf("%s\n", getenv("bite"));
+	}
 }
