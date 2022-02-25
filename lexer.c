@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 02:52:24 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/15 11:06:24 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/25 18:09:55 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -139,8 +139,9 @@ t_cmd_token	*tokenisation(char *cmd)
 	tok = malloc (sizeof (t_cmd_token));
 	tok->token = 0;
 	tok->cmd = 0;
-	cmd_int = ft_strtrim(cmd, " ");
-	while (cmd_int[++i])
+	if (cmd)
+		cmd_int = ft_strtrim(cmd, " ");
+	while (cmd && cmd_int[++i])
 	{
 		if (is_token(cmd_int[i]) != TOKEN_SPACE)
 		{

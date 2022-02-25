@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/24 23:06:31 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/25 18:38:06 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,11 @@ typedef struct s_sig
 {
 	int	run;
 	int	stop_cmd;
+	int			old_stdin;
+	int			old_stdout;
 }	t_sig;
+
+t_sig	g_sig;
 
 int			is_token (char c);
 int			get_idx_until_c(char *cmd, int start, char c);

@@ -1,6 +1,5 @@
 TO DO :
 
-Finish Hear Doc : create files and return fd.
 Make exit code for process
 Find how to fork build_in : remake cd and export
 Make unset build in
@@ -8,3 +7,6 @@ Manage signals
 Add history
 find leaks
 Norm
+
+DONE : 
+Finish Hear Doc : create files and return fd.

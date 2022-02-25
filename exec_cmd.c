@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/25 00:14:42 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/25 20:36:49 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -119,24 +119,81 @@ int	check_file(char **names, int ***fd_tab, int ARG)
 	return (0);
 }
 
-int	exec_build_in(char **cmd, t_list *env)
+void	dup_manager(t_cmd *cmd, int i)
+{
+	if (cmd->cmd[i]->fd_in || cmd->cmd[i]->fd_hear_doc)
+	{
+		g_sig.old_stdin = dup(0);
+		if(cmd->cmd[i]->last_is_in == 1)
+			dup2(*cmd->cmd[i]->fd_in[size_tabint(cmd->cmd[i]->fd_in) - 1], 0);
+		else
+			dup2(*cmd->cmd[i]->fd_hear_doc[size_tabint(cmd->cmd[i]->fd_hear_doc) - 1], 0);
+	}
+	else if(i)
+	{
+		g_sig.old_stdin = dup(0);
+		dup2(cmd->pipes[i - 1][0], 0);
+	}
+	else if(size_tabcmd(cmd->cmd) > 1)
+		close(cmd->pipes[i][0]);
+	if (cmd->cmd[i]->fd_out_add || cmd->cmd[i]->fd_out_replace)
+	{
+		g_sig.old_stdout = dup(1);
+		if(cmd->cmd[i]->last_is_add == 1)
+			dup2(*cmd->cmd[i]->fd_out_add[size_tabint(cmd->cmd[i]->fd_out_add) - 1], 1);
+		if(cmd->cmd[i]->last_is_add == 0)
+			dup2(*cmd->cmd[i]->fd_out_replace[size_tabint(cmd->cmd[i]->fd_out_replace) - 1], 1);
+		if(size_tabcmd(cmd->cmd) > 1 && i != size_tabint(cmd->pipes))
+			close(cmd->pipes[i][1]);
+	}
+	else if (i != size_tabint(cmd->pipes))
+	{
+		g_sig.old_stdout = dup(1);
+		dup2(cmd->pipes[i][1], 1);
+	}
+	else if(size_tabcmd(cmd->cmd) > 1 && i != size_tabint(cmd->pipes))
+		close(cmd->pipes[i][1]);
+}
+
+void	close_pipes(t_cmd *cmd, int idx)
+{
+	int	i;
+
+	i = -1;
+	while (cmd->pipes[++i] && i < idx)
+	{
+		close(cmd->pipes[i][0]);
+		close(cmd->pipes[i][1]);
+	}
+}
+
+void	re_dup(t_cmd *cmd, int i)
+{
+	close_pipes(cmd, i);
+	dup2(g_sig.old_stdin, 0);
+	dup2(g_sig.old_stdout, 1);
+	//close(g_sig.old_stdin);
+	//close(g_sig.old_stdout);
+}
+
+int	exec_build_in(t_cmd *cmd, t_list *env, int i, int fd)
 {
 	int	res;
 	char	**env_chr;
 	char	*cmd_trim;
 
-	cmd_trim = ft_strtrim(cmd[0], " ");
 	env_chr = get_env_in_char(env);
+	cmd_trim = ft_strtrim(cmd->cmd[i]->cmd[0], " ");
 	if (!ft_strcmp("cd", cmd_trim))
-		res = cd_bi(env, cmd);
+		res = cd_bi(env, cmd->cmd[i]->cmd);
 	if (!ft_strcmp("pwd", cmd_trim))
-		res = pwd_bi(env);
+		res = pwd_bi(env, fd);
 	if (!ft_strcmp("echo", cmd_trim))
-		res = echo_bi(cmd);
+		res = echo_bi(cmd->cmd[i]->cmd, fd);
 	if (!ft_strcmp("env", cmd_trim))
-		res = env_bi(env_chr);
+		res = env_bi(env_chr, fd);
 	if (!ft_strcmp("export", cmd_trim))
-		res = export_bi(cmd, env);
+		res = export_bi(cmd->cmd[i]->cmd, env);
 	free_tabstr(env_chr);
 	free (cmd_trim);
 	return (res);
@@ -170,55 +227,30 @@ int	exec_sys_cmd(char **args, t_list *envp)
 	return (127);
 }
 
-void	close_pipes(t_cmd *cmd, int idx)
-{
-	int	i;
-
-	i = -1;
-	while (cmd->pipes[++i] && i < idx)
-	{
-		close(cmd->pipes[i][0]);
-		close(cmd->pipes[i][1]);
-	}
-}
-
-void	dup_manager(t_cmd *cmd, int i)
-{
-	if (cmd->cmd[i]->fd_in || cmd->cmd[i]->fd_hear_doc)
-	{
-		if(cmd->cmd[i]->last_is_in == 1)
-			dup2(*cmd->cmd[i]->fd_in[size_tabint(cmd->cmd[i]->fd_in) - 1], 0);
-		else
-			dup2(*cmd->cmd[i]->fd_hear_doc[size_tabint(cmd->cmd[i]->fd_hear_doc) - 1], 0);
-	}
-	else if(i)
-		dup2(cmd->pipes[i - 1][0], 0);
-	else if(size_tabcmd(cmd->cmd) > 1)
-		close(cmd->pipes[i][0]);
-	if (cmd->cmd[i]->fd_out_add || cmd->cmd[i]->fd_out_replace)
-	{
-		if(cmd->cmd[i]->last_is_add == 1)
-			dup2(*cmd->cmd[i]->fd_out_add[size_tabint(cmd->cmd[i]->fd_out_add) - 1], 1);
-		if(cmd->cmd[i]->last_is_add == 0)
-			dup2(*cmd->cmd[i]->fd_out_replace[size_tabint(cmd->cmd[i]->fd_out_replace) - 1], 1);
-		if(size_tabcmd(cmd->cmd) > 1)
-			close(cmd->pipes[i - 1][1]);
-	}
-	else if (i != size_tabint(cmd->pipes))
-		dup2(cmd->pipes[i][1], 1);
-	else if(size_tabcmd(cmd->cmd) > 1)
-		close(cmd->pipes[i - 1][1]);
-}
-
 int	exec_sub_cmd(t_cmd *cmd, int i, t_list *env)
 {
-	dup_manager(cmd, i);
-	cmd->cmd[i]->cmd = ft_tabstrtrim(cmd->cmd[i]->cmd);
-	close_pipes(cmd, i);
 	if(is_build_in(cmd->cmd[i]->cmd[0]))
-		exit(exec_build_in(cmd->cmd[i]->cmd, env));
-	else
+	{
+		if(size_tabcmd(cmd->cmd) > 1)
+		{
+			dup_manager(cmd, i);
+			exec_build_in(cmd, env, i, g_sig.old_stdout);
+		}
+		else
+			exec_build_in(cmd, env, i, 1); 
+		if(size_tabcmd(cmd->cmd) > 1)
+		{
+			close_pipes(cmd, i);
+			re_dup(cmd, i);
+		}
+	}
+	else if (fork() == 0)
+	{
+		dup_manager(cmd, i);
+		cmd->cmd[i]->cmd = ft_tabstrtrim(cmd->cmd[i]->cmd);
+		close_pipes(cmd, i);
 		exec_sys_cmd(cmd->cmd[i]->cmd, env);
+	}
 	return (0);
 }
 
@@ -244,8 +276,9 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 	int	status;
 
 	i = -1;
+	status = 0;
 	get_pipes(cmd);
-	while (cmd->cmd[++i])
+	while (cmd->cmd && cmd->cmd[++i])
 	{
 		cmd->cmd[i]->in = ft_tabstrtrim(cmd->cmd[i]->in);
 		cmd->cmd[i]->out_replace = ft_tabstrtrim(cmd->cmd[i]->out_replace);
@@ -256,8 +289,7 @@ check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), O_WRONLY | 
 check_file(cmd->cmd[i]->out_add, &(cmd->cmd[i]->fd_out_add), O_WRONLY | O_APPEND | O_CREAT) ||
 read_heardocs(cmd->cmd[i], env))
 			return (1);
-		if (fork() == 0)
-			exec_sub_cmd(cmd, i, env);
+		exec_sub_cmd(cmd, i, env);
 	}
 	close_pipes(cmd, size_tabcmd(cmd->cmd));
 	i = -1;

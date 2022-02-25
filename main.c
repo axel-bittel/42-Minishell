@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/02/21 21:42:09 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/25 18:33:53 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -22,7 +22,6 @@
 #include <unistd.h>
 #include <term.h>
 
-t_sig	g_sig;
 
 t_cmd	*parse_cmd (char *cmd, t_list *env)
 {
