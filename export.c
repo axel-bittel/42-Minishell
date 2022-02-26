@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:21:21 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/17 18:15:19 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/26 18:33:11 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,20 @@ char	get_deb_word(char *str, int i)
 	return (i + 1);
 }
 
+char	get_end_word(char *str, int i)
+{
+	while (str[i] && str[i] != ' ')
+		i++;
+	return (i - 1);
+}
 void	print_error(char **cmd)
 {
 	ft_putstr_fd("BISCUIT:export", 2);
 	ft_putstr_fd(cmd[1], 2);
-	ft_putstr_fd(":not a valid identifier", 2);
+	ft_putstr_fd(":not a valid identifier\n", 2);
 }
 
-int	check_export_error(char **cmd, t_list *env)
+int	check_export_error(char **cmd, t_list *env, int fd)
 {
 	int		size;
 	char	**env_chr;
@@ -38,37 +44,52 @@ int	check_export_error(char **cmd, t_list *env)
 	env_chr = get_env_in_char(env);
 	if (size > 2)
 	{
-		ft_putstr_fd("BISCUIT:export:arguments error", 2);
+		ft_putstr_fd("BISCUIT:export:arguments error\n", 2);
 		return (free_tabstr(env_chr), 1);
 	}
 	else if (size == 1)
-		env_bi(env_chr);
+		env_bi(env_chr, fd);
 	free_tabstr(env_chr);
 	return (0);
 }
 
-int	export_bi(char **cmd, t_list *env)
+int	add_var(char **cmd, int *i, int j, t_list *env)
 {
-	int	i;
 	char	*name;
 	char	*data;
 
-	i = -1;
-	if(check_export_error(cmd, env))
-		return (1);
-	while (cmd[1] && cmd[1][++i])
+	name = ft_substrdup(cmd[*i], get_deb_word(cmd[*i], j), j - 1);
+	if (cmd[*i][j + 1])
+		data = ft_substrdup(cmd[*i], j + 1, get_end_word(cmd[*i], j + 1));
+	else if (cmd[*i + 1])
 	{
-		if (cmd[1][i] == '=')
+		data = ft_strdup(cmd[*i + 1]);
+		(*i)++;
+	}
+	if (!ft_isalpha(name[0]))
+		return (print_error(cmd), free(name), free(data), 1);
+	else
+		add_val(env, name, data);
+	free(name);
+	free(data);
+	return (0);
+}
+
+int	export_bi(char **cmd, t_list *env, int fd)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	(void)fd;
+	while (cmd[++i])
+	{
+		j = -1;
+		while (cmd[i][++j])
 		{
-			name = ft_substrdup(cmd[1], get_deb_word(cmd[1], i), i - 1);
-			data = ft_substrdup(cmd[1], i + 1, ft_strlen(cmd[1]) - 1);
-			if (!ft_isalpha(name[0]))
-				return (print_error(cmd), free(name), free(data), 1);
-			else
-				add_val(env, name, data);
-			free(name);
-			free(data);
-			break;
+			if (cmd[i][j] == '=')
+				if(add_var(cmd, &i, j, env))
+					return (1);
 		}
 	}
 	return (0);

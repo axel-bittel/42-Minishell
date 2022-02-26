@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "libft/libft.h"
 
 char	*insert_str(char *str, char *str_ins, int *deb, int end)
@@ -30,13 +31,14 @@ char	*insert_str(char *str, char *str_ins, int *deb, int end)
 int	main(int argc, char **argv, char **envp)
 {
 	int	i;
+	int	old;
+	int	fd;
 
-	if (fork() == 0)
-		envp[0] = "bite=test=nonouiouiouio";
-	else
-	{
-		envp[0] = "bite=test=nonouiouiouio";
-		waitpid(-1, 0, 0);
-		printf("%s\n", getenv("bite"));
-	}
+	envp[0] = "bite=test=nonouiouiouio";
+	fd = open("res", O_WRONLY | O_APPEND);
+	old = dup(1);
+	dup2(fd, 1);
+	write(fd, "test\n", 5);
+	dup2(old, 1);
+	write(1, "test2\n", 6);
 }

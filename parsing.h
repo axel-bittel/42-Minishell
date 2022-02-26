@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/25 18:38:06 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/26 23:51:33 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ typedef struct s_sig
 	int	stop_cmd;
 	int			old_stdin;
 	int			old_stdout;
+	int			new_stdin;
+	int			new_stdout;
 }	t_sig;
 
 t_sig	g_sig;
@@ -80,6 +82,7 @@ char		*ft_substrdup(char	*str, int start, int end);
 int			**ft_tabintjoin(int **tab, int* num);
 char		**ft_tabjoin(char **tab, char *str);
 void		free_tabstr(char **tab_str);
+void		free_tabint(int **tab_int);
 int			size_tabint(int **str);
 int			size_tabstr(char **str);
 int			size_tabtabstr(char ***str);

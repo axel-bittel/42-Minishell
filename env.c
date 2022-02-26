@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:09:32 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/25 20:25:08 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/26 11:48:20 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -21,7 +21,7 @@ int	env_bi(char **env, int fd)
 	while (env[++i])
 	{
 		ft_putstr_fd(env[i], fd);
-		write (1, "\n", fd);
+		write (fd, "\n", 1);
 	}
 	return (1);
 }

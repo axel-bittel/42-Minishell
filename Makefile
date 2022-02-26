@@ -6,11 +6,11 @@
 #    By: abittel <abittel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/18 10:24:03 by abittel           #+#    #+#              #
-#    Updated: 2022/02/17 17:31:08 by abittel          ###   ########.fr        #
+#    Updated: 2022/02/26 23:42:31 by abittel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	=	main.c tab_manip.c lexer.c parser.c ft_treeadd_f.c ft_treenew.c ft_treeprof.c env_manager.c expander.c cd.c echo.c pwd.c env.c exec_cmd.c export.c
+SRCS	=	main.c tab_manip.c lexer.c parser.c ft_treeadd_f.c ft_treenew.c ft_treeprof.c env_manager.c expander.c cd.c echo.c pwd.c env.c exec_cmd.c export.c unset.c exit.c
 OSRCS	=	${SRCS:.c=.o}
 NAME_S	= minishell
 

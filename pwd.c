@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 17:59:04 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/25 20:24:46 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/26 11:48:34 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -15,7 +15,7 @@
 
 int	pwd_bi(t_list *env, int fd)
 {
-	ft_putstr_fd(get_val_var(env, "PWD"), 1);
-	write(1, "\n", fd);
+	ft_putstr_fd(get_val_var(env, "PWD"), fd);
+	write(fd, "\n", 1);
 	return (0);
 }

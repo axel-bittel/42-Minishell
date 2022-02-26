@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/21 16:22:22 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/26 16:42:07 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -14,7 +14,12 @@
 #include "env_manager.h"
 #include "parsing.h"
 
-
+void	free_env_var(t_env_var *var)
+{
+	free(var->name);
+	free(var->value);
+	free(var);
+}
 t_list	*get_fst_env(char **envp)
 {
 	int		i;
@@ -93,6 +98,37 @@ void	add_val(t_list *lst, char *name, char *val)
 			((t_env_var *)inter->content)->value = ft_strdup(val);
 		}
 	}
+}
+
+int	delete_val(t_list **lst, char *name)
+{
+	t_list	*inter;
+	t_list	*prec;
+
+	prec = 0;
+	inter = *lst;
+	while (inter && lst && inter->next)
+	{
+		if(!ft_strcmp(name, ((t_env_var *)inter->content)->name))
+		{
+			if(prec)
+				prec->next = inter->next;
+			else
+				*lst = inter->next;
+			free_env_var((t_env_var *)inter->content);
+			free(inter);
+			return (1);
+		}
+		prec = inter;
+		inter = inter->next;
+	}
+	if(!ft_strcmp(name, ((t_env_var *)inter->content)->name))
+	{
+		prec->next = NULL;
+		free_env_var((t_env_var *)inter->content);
+		free(inter);
+	}
+	return (1);
 }
 
 char	**get_env_in_char(t_list *env)
