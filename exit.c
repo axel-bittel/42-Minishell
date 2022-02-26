@@ -6,14 +6,14 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/26 23:49:10 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/27 00:27:07 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 #include "libft.h"
 
-void	free_cmd_exit(t_cmd *cmd)
+void	free_cmd(t_cmd *cmd)
 {
 	int	i;
 
@@ -40,13 +40,13 @@ int	exit_bi(t_cmd *cmd, int i, int fd)
 	ft_putstr_fd("exit\n", fd);
 	if(size_tabstr(cmd->cmd[i]->cmd) == 1)
 	{
-		free_cmd_exit(cmd);
+		free_cmd(cmd);
 		exit(0);
 	}
 	else if(size_tabstr(cmd->cmd[i]->cmd) == 2)
 	{
 		stat = ft_atoi(cmd->cmd[i]->cmd[1]);
-		free_cmd_exit(cmd);
+		free_cmd(cmd);
 		exit (stat);
 	}
 	else

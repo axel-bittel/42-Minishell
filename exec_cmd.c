@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/26 23:50:12 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/27 00:16:45 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -94,7 +94,7 @@ int	read_heardocs(t_sub_cmd *cmd, t_list *env)
 		fd = malloc(sizeof(int));
 		*fd = open(name, O_CREAT | O_TRUNC | O_WRONLY, 0666);
 		if (!*fd)
-			return (1);
+			return (errno);
 		line_heardoc = read_heardoc(cmd->hear_doc[i]);
 		expand_VAR(&line_heardoc, env);
 		ft_putstr_fd (line_heardoc, *fd);
@@ -123,7 +123,10 @@ int	check_file(char **names, int ***fd_tab, int ARG)
 			perror(error_msg);
 			free(inter_fd);
 			free(names[i]);
-			return (errno);
+			if (errno == EACCES)
+				return (errno = 126, 126);
+			else
+				return (1);
 		}
 		else
 			*fd_tab = ft_tabintjoin(*fd_tab, inter_fd);
@@ -223,8 +226,8 @@ int	exec_build_in(t_cmd *cmd, t_list *env, int i, int fd)
 		res = export_bi(cmd->cmd[i]->cmd, env, i);
 	if (!ft_strcmp("unset", cmd_trim))
 		res = unset_bi(cmd->cmd[i]->cmd, env);
-	if (!ft_strcmp("unset", cmd_trim))
-		res = exit(cmd, i, fd);
+	if (!ft_strcmp("exit", cmd_trim))
+		res = exit_bi(cmd, i, fd);
 	free_tabstr(env_chr);
 	free (cmd_trim);
 	return (res);
@@ -255,7 +258,7 @@ int	exec_sys_cmd(char **args, t_list *envp)
 	f_cmd = ft_strjoin("BISCUIT:", args[0]);
 	perror(f_cmd);
 	free(f_cmd);
-	return (127);
+	exit (errno);
 }
 
 int	exec_sub_cmd(t_cmd *cmd, int *i, t_list *env)
@@ -268,7 +271,7 @@ int	exec_sub_cmd(t_cmd *cmd, int *i, t_list *env)
 		if (cmd->cmd[*i + 1])
 			i_bis = exec_sub_cmd(cmd, ((++i_bis), &i_bis), env);
 		dup_manager(cmd, *i, 1);
-		exec_build_in(cmd, env, *i, g_sig.new_stdout);
+		add_val(env, "?", ft_itoa(exec_build_in(cmd, env, *i, g_sig.new_stdout)));
 		close_pipes(cmd, *i);
 		re_dup(cmd, *i);
 	}
@@ -316,13 +319,16 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), O_WRONLY | O_TRUNC | O_CREAT) || \
 check_file(cmd->cmd[i]->out_add, &(cmd->cmd[i]->fd_out_add), O_WRONLY | O_APPEND | O_CREAT) ||
 read_heardocs(cmd->cmd[i], env))
-			return (1);
+			return (add_val(env, "?", ft_itoa(errno)), 1);
 		i = exec_sub_cmd(cmd, &i, env);
 	}
 	close_pipes(cmd, size_tabcmd(cmd->cmd));
 	i = -1;
 	while(cmd->cmd[++i])
+	{
 		waitpid(-1, &status, 0);
+		add_val(env, "?", ft_itoa(WEXITSTATUS(status)));
+	}
 	return (status);
 }
 

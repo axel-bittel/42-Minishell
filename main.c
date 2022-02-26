@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/02/26 17:11:24 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/27 00:23:55 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -22,7 +22,6 @@
 #include <unistd.h>
 #include <term.h>
 
-
 t_cmd	*parse_cmd (char *cmd, t_list *env)
 {
 	t_cmd_token	*res;
@@ -35,7 +34,7 @@ t_cmd	*parse_cmd (char *cmd, t_list *env)
 	final = parser(res, &i, 0);
 	if (final)
 	{
-		print_tree (final);
+		//print_tree (final);
 		exec_tree_cmd(final, env);
 	}
 	return (0);
@@ -48,10 +47,6 @@ void	sig_sigint(int sig)
 	rl_replace_line("", 1);
 	rl_on_new_line();
 	rl_redisplay();
-}
-void	signal_callback_handler(int signum)
-{
-	printf("Caught signal SIGPIPE %d\n",signum);
 }
 
 void	signal_catching(void)

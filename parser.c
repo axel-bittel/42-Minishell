@@ -6,13 +6,14 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/24 19:50:45 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/27 00:29:47 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 #include "parsing.h"
 #include "ft_tree.h"
-#include <stdio.h>
+#include "build_in.h"
+#include <unistd.h>
 
 int	idx_end_cmd(t_cmd_token *cmd, int idx)
 {
@@ -60,7 +61,7 @@ void	str_join_to_last(char **tab, char *str)
 	tab[size_tabstr(tab) - 1] = ft_strjoin(tab[size_tabstr(tab) - 1], str);
 	free(inter);
 }
-
+/*
 void	print_cmd(t_cmd *cmd)
 {
 	int	i;
@@ -111,40 +112,7 @@ void	print_tree(t_tree *tree)
 		}
 	}
 }
-
-t_cmd	*free_cmd(t_cmd *cmd)
-{
-	int	i;
-	int	j;
-
-	i = -1;
-	while (cmd->cmd[++i])
-	{
-		j = -1;
-		while (cmd->cmd[i]->cmd[++j])
-			free (cmd->cmd[i]->cmd[j]);
-		free(cmd->cmd[i]);
-		j = -1;
-		while (cmd->cmd[i]->in && cmd->cmd[i]->in[++j])
-			free(cmd->cmd[i]->in[j]);
-		if (cmd->cmd[i]->in)
-			free(cmd->cmd[i]->in);
-		j = -1;
-		while (cmd->cmd[i]->out_add && cmd->cmd[i]->out_add[++j])
-			free(cmd->cmd[i]->out_add[j]);
-		if (cmd->cmd[i]->out_add)
-			free(cmd->cmd[i]->out_add);
-		j = -1;
-		while (cmd->cmd[i]->out_replace && cmd->cmd[i]->out_replace[++j])
-			free(cmd->cmd[i]->out_replace[j]);
-		if (cmd->cmd[i]->out_replace)
-			free(cmd->cmd[i]->out_replace);
-		free(cmd->cmd[i]);
-	}
-	free(cmd);
-	return (NULL);
-}
-
+*/
 t_tree	*free_tree(t_tree *tree)
 {
 	if (!tree)
@@ -163,9 +131,13 @@ t_tree	*free_tree(t_tree *tree)
 int	print_parse_error(t_cmd_token *cmd, int idx)
 {
 	if (cmd->cmd[idx + 1])
-		printf ("SH: parse error near %s\n",cmd->cmd[idx + 1]);
+	{
+		ft_putstr_fd("SH: parse error near ", 2);
+		ft_putstr_fd(cmd->cmd[idx + 1], 2);
+		write (2, "\n", 1);
+	}
 	else
-		printf ("SH: parse error near \\n\n");
+		ft_putstr_fd("SH: parse error near \n", 2);
 	return (0);
 }
 
@@ -242,8 +214,6 @@ int	get_cmd_cond_elem_token(t_cmd_token *cmd, int *idx, t_sub_cmd **inter)
 
 int	get_cmd_cond_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, t_sub_cmd **inter)
 {
-	//if ((*cmd->token[idx] & TOKEN_REST) && idx && (*cmd->token[idx - 1] & TOKEN_REST))
-	//	str_join_to_last((*inter)->cmd, cmd->cmd[idx]);
 	if (is_input(cmd, idx))
 	{
 		if (!(*inter)->cmd)
@@ -263,7 +233,7 @@ int	get_cmd_cond_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, t_sub_cmd **int
 		*inter = init_sub_cmd();
 		return (2);
 	}
-	else if(*cmd->token[idx] == TOKEN_BRACK_CL)// || next_is_token(cmd, idx, TOKEN_BRACK_CL))
+	else if(*cmd->token[idx] == TOKEN_BRACK_CL)
 		return (2);
 	else
 		return (0);
@@ -307,7 +277,8 @@ int	set_tree_cmd(t_cmd_token *cmd, int *i, t_tree **inter_a, t_tree **final)
 	else
 		*final = *inter_a;
 	if (cmd->token[*i] && (*cmd->token[*i] == TOKEN_OR || \
-*cmd->token[*i] == TOKEN_AND || *cmd->token[*i] == TOKEN_PIPE || (*cmd->token[*i] == TOKEN_BRACK_CL && *cmd->token[*i - 1] == TOKEN_BRACK_CL)))
+*cmd->token[*i] == TOKEN_AND || *cmd->token[*i] == TOKEN_PIPE || \
+(*cmd->token[*i] == TOKEN_BRACK_CL && *cmd->token[*i - 1] == TOKEN_BRACK_CL)))
 	{
 		if (*final)
 			*inter_a = *final;
