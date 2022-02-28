@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/26 16:42:07 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 12:29:03 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -39,6 +39,7 @@ t_list	*get_fst_env(char **envp)
 			ft_lstadd_back(&res, ft_lstnew((void *)inter));
 		else
 			res = ft_lstnew((void *)inter);
+		free_tabstr(line_splt);
 	}
 	return (res);
 }
@@ -75,12 +76,20 @@ void	ft_lst_add_back_var(t_list *lst, char *name, char *val)
 void	add_val(t_list *lst, char *name, char *val)
 {
 	char	*res;
+	char	*name_dup;
+	char	*val_dup;
 	t_list	*inter;
 
 	inter = lst;
 	res = get_val_var(lst, name);
 	if (!res[0])
-		ft_lst_add_back_var(lst, ft_strdup(name), ft_strdup(val));
+	{
+		val_dup = ft_strdup(val);
+		name_dup = ft_strdup(name);
+		ft_lst_add_back_var(lst, name_dup, val_dup);
+		free(val_dup);
+		free(name_dup);
+	}
 	else
 	{
 		while (inter->next)
@@ -98,6 +107,8 @@ void	add_val(t_list *lst, char *name, char *val)
 			((t_env_var *)inter->content)->value = ft_strdup(val);
 		}
 	}
+	if(!*res)
+		free(res);
 }
 
 int	delete_val(t_list **lst, char *name)
@@ -129,6 +140,23 @@ int	delete_val(t_list **lst, char *name)
 		free(inter);
 	}
 	return (1);
+}
+
+void	free_env(t_list *env)
+{
+	t_list	*inter;
+	t_list	*nxt;
+
+	inter = env;
+	while (inter->next)
+	{
+		nxt = inter->next;
+		free_env_var((t_env_var *)inter->content);
+		free(inter);
+		inter = nxt;
+	}
+	free_env_var((t_env_var *)inter->content);
+	free(inter);
 }
 
 char	**get_env_in_char(t_list *env)

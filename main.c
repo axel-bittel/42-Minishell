@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/02/27 00:23:55 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 12:19:44 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -33,10 +33,9 @@ t_cmd	*parse_cmd (char *cmd, t_list *env)
 	expander(res, env);
 	final = parser(res, &i, 0);
 	if (final)
-	{
-		//print_tree (final);
 		exec_tree_cmd(final, env);
-	}
+	free_cmd_token(res);
+	free_tree(final);
 	return (0);
 }
 void	sig_sigint(int sig)
@@ -49,12 +48,16 @@ void	sig_sigint(int sig)
 	rl_redisplay();
 }
 
+void	sig_sigkill(int sig)
+{
+	(void)sig;
+}
+
 void	signal_catching(void)
 {
 	g_sig.run = 1;
 	signal (SIGINT, &sig_sigint);
-	//signal(SIGPIPE, signal_callback_handler);
-	signal (SIGQUIT, NULL);
+	signal (SIGKILL, &sig_sigkill);
 }
 
 void	print_header ()
@@ -81,6 +84,8 @@ int	main(int argc, char **argv, char **envp)
 	{
 		rl_on_new_line ();
 		cmd = readline("BISCUIT > ");
+		if (!cmd)
+			exit_sig(1, env);
 		parse_cmd (cmd, env);
 		if (g_sig.stop_cmd)
 		{

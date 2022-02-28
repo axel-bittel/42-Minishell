@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/27 00:16:45 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 12:06:17 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -227,7 +227,7 @@ int	exec_build_in(t_cmd *cmd, t_list *env, int i, int fd)
 	if (!ft_strcmp("unset", cmd_trim))
 		res = unset_bi(cmd->cmd[i]->cmd, env);
 	if (!ft_strcmp("exit", cmd_trim))
-		res = exit_bi(cmd, i, fd);
+		res = exit_bi(cmd, i, fd, env);
 	free_tabstr(env_chr);
 	free (cmd_trim);
 	return (res);

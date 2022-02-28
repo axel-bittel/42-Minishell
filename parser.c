@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/27 00:29:47 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 12:21:01 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -113,6 +113,14 @@ void	print_tree(t_tree *tree)
 	}
 }
 */
+
+void	free_cmd_token(t_cmd_token *cmd)
+{
+	free_tabstr(cmd->cmd);
+	free_tabint(cmd->token);
+	free(cmd);
+}
+
 t_tree	*free_tree(t_tree *tree)
 {
 	if (!tree)

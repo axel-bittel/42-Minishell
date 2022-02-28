@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/27 00:27:07 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 12:05:37 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ void	free_cmd(t_cmd *cmd)
 	}
 }
 
-int	exit_bi(t_cmd *cmd, int i, int fd)
+int	exit_bi(t_cmd *cmd, int i, int fd, t_list *env)
 {
 	int	stat;
 
+	free_env(env);
 	ft_putstr_fd("exit\n", fd);
 	if(size_tabstr(cmd->cmd[i]->cmd) == 1)
 	{
@@ -52,4 +53,11 @@ int	exit_bi(t_cmd *cmd, int i, int fd)
 	else
 		ft_putstr_fd("BISCUIT: exit: ERROR ARGUMENT", 2);
 	return (1);
+}
+
+int	exit_sig(int exit_nb, t_list *env)
+{
+	free_env(env);
+	ft_putstr_fd("exit\n", 1);
+	exit(exit_nb);
 }
