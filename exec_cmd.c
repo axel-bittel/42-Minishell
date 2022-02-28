@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/28 12:06:17 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 18:55:39 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -233,6 +233,17 @@ int	exec_build_in(t_cmd *cmd, t_list *env, int i, int fd)
 	return (res);
 }
 
+int		is_path(char *str)
+{
+	int	i;
+
+	i = -1;
+	while(str[++i])
+		if (str[i] == '/')
+			return (1);
+	return (0);
+}
+
 int	exec_sys_cmd(char **args, t_list *envp)
 {
 	int		i;
@@ -256,9 +267,15 @@ int	exec_sys_cmd(char **args, t_list *envp)
 	else
 		execve(args[0], args, get_env_in_char(envp));
 	f_cmd = ft_strjoin("BISCUIT:", args[0]);
-	perror(f_cmd);
+	if (is_path(args[0]))
+		perror(f_cmd);
+	else
+	{
+		ft_putstr_fd(f_cmd, 2);
+		ft_putstr_fd(": Command not found\n", 2);
+	}
 	free(f_cmd);
-	exit (errno);
+	exit (127);
 }
 
 int	exec_sub_cmd(t_cmd *cmd, int *i, t_list *env)
@@ -266,6 +283,8 @@ int	exec_sub_cmd(t_cmd *cmd, int *i, t_list *env)
 	int	i_bis;
 
 	i_bis = *i;
+	if (!cmd->cmd || !cmd->cmd[*i])
+		return (i_bis);
 	if(is_build_in(cmd->cmd[*i]->cmd[0]))
 	{
 		if (cmd->cmd[*i + 1])
@@ -319,7 +338,7 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), O_WRONLY | O_TRUNC | O_CREAT) || \
 check_file(cmd->cmd[i]->out_add, &(cmd->cmd[i]->fd_out_add), O_WRONLY | O_APPEND | O_CREAT) ||
 read_heardocs(cmd->cmd[i], env))
-			return (add_val(env, "?", ft_itoa(errno)), 1);
+			return (add_val(env, "?", "1"), 1);
 		i = exec_sub_cmd(cmd, &i, env);
 	}
 	close_pipes(cmd, size_tabcmd(cmd->cmd));
@@ -327,7 +346,8 @@ read_heardocs(cmd->cmd[i], env))
 	while(cmd->cmd[++i])
 	{
 		waitpid(-1, &status, 0);
-		add_val(env, "?", ft_itoa(WEXITSTATUS(status)));
+		if(!is_build_in(cmd->cmd[i]->cmd[0]))
+			add_val(env, "?", ft_itoa(WEXITSTATUS(status)));
 	}
 	return (status);
 }

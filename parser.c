@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/28 16:02:40 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 18:49:41 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -147,7 +147,7 @@ int	print_parse_error(t_cmd_token *cmd, int idx)
 	}
 	else
 		ft_putstr_fd("SH: parse error near \n", 2);
-	return (0);
+	return (1);
 }
 
 int	next_is_input(t_cmd_token *cmd, int idx)
