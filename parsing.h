@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/28 12:20:57 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 14:28:00 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ typedef struct s_sig
 	int			old_stdout;
 	int			new_stdin;
 	int			new_stdout;
+	t_tree		*tree;
 }	t_sig;
 
 t_sig	g_sig;

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/28 12:05:37 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 14:41:51 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ void	free_cmd(t_cmd *cmd)
 {
 	int	i;
 
+	i = -1;
 	free_tabint(cmd->pipes);
 	while (cmd->cmd[++i])
 	{
@@ -31,6 +32,8 @@ void	free_cmd(t_cmd *cmd)
 		free_tabint(cmd->cmd[i]->fd_out_replace);
 		free(cmd->cmd[i]);
 	}
+	free(cmd->cmd);
+	free(cmd);
 }
 
 int	exit_bi(t_cmd *cmd, int i, int fd, t_list *env)
@@ -41,13 +44,13 @@ int	exit_bi(t_cmd *cmd, int i, int fd, t_list *env)
 	ft_putstr_fd("exit\n", fd);
 	if(size_tabstr(cmd->cmd[i]->cmd) == 1)
 	{
-		free_cmd(cmd);
+		free_tree(g_sig.tree);
 		exit(0);
 	}
 	else if(size_tabstr(cmd->cmd[i]->cmd) == 2)
 	{
 		stat = ft_atoi(cmd->cmd[i]->cmd[1]);
-		free_cmd(cmd);
+		free_tree(g_sig.tree);
 		exit (stat);
 	}
 	else

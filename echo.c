@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 16:47:53 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/26 11:13:14 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 16:08:09 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -22,7 +22,7 @@ int	echo_bi(char **cmd, int fd)
 	end_line = 1;
 	while (cmd[++i])
 	{
-		inter = cmd[i];
+		inter = ft_strdup(cmd[i]);
 		if (!ft_strcmp(cmd[i], "-n") && i == 1)
 			end_line = 0;
 		else

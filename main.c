@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/02/28 12:19:44 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 15:36:08 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -33,9 +33,13 @@ t_cmd	*parse_cmd (char *cmd, t_list *env)
 	expander(res, env);
 	final = parser(res, &i, 0);
 	if (final)
+	{
+		g_sig.tree = final;
 		exec_tree_cmd(final, env);
+	}
+	if(final)
+		free_tree(final);
 	free_cmd_token(res);
-	free_tree(final);
 	return (0);
 }
 void	sig_sigint(int sig)

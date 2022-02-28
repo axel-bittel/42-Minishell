@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 02:52:24 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/25 18:09:55 by abittel          ###   ########.fr       */
+/*   Updated: 2022/02/28 13:38:25 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -152,5 +152,6 @@ t_cmd_token	*tokenisation(char *cmd)
 			i = get_end_tok(cmd_int, i);
 		}
 	}
+	free(cmd_int);
 	return (tok);
 }
