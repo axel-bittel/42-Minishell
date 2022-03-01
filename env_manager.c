@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/28 12:29:03 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/01 21:48:25 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -107,8 +107,6 @@ void	add_val(t_list *lst, char *name, char *val)
 			((t_env_var *)inter->content)->value = ft_strdup(val);
 		}
 	}
-	if(!*res)
-		free(res);
 }
 
 int	delete_val(t_list **lst, char *name)

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 02:52:24 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/28 13:38:25 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/01 20:29:57 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -73,7 +73,7 @@ int	get_idx_until_new_tok(char *cmd, int start)
 	old_tok = is_token(cmd[i]);
 	while (cmd[++i])
 	{
-		if ((is_token(cmd[i]) != TOKEN_REST && is_token(cmd[i]) != TOKEN_SPACE) || \
+		if ((is_token(cmd[i]) != TOKEN_REST && is_token(cmd[i]) != TOKEN_SPACE && is_token(cmd[i]) != TOKEN_ARG) || \
 (old_tok == TOKEN_SPACE && is_token(cmd[i]) == TOKEN_REST))
 			return (i - 1);
 		old_tok = is_token(cmd[i]);

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/28 18:49:41 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/01 21:12:20 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -61,7 +61,7 @@ void	str_join_to_last(char **tab, char *str)
 	tab[size_tabstr(tab) - 1] = ft_strjoin(tab[size_tabstr(tab) - 1], str);
 	free(inter);
 }
-/*
+#include <stdio.h>
 void	print_cmd(t_cmd *cmd)
 {
 	int	i;
@@ -71,7 +71,7 @@ void	print_cmd(t_cmd *cmd)
 	while (cmd->cmd[++i])
 	{
 		j = -1;
-		while (cmd->cmd[i]->cmd[++j])
+		while (cmd->cmd[i]->cmd && cmd->cmd[i]->cmd[++j])
 			printf("%s\n", cmd->cmd[i]->cmd[j]);
 		printf("\n");
 		j = -1;
@@ -112,7 +112,7 @@ void	print_tree(t_tree *tree)
 		}
 	}
 }
-*/
+
 
 void	free_cmd_token(t_cmd_token *cmd)
 {
@@ -270,7 +270,7 @@ t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 		}
 		idx++;
 	}
-	if (inter->cmd)
+	if (inter)
 		res->cmd = ft_cmdjoin(res->cmd, inter);
 	else
 		free(inter);
