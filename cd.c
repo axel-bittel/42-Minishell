@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 20:47:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/25 00:08:42 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/02 19:28:07 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "build_in.h"
@@ -47,7 +47,8 @@ void	add_file_in_path(char **str, char *add)
 	inter = *str;
 	*str = ft_strjoin(*str, add);
 	free(inter);
-	free(add);
+	if (add)
+		free(add);
 }
 
 void	delete_file_in_path(char **str)

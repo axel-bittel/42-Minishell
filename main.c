@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/02/28 12:19:44 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/02 20:12:35 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -87,11 +87,6 @@ int	main(int argc, char **argv, char **envp)
 		if (!cmd)
 			exit_sig(1, env);
 		parse_cmd (cmd, env);
-		if (g_sig.stop_cmd)
-		{
-			g_sig.stop_cmd = 0;
-			continue ;
-		}
 		free (cmd);
 	}
 	return (0);

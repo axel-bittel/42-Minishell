@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:27:48 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/21 16:01:20 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/02 19:53:44 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -71,6 +71,7 @@ void	expand_VAR(char **cmd, t_list *env)
 		{
 			inter = ft_substrdup(*cmd, i + 1, get_end_VAR(*cmd, i));
 			*cmd = insert_str(*cmd, ft_strdup(get_val_var(env, inter)), &i, get_end_VAR(*cmd, i));
+			free (inter);
 		}
 	}
 }
@@ -187,19 +188,16 @@ char	*delete_chr_in_str(char *str, char chr)
 void	expander(t_cmd_token *cmd, t_list *env)
 {
 	int		i;
-	//char	*inter;
 
 	i = -1;
 	while (++i < size_tabint(cmd->token))
 	{
 		if (*cmd->token[i] == TOKEN_DQUOTE || *cmd->token[i] == TOKEN_QUOTE)
 		{
-			//inter = cmd->cmd[i];
 			if (*cmd->token[i] == TOKEN_DQUOTE)
 				cmd->cmd[i] = delete_chr_in_str(cmd->cmd[i], '\"');
 			if (*cmd->token[i] == TOKEN_QUOTE)
 				cmd->cmd[i] = delete_chr_in_str(cmd->cmd[i], '\'');
-			//free(inter);
 		}
 		if (*cmd->token[i] == TOKEN_REST || *cmd->token[i] == TOKEN_DQUOTE)
 			expand_VAR(cmd->cmd + i, env);
