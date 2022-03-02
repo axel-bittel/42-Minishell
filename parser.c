@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/28 12:21:01 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/01 21:12:20 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -61,7 +61,7 @@ void	str_join_to_last(char **tab, char *str)
 	tab[size_tabstr(tab) - 1] = ft_strjoin(tab[size_tabstr(tab) - 1], str);
 	free(inter);
 }
-/*
+#include <stdio.h>
 void	print_cmd(t_cmd *cmd)
 {
 	int	i;
@@ -71,7 +71,7 @@ void	print_cmd(t_cmd *cmd)
 	while (cmd->cmd[++i])
 	{
 		j = -1;
-		while (cmd->cmd[i]->cmd[++j])
+		while (cmd->cmd[i]->cmd && cmd->cmd[i]->cmd[++j])
 			printf("%s\n", cmd->cmd[i]->cmd[j]);
 		printf("\n");
 		j = -1;
@@ -112,7 +112,7 @@ void	print_tree(t_tree *tree)
 		}
 	}
 }
-*/
+
 
 void	free_cmd_token(t_cmd_token *cmd)
 {
@@ -133,6 +133,7 @@ t_tree	*free_tree(t_tree *tree)
 		free_tree(tree->f_a);
 		free_tree(tree->f_b);
 	}
+	free(tree);
 	return (NULL);
 }
 
@@ -146,7 +147,7 @@ int	print_parse_error(t_cmd_token *cmd, int idx)
 	}
 	else
 		ft_putstr_fd("SH: parse error near \n", 2);
-	return (0);
+	return (1);
 }
 
 int	next_is_input(t_cmd_token *cmd, int idx)
@@ -169,7 +170,7 @@ t_cmd	*init_cmd(void)
 
 	res = malloc (sizeof(t_cmd));
 	res->cmd = malloc(sizeof(t_cmd *));
-	res->cmd = NULL;
+	res->cmd[0] = NULL;
 	res->pipes = 0;
 	return (res);
 }
@@ -195,24 +196,24 @@ int	get_cmd_cond_elem_token(t_cmd_token *cmd, int *idx, t_sub_cmd **inter)
 {
 	if (*cmd->token[*idx] == TOKEN_INDIR && next_is_input(cmd, *idx))
 	{
-		(*inter)->in = ft_tabjoin((*inter)->in, cmd->cmd[(*idx)++ + 1]);
+		(*inter)->in = ft_tabjoin((*inter)->in, ft_strdup(cmd->cmd[(*idx)++ + 1]));
 		(*inter)->last_is_in = 1;
 	}
 	else if (*cmd->token[*idx] == TOKEN_DINDIR && next_is_input(cmd, *idx))
 	{
-		(*inter)->hear_doc = ft_tabjoin((*inter)->hear_doc, cmd->cmd[(*idx)++ + 1]);
+		(*inter)->hear_doc = ft_tabjoin((*inter)->hear_doc, ft_strdup(cmd->cmd[(*idx)++ + 1]));
 		(*inter)->last_is_in = 0;
 	}
 	else if (*cmd->token[*idx] == TOKEN_REDIR && next_is_input(cmd, *idx))
 	{
-		(*inter)->out_replace = ft_tabjoin((*inter)->out_replace, cmd->cmd[(*idx)++ + 1]);
+		(*inter)->out_replace = ft_tabjoin((*inter)->out_replace, ft_strdup(cmd->cmd[(*idx)++ + 1]));
 		(*inter)->last_is_add = 0;
 	}
 	else if (*cmd->token[*idx] == TOKEN_ARG)
-		(*inter)->cmd = ft_tabjoin((*inter)->cmd, cmd->cmd[*idx]);
+		(*inter)->cmd = ft_tabjoin((*inter)->cmd, ft_strdup(cmd->cmd[*idx]));
 	else if (*cmd->token[*idx] == TOKEN_DREDIR && next_is_input(cmd, *idx))
 	{
-		(*inter)->out_add = ft_tabjoin((*inter)->out_add, cmd->cmd[(*idx)++ + 1]);
+		(*inter)->out_add = ft_tabjoin((*inter)->out_add, ft_strdup(cmd->cmd[(*idx)++ + 1]));
 		(*inter)->last_is_add = 1;
 	}
 	else
@@ -226,7 +227,7 @@ int	get_cmd_cond_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, t_sub_cmd **int
 	{
 		if (!(*inter)->cmd)
 			*cmd->token[idx] = TOKEN_CMD;
-		(*inter)->cmd = ft_tabjoin((*inter)->cmd, cmd->cmd[idx]);
+		(*inter)->cmd = ft_tabjoin((*inter)->cmd, ft_strdup(cmd->cmd[idx]));
 	}
 	else if (*cmd->token[idx] == TOKEN_PIPE && (next_is_input(cmd, idx) \
 || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
@@ -269,7 +270,7 @@ t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 		}
 		idx++;
 	}
-	if (inter->cmd)
+	if (inter)
 		res->cmd = ft_cmdjoin(res->cmd, inter);
 	else
 		free(inter);

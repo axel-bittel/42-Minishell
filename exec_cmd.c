@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/02 20:47:36 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/02 20:50:40 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -122,11 +122,7 @@ int	check_file(char **names, int ***fd_tab, int ARG)
 			error_msg = ft_strjoin("BISCUIT: ", names[i]);
 			perror(error_msg);
 			free(inter_fd);
-			free(names[i]);
-			if (errno == EACCES)
-				return (errno = 126, 126);
-			else
-				return (1);
+			return (1);
 		}
 		else
 			*fd_tab = ft_tabintjoin(*fd_tab, inter_fd);
@@ -192,6 +188,8 @@ void	close_pipes(t_cmd *cmd, int idx)
 	int	i;
 
 	i = -1;
+	if (!cmd->pipes)
+		return ;
 	while (cmd->pipes[++i] && i < idx)
 	{
 		close(cmd->pipes[i][0]);
@@ -233,13 +231,13 @@ int	exec_build_in(t_cmd *cmd, t_list *env, int i, int fd)
 	return (res);
 }
 
-int	is_path(char *cmd)
+int		is_path(char *str)
 {
 	int	i;
 
 	i = -1;
-	while (cmd[++i])
-		if (cmd[i] == '/')
+	while(str[++i])
+		if (str[i] == '/')
 			return (1);
 	return (0);
 }
@@ -262,8 +260,9 @@ int	exec_sys_cmd(char **args, t_list *envp)
 		free(inter_path);
 		free(f_cmd);
 	}
+	inter_path = get_absolute_path(envp, args[0]);
 	if (!is_absolute_path(args[0]))
-		execve(get_absolute_path(envp, args[0]), args, get_env_in_char(envp));
+		execve(inter_path, args, 0);
 	else
 		execve(args[0], args, get_env_in_char(envp));
 	if (!is_path(args[0]))
@@ -271,8 +270,15 @@ int	exec_sys_cmd(char **args, t_list *envp)
 		ft_putstr_fd("BISCUIT: COMMAND NOT FOUND\n", 2);
 		exit (127);
 	}
+	free(inter_path);
 	f_cmd = ft_strjoin("BISCUIT:", args[0]);
-	perror(f_cmd);
+	if (is_path(args[0]))
+		perror(f_cmd);
+	else
+	{
+		ft_putstr_fd(f_cmd, 2);
+		ft_putstr_fd(": Command not found\n", 2);
+	}
 	free(f_cmd);
 	exit (1);
 }
@@ -282,6 +288,8 @@ int	exec_sub_cmd(t_cmd *cmd, int *i, t_list *env)
 	int	i_bis;
 
 	i_bis = *i;
+	if (!cmd->cmd || !cmd->cmd[*i] || !cmd->cmd[*i]->cmd)
+		return (i_bis);
 	if(is_build_in(cmd->cmd[*i]->cmd[0]))
 	{
 		if (cmd->cmd[*i + 1])
@@ -308,6 +316,8 @@ void	get_pipes(t_cmd *cmd)
 
 	i = -1;
 	size_tab = size_tabcmd(cmd->cmd);
+	if (size_tab <= 0)
+		return ;
 	cmd->pipes = malloc(sizeof(int *) * (size_tab));
 	cmd->pipes[size_tab - 1] = NULL;
 	while(++i < size_tab - 1)
@@ -335,7 +345,7 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), O_WRONLY | O_TRUNC | O_CREAT) || \
 check_file(cmd->cmd[i]->out_add, &(cmd->cmd[i]->fd_out_add), O_WRONLY | O_APPEND | O_CREAT) ||
 read_heardocs(cmd->cmd[i], env))
-			return (add_val(env, "?", ft_itoa(errno)), 1);
+			return (add_val(env, "?", "1"), 1);
 		i = exec_sub_cmd(cmd, &i, env);
 	}
 	close_pipes(cmd, size_tabcmd(cmd->cmd));
@@ -343,7 +353,8 @@ read_heardocs(cmd->cmd[i], env))
 	while(cmd->cmd[++i])
 	{
 		waitpid(-1, &status, 0);
-		add_val(env, "?", ft_itoa(WEXITSTATUS(status)));
+		if(cmd->cmd[i]->cmd && !is_build_in(cmd->cmd[i]->cmd[0]))
+			add_val(env, "?", ft_itoa(WEXITSTATUS(status)));
 	}
 	return (status);
 }
