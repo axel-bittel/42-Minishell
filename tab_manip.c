@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 02:55:39 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/26 23:42:06 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/03 15:01:28 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -19,7 +19,8 @@ int	size_tabstr(char **str)
 	i = -1;
 	if (!str)
 		return (0);
-	while (str[++i]);
+	while (str[i])
+		i++;
 	return (i);
 }
 
@@ -30,7 +31,8 @@ int	size_tabtabstr(char ***str)
 	i = -1;
 	if (!str)
 		return (0);
-	while (str[++i]);
+	while (str[i])
+		i++;
 	return (i);
 }
 
@@ -41,7 +43,8 @@ int	size_tabint(int **str)
 	i = -1;
 	if (!str)
 		return (0);
-	while (str[++i]);
+	while (str[i])
+		i++;
 	return (i);
 }
 
@@ -83,7 +86,7 @@ char	***ft_tabtabjoin(char ***tab, char **tab_add)
 	return (res);
 }
 
-int	**ft_tabintjoin(int **tab, int* num)
+int	**ft_tabintjoin(int **tab, int *num)
 {
 	int		i;
 	int		**res;
@@ -107,9 +110,9 @@ int	size_tabcmd(t_sub_cmd **tab)
 	int	i;
 
 	i = 0;
-	if(!tab)
+	if (!tab)
 		return (0);
-	while(tab[i])
+	while (tab[i])
 		i++;
 	return (i);
 }
@@ -167,7 +170,7 @@ void	free_tabint(int **tab_int)
 		return ;
 	while (tab_int && tab_int[++i])
 		free(tab_int[i]);
-	if(tab_int)
+	if (tab_int)
 		free(tab_int);
 }
 
@@ -200,7 +203,7 @@ char	**ft_tabstrtrim(char **tab)
 
 	i = 0;
 	res = malloc (sizeof(char *) * (size_tabstr(tab) + 1));
-	while(tab && tab[i])
+	while (tab && tab[i])
 	{
 		res[i] = ft_strtrim(tab[i], " ");
 		i++;

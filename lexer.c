@@ -5,15 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/01/29 02:52:24 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/01 20:29:57 by abittel          ###   ########.fr       */
+/*   Created: 2022/03/03 15:32:06 by abittel           #+#    #+#             */
+/*   Updated: 2022/03/03 15:41:33 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
 #include "libft.h"
 #include <stdlib.h>
 
-int	is_token (char c)
+int	is_token(char c)
 {
 	if (c == '-')
 		return (TOKEN_ARG);
@@ -58,7 +58,7 @@ int	get_idx_until_c_and_space(char *cmd, int start, char c)
 	{
 		if (cmd[i] == ' ' && cmd[i + 1] != ' ')
 			return (i);
-		else if(cmd[i] != ' ')
+		else if (cmd[i] != ' ')
 			return (i - 1);
 	}
 	return (-1);
@@ -73,8 +73,9 @@ int	get_idx_until_new_tok(char *cmd, int start)
 	old_tok = is_token(cmd[i]);
 	while (cmd[++i])
 	{
-		if ((is_token(cmd[i]) != TOKEN_REST && is_token(cmd[i]) != TOKEN_SPACE && is_token(cmd[i]) != TOKEN_ARG) || \
-(old_tok == TOKEN_SPACE && is_token(cmd[i]) == TOKEN_REST))
+		if ((is_token(cmd[i]) != TOKEN_REST && is_token(cmd[i]) != TOKEN_SPACE \
+	&& is_token(cmd[i]) != TOKEN_ARG) || (old_tok == TOKEN_SPACE \
+	&& is_token(cmd[i]) == TOKEN_REST))
 			return (i - 1);
 		old_tok = is_token(cmd[i]);
 	}
@@ -97,27 +98,19 @@ int	get_end_tok(char *cmd, int i)
 	int	tok;
 
 	tok = is_token(cmd[i]);
-	if (tok == TOKEN_DQUOTE || tok == TOKEN_QUOTE)
-	{
-		if (get_idx_until_c_and_space(cmd, i, cmd[i]) != -1)
-			return (get_idx_until_c_and_space(cmd, i, cmd[i]));
-	}
-	else if (tok == TOKEN_ARG)
-	{
-		if (get_idx_until_diff_tok(cmd, i, TOKEN_REST) != -1)
-			return (get_idx_until_diff_tok(cmd, i, TOKEN_REST));
-	}
-	else if (tok == TOKEN_REDIR || tok == TOKEN_INDIR || \
-tok == TOKEN_AND || tok == TOKEN_OR)
-	{
-		if (get_idx_until_diff_tok(cmd, i, is_token(cmd[i])) != -1)
-			return (get_idx_until_diff_tok(cmd, i, is_token(cmd[i])));
-	}
-	else if (tok == TOKEN_REST && !i)
-	{
-		if (get_idx_until_diff_tok(cmd, i, TOKEN_REST) != -1)
-			return (get_idx_until_diff_tok(cmd, i, TOKEN_REST));
-	}
+	if ((tok == TOKEN_DQUOTE || tok == TOKEN_QUOTE) && \
+	(get_idx_until_c_and_space(cmd, i, cmd[i]) != -1))
+		return (get_idx_until_c_and_space(cmd, i, cmd[i]));
+	else if ((tok == TOKEN_ARG) && \
+	(get_idx_until_diff_tok(cmd, i, TOKEN_REST) != -1))
+		return (get_idx_until_diff_tok(cmd, i, TOKEN_REST));
+	else if ((tok == TOKEN_REDIR || tok == TOKEN_INDIR || \
+tok == TOKEN_AND || tok == TOKEN_OR) && \
+	(get_idx_until_diff_tok(cmd, i, is_token(cmd[i])) != -1))
+		return (get_idx_until_diff_tok(cmd, i, is_token(cmd[i])));
+	else if ((tok == TOKEN_REST && !i) && \
+	(get_idx_until_diff_tok(cmd, i, TOKEN_REST) != -1))
+		return (get_idx_until_diff_tok(cmd, i, TOKEN_REST));
 	else if (tok == TOKEN_REST || tok == TOKEN_SPACE)
 	{
 		if (get_idx_until_new_tok(cmd, i) != -1)
@@ -147,7 +140,8 @@ t_cmd_token	*tokenisation(char *cmd)
 		{
 			inter = malloc (sizeof(int));
 			*inter = is_token(cmd_int[i]);
-			tok->cmd = ft_tabjoin(tok->cmd, ft_substrdup(cmd, i, get_end_tok(cmd_int, i)));
+			tok->cmd = ft_tabjoin(tok->cmd, ft_substrdup(cmd, i, \
+get_end_tok(cmd_int, i)));
 			tok->token = ft_tabintjoin(tok->token, inter);
 			i = get_end_tok(cmd_int, i);
 		}

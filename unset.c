@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 16:24:42 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/26 18:36:49 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/03 17:40:49 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "build_in.h"
 #include "env_manager.h"
 
-int	unset_bi(char **cmd,t_list *env)
+int	unset_bi(char **cmd, t_list *env)
 {
 	int		i;
 	char	*inter;

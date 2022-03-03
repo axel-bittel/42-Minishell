@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/02 20:51:17 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/03 17:39:15 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -20,11 +20,12 @@ void	free_env_var(t_env_var *var)
 	free(var->value);
 	free(var);
 }
+
 t_list	*get_fst_env(char **envp)
 {
-	int		i;
-	char	**line_splt;
-	t_list	*res;
+	int			i;
+	char		**line_splt;
+	t_list		*res;
 	t_env_var	*inter;
 
 	res = 0;
@@ -52,11 +53,11 @@ char	*get_val_var(t_list *lst, char *name)
 	inter = lst;
 	while (inter->next)
 	{
-		if(!ft_strcmp(name, ((t_env_var *)inter->content)->name))
+		if (!ft_strcmp(name, ((t_env_var *)inter->content)->name))
 			return (((t_env_var *)inter->content)->value);
 		inter = inter->next;
 	}
-	if(!ft_strcmp(name, ((t_env_var *)inter->content)->name))
+	if (!ft_strcmp(name, ((t_env_var *)inter->content)->name))
 		return (((t_env_var *)inter->content)->value);
 	res_null = malloc (sizeof(char));
 	*res_null = 0;
@@ -73,41 +74,55 @@ void	ft_lst_add_back_var(t_list *lst, char *name, char *val)
 	ft_lstadd_back(&lst, ft_lstnew(new));
 }
 
+void	add_val_not_exist(t_list *lst, char *name, char *val, char *res)
+{
+	char	*name_dup;
+	char	*val_dup;
+
+	val_dup = ft_strdup(val);
+	name_dup = ft_strdup(name);
+	ft_lst_add_back_var(lst, name_dup, val_dup);
+	free(val_dup);
+	free(name_dup);
+	free(res);
+}
+
 void	add_val(t_list *lst, char *name, char *val)
 {
 	char	*res;
-	char	*name_dup;
-	char	*val_dup;
 	t_list	*inter;
 
 	inter = lst;
 	res = get_val_var(lst, name);
 	if (!res[0])
-	{
-		val_dup = ft_strdup(val);
-		name_dup = ft_strdup(name);
-		ft_lst_add_back_var(lst, name_dup, val_dup);
-		free(val_dup);
-		free(name_dup);
-		free(res);
-	}
+		add_val_not_exist(lst, name, val, res);
 	else
 	{
 		while (inter->next)
 		{
-			if(!ft_strcmp(name, ((t_env_var *)inter->content)->name))
+			if (!ft_strcmp(name, ((t_env_var *)inter->content)->name))
 			{
 				free(((t_env_var *)inter->content)->value);
 				((t_env_var *)inter->content)->value = ft_strdup(val);
 			}
 			inter = inter->next;
 		}
-		if(!ft_strcmp(name, ((t_env_var *)inter->content)->name))
+		if (!ft_strcmp(name, ((t_env_var *)inter->content)->name))
 		{
 			free(((t_env_var *)inter->content)->value);
 			((t_env_var *)inter->content)->value = ft_strdup(val);
 		}
 	}
+}
+
+void	delete_elem(t_list **lst, t_list *inter, t_list *prec)
+{
+	if (prec)
+		prec->next = inter->next;
+	else
+		*lst = inter->next;
+	free_env_var((t_env_var *)inter->content);
+	free(inter);
 }
 
 int	delete_val(t_list **lst, char *name)
@@ -119,20 +134,15 @@ int	delete_val(t_list **lst, char *name)
 	inter = *lst;
 	while (inter && lst && inter->next)
 	{
-		if(!ft_strcmp(name, ((t_env_var *)inter->content)->name))
+		if (!ft_strcmp(name, ((t_env_var *)inter->content)->name))
 		{
-			if(prec)
-				prec->next = inter->next;
-			else
-				*lst = inter->next;
-			free_env_var((t_env_var *)inter->content);
-			free(inter);
+			delete_elem(lst, inter, prec);
 			return (1);
 		}
 		prec = inter;
 		inter = inter->next;
 	}
-	if(!ft_strcmp(name, ((t_env_var *)inter->content)->name))
+	if (!ft_strcmp(name, ((t_env_var *)inter->content)->name))
 	{
 		prec->next = NULL;
 		free_env_var((t_env_var *)inter->content);
@@ -170,15 +180,15 @@ char	**get_env_in_char(t_list *env)
 	inter_l = env;
 	while (inter_l->next)
 	{
-		res[++i] = ft_strjoin(((t_env_var *)inter_l->content)->name, "=");
+		res[++i] = ft_strjoin (((t_env_var *)inter_l->content)->name, "=");
 		inter = res[i];
-		res[i] = ft_strjoin(res[i],((t_env_var *)inter_l->content)->value);
+		res[i] = ft_strjoin (res[i], ((t_env_var *)inter_l->content)->value);
 		free(inter);
 		inter_l = (t_list *)inter_l->next;
 	}
 	res[++i] = ft_strjoin(((t_env_var *)inter_l->content)->name, "=");
 	inter = res[i];
-	res[i] = ft_strjoin(res[i],((t_env_var *)inter_l->content)->value);
+	res[i] = ft_strjoin(res[i], ((t_env_var *)inter_l->content)->value);
 	free(inter);
 	res[++i] = NULL;
 	return (res);

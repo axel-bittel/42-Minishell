@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/27 19:54:10 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/01 17:13:40 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/03 15:59:47 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_tree.h"
@@ -27,7 +27,8 @@ t_tree	*ft_treenew(void *content)
 	res->content = content;
 	return (res);
 }
-t_tree	*ft_treenew_fill (void *content, t_tree *fils_a, t_tree *fils_b)
+
+t_tree	*ft_treenew_fill(void *content, t_tree *fils_a, t_tree *fils_b)
 {
 	t_tree	*res;
 

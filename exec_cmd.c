@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/02 20:50:40 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/03 17:44:57 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -27,12 +27,27 @@ int	is_build_in(char *str)
 
 	res = 0;
 	str_trim = ft_strtrim(str, " ");
-	if(!ft_strcmp(str_trim, "cd") || !ft_strcmp(str_trim, "env") || \
-!ft_strcmp(str_trim, "pwd") || !ft_strcmp(str_trim, "echo") || !ft_strcmp(str_trim, "export") \
-|| !ft_strcmp(str_trim, "unset") || !ft_strcmp(str_trim, "exit"))
+	if (!ft_strcmp(str_trim, "cd") || !ft_strcmp(str_trim, "env") || \
+!ft_strcmp(str_trim, "pwd") || !ft_strcmp(str_trim, "echo") || \
+!ft_strcmp(str_trim, "export") || !ft_strcmp(str_trim, "unset") || \
+!ft_strcmp(str_trim, "exit"))
 		res = 1;
 	free(str_trim);
 	return (res);
+}
+
+void	read_heardoc_addline(char *line, char **res, char **inter)
+{
+	if (*res)
+		*inter = *res;
+	*res = ft_strjoin(*res, "\n");
+	if (*inter)
+		free(*inter);
+	*inter = *res;
+	*res = ft_strjoin(*res, line);
+	free(*inter);
+	if (line)
+		free(line);
 }
 
 char	*read_heardoc(char *end)
@@ -53,18 +68,7 @@ char	*read_heardoc(char *end)
 		if (!ft_strcmp(line, end))
 			find_end = 1;
 		else
-		{
-			if (*res)
-				inter = res;
-			res = ft_strjoin(res, "\n");
-			if (inter)
-				free(inter);
-			inter = res;
-			res = ft_strjoin(res, line);
-			free(inter);
-			if (line)
-				free(line);
-		}
+			read_heardoc_addline(line, &res, &inter);
 	}
 	return (res);
 }
@@ -80,6 +84,7 @@ char	*get_name_hd(int i)
 	free(inter);
 	return (res);
 }
+
 int	read_heardocs(t_sub_cmd *cmd, t_list *env)
 {
 	int		i;
@@ -96,7 +101,7 @@ int	read_heardocs(t_sub_cmd *cmd, t_list *env)
 		if (!*fd)
 			return (errno);
 		line_heardoc = read_heardoc(cmd->hear_doc[i]);
-		expand_VAR(&line_heardoc, env);
+		expand_var(&line_heardoc, env);
 		ft_putstr_fd (line_heardoc, *fd);
 		close(*fd);
 		*fd = open(name, O_RDWR);
@@ -108,8 +113,8 @@ int	read_heardocs(t_sub_cmd *cmd, t_list *env)
 
 int	check_file(char **names, int ***fd_tab, int ARG)
 {
-	int	i;
-	int	*inter_fd;
+	int		i;
+	int		*inter_fd;
 	char	*error_msg;
 
 	i = -1;
@@ -117,7 +122,7 @@ int	check_file(char **names, int ***fd_tab, int ARG)
 	{
 		inter_fd = malloc(sizeof(int));
 		*inter_fd = open(names[i], ARG, 0666);
-		if (*inter_fd== -1)
+		if (*inter_fd == -1)
 		{
 			error_msg = ft_strjoin("BISCUIT: ", names[i]);
 			perror(error_msg);
@@ -130,56 +135,77 @@ int	check_file(char **names, int ***fd_tab, int ARG)
 	return (0);
 }
 
-void	dup_manager(t_cmd *cmd, int i, int is_bi)
+void	dup_manager_read(t_cmd *cmd, int i, t_sub_cmd *c)
 {
 	if (cmd->cmd[i]->fd_in || cmd->cmd[i]->fd_hear_doc)
 	{
 		g_sig.old_stdin = dup(0);
-		if(cmd->cmd[i]->last_is_in == 1)
+		if (cmd->cmd[i]->last_is_in == 1)
 		{
-			g_sig.new_stdin = dup2(*cmd->cmd[i]->fd_in[size_tabint(cmd->cmd[i]->fd_in) - 1], 0);
-			g_sig.new_stdin = *cmd->cmd[i]->fd_in[size_tabint(cmd->cmd[i]->fd_in) - 1];
+			g_sig.new_stdin = dup2(*c->fd_in[size_tabint(c->fd_in) - 1], 0);
+			g_sig.new_stdin = *c->fd_in[size_tabint(c->fd_in) - 1];
 		}
 		else
 		{
-			g_sig.new_stdin = dup2(*cmd->cmd[i]->fd_hear_doc[size_tabint(cmd->cmd[i]->fd_hear_doc) - 1], 0);
-			g_sig.new_stdin = *cmd->cmd[i]->fd_hear_doc[size_tabint(cmd->cmd[i]->fd_hear_doc) - 1];
+			g_sig.new_stdin = dup2(*c->fd_hear_doc[\
+size_tabint(c->fd_hear_doc) - 1], 0);
+			g_sig.new_stdin = *c->fd_hear_doc[size_tabint(c->fd_hear_doc) - 1];
 		}
 	}
-	else if(i)
+	else if (i)
 	{
 		g_sig.old_stdin = dup(0);
 		g_sig.new_stdin = dup2(cmd->pipes[i - 1][0], 0);
 		g_sig.new_stdin = cmd->pipes[i - 1][0];
 	}
-	else if(size_tabcmd(cmd->cmd) > 1)
+	else if (size_tabcmd(cmd->cmd) > 1)
 		close(cmd->pipes[i][0]);
+}
+
+int	dup_manager_write(t_cmd *cmd, int i, t_sub_cmd *c)
+{
 	if (cmd->cmd[i]->fd_out_add || cmd->cmd[i]->fd_out_replace)
 	{
 		g_sig.old_stdout = dup(1);
-		if(cmd->cmd[i]->last_is_add == 1)
+		if (cmd->cmd[i]->last_is_add == 1)
 		{
-			g_sig.new_stdout = dup2(*cmd->cmd[i]->fd_out_add[size_tabint(cmd->cmd[i]->fd_out_add) - 1], 1);
-			g_sig.new_stdout = *cmd->cmd[i]->fd_out_add[size_tabint(cmd->cmd[i]->fd_out_add) - 1];
+			g_sig.new_stdout = dup2(*c->fd_out_add[\
+size_tabint(c->fd_out_add) - 1], 1);
+			g_sig.new_stdout = *c->fd_out_add[size_tabint(c->fd_out_add) - 1];
 		}
-		if(cmd->cmd[i]->last_is_add == 0)
+		if (cmd->cmd[i]->last_is_add == 0)
 		{
-			g_sig.new_stdout = dup2(*cmd->cmd[i]->fd_out_replace[size_tabint(cmd->cmd[i]->fd_out_replace) - 1], 1);
-			g_sig.new_stdout = *cmd->cmd[i]->fd_out_replace[size_tabint(cmd->cmd[i]->fd_out_replace) - 1];
+			g_sig.new_stdout = dup2(*c->fd_out_replace[\
+size_tabint(c->fd_out_replace) - 1], 1);
+			g_sig.new_stdout = *c->fd_out_replace[\
+size_tabint(c->fd_out_replace) - 1];
 		}
-		if(size_tabcmd(cmd->cmd) > 1 && i != size_tabint(cmd->pipes))
+		if (size_tabcmd(cmd->cmd) > 1 && i != size_tabint(cmd->pipes))
 			close(cmd->pipes[i][1]);
 	}
+	else
+		return (0);
+	return (1);
+}
+
+void	dup_manager(t_cmd *cmd, int i, int is_bi)
+{
+	t_sub_cmd	*c;
+
+	c = cmd->cmd[i];
+	dup_manager_read(cmd, i, c);
+	if (dup_manager_write(cmd, i, c))
+		return ;
 	else if (i != size_tabint(cmd->pipes))
 	{
-		if(is_bi)
+		if (is_bi)
 			g_sig.old_stdout = dup(1);
 		g_sig.new_stdout = dup2(cmd->pipes[i][1], 1);
 		g_sig.new_stdout = cmd->pipes[i][1];
 	}
-	else if(size_tabcmd(cmd->cmd) > 1 && i != size_tabint(cmd->pipes))
+	else if (size_tabcmd(cmd->cmd) > 1 && i != size_tabint(cmd->pipes))
 		close(cmd->pipes[i][1]);
-	else if(is_bi)
+	else if (is_bi)
 		g_sig.new_stdout = 1;
 }
 
@@ -206,7 +232,7 @@ void	re_dup(t_cmd *cmd, int i)
 
 int	exec_build_in(t_cmd *cmd, t_list *env, int i, int fd)
 {
-	int	res;
+	int		res;
 	char	**env_chr;
 	char	*cmd_trim;
 
@@ -231,12 +257,12 @@ int	exec_build_in(t_cmd *cmd, t_list *env, int i, int fd)
 	return (res);
 }
 
-int		is_path(char *str)
+int	is_path(char *str)
 {
 	int	i;
 
 	i = -1;
-	while(str[++i])
+	while (str[++i])
 		if (str[i] == '/')
 			return (1);
 	return (0);
@@ -285,17 +311,20 @@ int	exec_sys_cmd(char **args, t_list *envp)
 
 int	exec_sub_cmd(t_cmd *cmd, int *i, t_list *env)
 {
-	int	i_bis;
+	int		i_bis;
+	char	*res;
 
 	i_bis = *i;
 	if (!cmd->cmd || !cmd->cmd[*i] || !cmd->cmd[*i]->cmd)
 		return (i_bis);
-	if(is_build_in(cmd->cmd[*i]->cmd[0]))
+	if (is_build_in(cmd->cmd[*i]->cmd[0]))
 	{
 		if (cmd->cmd[*i + 1])
 			i_bis = exec_sub_cmd(cmd, ((++i_bis), &i_bis), env);
 		dup_manager(cmd, *i, 1);
-		add_val(env, "?", ft_itoa(exec_build_in(cmd, env, *i, g_sig.new_stdout)));
+		res = ft_itoa(exec_build_in(cmd, env, *i, g_sig.new_stdout));
+		add_val(env, "?", res);
+		free(res);
 		close_pipes(cmd, *i);
 		re_dup(cmd, *i);
 	}
@@ -320,10 +349,28 @@ void	get_pipes(t_cmd *cmd)
 		return ;
 	cmd->pipes = malloc(sizeof(int *) * (size_tab));
 	cmd->pipes[size_tab - 1] = NULL;
-	while(++i < size_tab - 1)
+	while (++i < size_tab - 1)
 	{
 		cmd->pipes[i] = malloc(sizeof(int) * 2);
 		pipe(cmd->pipes[i]);
+	}
+}
+
+void	wait_end_child(t_cmd *cmd, t_list *env, int *status)
+{
+	int		i;
+	char	*inter_free;
+
+	i = -1;
+	while (cmd->cmd[++i])
+	{
+		waitpid(-1, status, 0);
+		if (cmd->cmd[i]->cmd && !is_build_in(cmd->cmd[i]->cmd[0]))
+		{
+			inter_free = ft_itoa(WEXITSTATUS(*status));
+			add_val(env, "?", inter_free);
+			free(inter_free);
+		}
 	}
 }
 
@@ -340,22 +387,17 @@ int	exec_cmd(t_cmd *cmd, t_list *env)
 		cmd->cmd[i]->in = ft_tabstrtrim(cmd->cmd[i]->in);
 		cmd->cmd[i]->out_replace = ft_tabstrtrim(cmd->cmd[i]->out_replace);
 		cmd->cmd[i]->out_add = ft_tabstrtrim(cmd->cmd[i]->out_add);
-		cmd->cmd[i]->hear_doc= ft_tabstrtrim(cmd->cmd[i]->hear_doc);
-		if(check_file(cmd->cmd[i]->in, &(cmd->cmd[i]->fd_in), O_APPEND) || \
-check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), O_WRONLY | O_TRUNC | O_CREAT) || \
-check_file(cmd->cmd[i]->out_add, &(cmd->cmd[i]->fd_out_add), O_WRONLY | O_APPEND | O_CREAT) ||
+		cmd->cmd[i]->hear_doc = ft_tabstrtrim(cmd->cmd[i]->hear_doc);
+		if (check_file(cmd->cmd[i]->in, &(cmd->cmd[i]->fd_in), O_APPEND) || \
+check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), \
+O_WRONLY | O_TRUNC | O_CREAT) || check_file(cmd->cmd[i]->out_add, \
+&(cmd->cmd[i]->fd_out_add), O_WRONLY | O_APPEND | O_CREAT) || \
 read_heardocs(cmd->cmd[i], env))
 			return (add_val(env, "?", "1"), 1);
 		i = exec_sub_cmd(cmd, &i, env);
 	}
 	close_pipes(cmd, size_tabcmd(cmd->cmd));
-	i = -1;
-	while(cmd->cmd[++i])
-	{
-		waitpid(-1, &status, 0);
-		if(cmd->cmd[i]->cmd && !is_build_in(cmd->cmd[i]->cmd[0]))
-			add_val(env, "?", ft_itoa(WEXITSTATUS(status)));
-	}
+	wait_end_child(cmd, env, &status);
 	return (status);
 }
 
@@ -368,7 +410,7 @@ int	exec_tree_cmd(t_tree *cmd, t_list *env)
 	{
 		res_a = exec_tree_cmd((t_tree *)cmd->f_a, env);
 		if ((*(int *)(cmd->content) == OP_AND && !res_a) || \
-(*(int *)(cmd->content) == OP_OR && res_a))
+	(*(int *)(cmd->content) == OP_OR && res_a))
 		{
 			res_b = exec_tree_cmd((t_tree *)(cmd->f_b), env);
 			return (res_b);

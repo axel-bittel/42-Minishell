@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:21:21 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/26 18:33:11 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/03 16:00:30 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ char	get_end_word(char *str, int i)
 		i++;
 	return (i - 1);
 }
+
 void	print_error(char **cmd)
 {
 	ft_putstr_fd("BISCUIT:export", 2);
@@ -88,7 +89,7 @@ int	export_bi(char **cmd, t_list *env, int fd)
 		while (cmd[i][++j])
 		{
 			if (cmd[i][j] == '=')
-				if(add_var(cmd, &i, j, env))
+				if (add_var(cmd, &i, j, env))
 					return (1);
 		}
 	}
