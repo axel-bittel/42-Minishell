@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/03 15:29:44 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/03 23:58:58 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -41,7 +41,7 @@ int	is_input(t_cmd_token *cmd, int idx)
 int	is_op(t_cmd_token *cmd, int idx)
 {
 	if (cmd->cmd[idx] && ((*cmd->token[idx] == TOKEN_AND) || \
-*cmd->token[idx] == TOKEN_PIPE || *cmd->token[idx] == TOKEN_OR))
+/**cmd->token[idx] == TOKEN_PIPE ||*/ *cmd->token[idx] == TOKEN_OR))
 		return (1);
 	return (0);
 }
@@ -109,11 +109,12 @@ void	print_tree(t_tree *tree)
 		if (*(int *)tree->content != OP_BRACK)
 		{
 			printf("TREE B :\n");
-			print_tree(tree->f_b);
+			if (tree->f_b)
+				print_tree(tree->f_b);
 		}
 	}
-}*/
-
+}
+*/
 void	free_cmd_token(t_cmd_token *cmd)
 {
 	free_tabstr(cmd->cmd);
@@ -283,7 +284,7 @@ t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 		}
 		idx++;
 	}
-	if (inter)
+	if (inter->cmd)
 		res->cmd = ft_cmdjoin(res->cmd, inter);
 	else
 		free(inter);
@@ -298,19 +299,19 @@ void	set_tree_cmd(t_cmd_token *cmd, int *i, t_tree **inter_a, t_tree **final)
 		ft_treeadd_f(*final, *inter_a, 0);
 	else
 		*final = *inter_a;
-	if (cmd->token[*i] && (*cmd->token[*i] == TOKEN_OR || \
-*cmd->token[*i] == TOKEN_AND || *cmd->token[*i] == TOKEN_PIPE || (*cmd \
-->token[*i] == TOKEN_BRACK_CL && *cmd->token[*i - 1] == TOKEN_BRACK_CL)))
+	if (cmd->token[*i - 1] && cmd->token[*i] && (*cmd->token[*i] == TOKEN_OR || \
+*cmd->token[*i] == TOKEN_AND || *cmd->token[*i] == TOKEN_PIPE || \
+	(*cmd->token[*i] == TOKEN_BRACK_CL && cmd->token[*i + 1])))
 	{
 		if (*final)
 			*inter_a = *final;
 		op_inter = malloc(sizeof(int));
+		if (*cmd->token[*i] == TOKEN_BRACK_CL)
+			(*i)++;
 		if (*cmd->token[*i] == TOKEN_AND)
 			*op_inter = OP_AND;
 		else if (*cmd->token[*i] == TOKEN_OR)
 			*op_inter = OP_OR;
-		else if (*cmd->token[*i] == TOKEN_PIPE)
-			*op_inter = OP_PIPE;
 		*final = ft_treenew(op_inter);
 		ft_treeadd_f(*final, *inter_a, 1);
 		if (*cmd->token[*i] == TOKEN_BRACK_CL)
@@ -339,6 +340,8 @@ void	set_up_tok(t_cmd_token *cmd)
 	{
 		if (*cmd->token[i] == TOKEN_OR && !ft_strcmp(cmd->cmd[i], "|"))
 			*cmd->token[i] = TOKEN_PIPE;
+		else if (*cmd->token[i] == TOKEN_OR && !ft_strcmp(cmd->cmd[i], "||"))
+			*cmd->token[i] = TOKEN_OR;
 		else if (*cmd->token[i] == TOKEN_REDIR && !ft_strcmp(cmd->cmd[i], ">>"))
 			*cmd->token[i] = TOKEN_DREDIR;
 		else if (*cmd->token[i] == TOKEN_INDIR && !ft_strcmp(cmd->cmd[i], "<<"))
@@ -371,13 +374,10 @@ t_tree	*parser(t_cmd_token *cmd, int *i, int is_sub)
 			inter_a = parser(cmd, i, 1);
 			if (!inter_a)
 				return (NULL);
-			while (cmd->cmd[*i] && cmd->cmd[*i + 1] && *cmd->token[*i - 1] != \
+			while (cmd->cmd[*i - 1] && cmd->cmd[*i] && cmd->cmd[*i + 1] && *cmd->token[*i] != \
 TOKEN_BRACK_CL)
 				*i = idx_end_cmd(cmd, *i) + 1;
-			if (is_sub)
-				set_tree_cmd(cmd, i, &inter_a, &final);
-			else
-				final = inter_a;
+			set_tree_cmd(cmd, i, &inter_a, &final);
 		}
 		else
 			return (print_parse_error(cmd, *i), free_tree(inter_a), \
