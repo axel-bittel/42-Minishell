@@ -6,13 +6,12 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/03/04 15:15:03 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/04 21:29:09 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
-#include "build_in.h"
-#include "env_manager.h"
 #include "exec_cmd.h"
+#include "build_in.h"
 #include "libft.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -65,7 +64,7 @@ void	signal_catching(void)
 	signal (SIGINT, &sig_sigint);
 	signal (SIGQUIT, &sig_sigkill);
 }
-
+/*
 void	print_header(void)
 {
 	ft_putstr_fd("\n██████╗░██╗░██████╗░█████╗░██╗░░░██╗██╗████████╗ \
@@ -82,7 +81,7 @@ void	print_header(void)
 ════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚══════╝\n", 1);
 	ft_putstr_fd("-----------------------------------------------------\
 ------------------------------------\n\n\n\n", 1);
-}
+}*/
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -93,7 +92,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	signal_catching();
 	env = get_fst_env(envp);
-	print_header();
+	//print_header();
 	while (g_sig.run)
 	{
 		rl_on_new_line ();

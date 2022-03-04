@@ -6,18 +6,17 @@
 #    By: abittel <abittel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/18 10:24:03 by abittel           #+#    #+#              #
-#    Updated: 2022/02/26 23:42:31 by abittel          ###   ########.fr        #
+#    Updated: 2022/03/04 20:12:26 by abittel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-
-SRCS	=	main.c tab_manip.c lexer.c parser.c ft_treeadd_f.c ft_treenew.c ft_treeprof.c env_manager.c expander.c cd.c echo.c pwd.c env.c exec_cmd.c export.c unset.c exit.c
+SRCS = main.c exec/build_in.c exec/cd.c exec/echo.c exec/env.c exec/env_manager.c exec/env_utils.c exec/exec_cmd.c exec/exit.c exec/export.c exec/path_manager.c exec/pipes.c exec/pwd.c exec/read_heardoc.c exec/redir.c exec/unset.c parsing/expander.c parsing/expander_algo.c parsing/get_end.c parsing/init_free_cmd.c parsing/is_token.c parsing/lexer.c parsing/parse_cmd.c parsing/parser.c utils/ft_treeadd_f.c utils/ft_treenew.c utils/ft_treeprof.c utils/str_utils.c utils/tab_free.c utils/tab_manip.c utils/tab_manip_str.c
 OSRCS	=	${SRCS:.c=.o}
 NAME_S	= minishell
 
 all : ${NAME_S}
 
 %.o: %.c 
-	gcc -Wall -Werror -Wextra -c -I./libft -o $@ $< -g
+	gcc -Wall -Werror -Wextra -c -I./src -I./libft -o $@ $< -g
 ${NAME_S} :	${OSRCS} libft/libft.a 
 	gcc ${OSRCS} -Llibft -lft -lreadline -lncurses -o ${NAME_S} -g
 libft/libft.a :
