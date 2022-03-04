@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/03/03 23:59:22 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/04 15:15:03 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -49,7 +49,7 @@ void	sig_sigint(int sig)
 	if (sig == SIGINT)
 		g_sig.stop_cmd = 1;
 	write(1, "\n", 1);
-	rl_replace_line("", 1);
+	//rl_replace_line("", 1);
 	rl_on_new_line();
 	rl_redisplay();
 }
@@ -63,7 +63,7 @@ void	signal_catching(void)
 {
 	g_sig.run = 1;
 	signal (SIGINT, &sig_sigint);
-	signal (SIGKILL, &sig_sigkill);
+	signal (SIGQUIT, &sig_sigkill);
 }
 
 void	print_header(void)

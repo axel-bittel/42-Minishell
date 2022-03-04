@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/03 23:58:58 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/04 15:13:21 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -63,6 +63,7 @@ void	str_join_to_last(char **tab, char *str)
 	free(inter);
 }
 /*
+#include <stdio.h>
 void	print_cmd(t_cmd *cmd)
 {
 	int	i;

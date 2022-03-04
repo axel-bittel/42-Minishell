@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 02:55:39 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/03 15:01:28 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/04 15:11:25 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -16,7 +16,7 @@ int	size_tabstr(char **str)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if (!str)
 		return (0);
 	while (str[i])
@@ -28,7 +28,7 @@ int	size_tabtabstr(char ***str)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if (!str)
 		return (0);
 	while (str[i])
@@ -40,7 +40,7 @@ int	size_tabint(int **str)
 {
 	int	i;
 
-	i = -1;
+	i = 0;
 	if (!str)
 		return (0);
 	while (str[i])
