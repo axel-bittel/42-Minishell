@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 11:39:25 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/07 14:43:16 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 22:34:46 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <limits.h>
@@ -63,7 +63,7 @@ static unsigned long long	ft_atoi_logic(char *nprt)
 	return (res * is_neg);
 }
 
-int	ft_atoi(const char *nprt)
+long long	ft_atoi(const char *nprt)
 {
 	long long	res;
 	int			i;
@@ -78,6 +78,6 @@ int	ft_atoi(const char *nprt)
 		res = ft_atoi_logic((char *)nprt + i);
 		if (res == LLONG_MIN)
 			return (0);
-		return ((int)res);
+		return ((long long)res);
 	}
 }

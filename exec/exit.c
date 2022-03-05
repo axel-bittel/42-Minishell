@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 19:00:57 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 23:12:55 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "exec_cmd.h"
@@ -46,22 +46,25 @@ int	is_number(char *str)
 
 	i = -1;
 	while (str && str[++i])
-		if (!ft_isdigit(str[i]))
+		if (!ft_isdigit(str[i]) && !(!i && (str[i] == '+' || \
+str[i] == '-')))
 			return (0);
 	return (1);
 }
 
-void	exit_with_arg(t_cmd *cmd, int i)
+void	exit_with_arg(t_cmd *cmd, long long i)
 {
-	int	stat;
+	long long	stat;
 
 	stat = 2;
-	if (is_number(cmd->cmd[i]->cmd[1]))
+	if (is_number(cmd->cmd[i]->cmd[1]) && \
+!((ft_atoi(cmd->cmd[i]->cmd[1]) < 0 && cmd->cmd[i]->cmd[1][0] != '-') || \
+	(ft_atoi(cmd->cmd[i]->cmd[1]) >= 0 && cmd->cmd[i]->cmd[1][0] == '-')))
 		stat = ft_atoi(cmd->cmd[i]->cmd[1]);
 	else
 		ft_putstr_fd("BISCUIT: exit: ERROR ARGUMENT\n", 2);
-	if (stat > 256 || stat < 0)
-		stat = stat % 256;
+	if (stat != 2)
+		stat = stat & 0377;
 	free_cmd(cmd);
 	rl_clear_history();
 	exit (stat);

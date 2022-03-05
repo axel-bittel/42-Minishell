@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 15:25:59 by abittel           #+#    #+#             */
-/*   Updated: 2022/02/07 14:41:56 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 22:35:06 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define LIBFT_H
 # include <stdlib.h>
 
-int				ft_atoi(const char *nprt);
+long long		ft_atoi(const char *nprt);
 void			ft_bzero(void	*s, size_t n);
 void			*ft_calloc(size_t nmeb, size_t size);
 int				ft_isalnum(int c);
