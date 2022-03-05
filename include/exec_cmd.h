@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 20:16:47 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 19:03:24 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 21:34:52 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	get_path(t_list *env, char **cmd, char **path);
 int		cd_bi(t_list *env, char **cmd);
 int		echo_bi(char **cmd, int fd);
 int		env_bi(char **env, int fd);
-t_list	*get_fst_env(char **envp);
+t_list	*get_fst_env(char **envp, char *lunch);
 char	*get_val_var(t_list *lst, char *name);
 void	add_val(t_list *lst, char *name, char *val);
 int		delete_val(t_list **lst, char *name);
@@ -69,5 +69,6 @@ t_tree	*free_tree(t_tree *tree);
 int		is_path(char *str);
 char	get_deb_word(char *str, int i);
 char	get_end_word(char *str, int i);
+void	create_base_env(t_list **res, char *lunch);
 char	*get_pwd(t_list *env);
 #endif

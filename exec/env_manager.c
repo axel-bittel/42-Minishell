@@ -6,15 +6,16 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 13:40:05 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 21:34:04 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
+#include <unistd.h>
 #include "libft.h"
 #include "exec_cmd.h"
 #include "parsing.h"
 
-t_list	*get_fst_env(char **envp)
+t_list	*get_fst_env(char **envp, char *lunch)
 {
 	int			i;
 	char		**line_splt;
@@ -35,6 +36,8 @@ t_list	*get_fst_env(char **envp)
 			res = ft_lstnew((void *)inter);
 		free_tabstr(line_splt);
 	}
+	if (!envp[0])
+		create_base_env(&res, lunch);
 	return (res);
 }
 
