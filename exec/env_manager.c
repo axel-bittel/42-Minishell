@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 19:47:26 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 13:40:05 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -23,7 +23,7 @@ t_list	*get_fst_env(char **envp)
 
 	res = 0;
 	i = -1;
-	while (envp[++i])
+	while (envp && envp[++i])
 	{
 		line_splt = ft_split(envp[i], '=');
 		inter = malloc(sizeof(t_env_var));
@@ -44,7 +44,7 @@ char	*get_val_var(t_list *lst, char *name)
 	t_list	*inter;
 
 	inter = lst;
-	while (inter->next)
+	while (inter && inter->next)
 	{
 		if (!ft_strcmp(name, ((t_env_var *)inter->content)->name))
 			return (((t_env_var *)inter->content)->value);
@@ -119,6 +119,8 @@ char	**get_env_in_char(t_list *env)
 	char	*inter;
 
 	i = -1;
+	if (!env)
+		return (0);
 	res = malloc(sizeof(char *) * (ft_lstsize(env) + 1));
 	inter_l = env;
 	while (inter_l->next)

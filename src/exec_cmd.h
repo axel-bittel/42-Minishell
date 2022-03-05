@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 20:16:47 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 20:54:19 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 13:28:16 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,5 @@ t_tree	*free_tree(t_tree *tree);
 int		is_path(char *str);
 char	get_deb_word(char *str, int i);
 char	get_end_word(char *str, int i);
+char	*get_pwd(t_list *env);
 #endif

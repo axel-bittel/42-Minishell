@@ -6,11 +6,12 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:34:02 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 19:48:48 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 13:34:48 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h" 
 #include "exec_cmd.h"
+#include "unistd.h"
 
 int	is_absolute_path(char *cmd)
 {
@@ -72,7 +73,7 @@ char	*get_absolute_path(t_list *env, char *path)
 	char	*path_c;
 
 	i = -1;
-	res = ft_strdup(get_val_var(env, "PWD"));
+	res = get_pwd(env);
 	path_c = path;
 	while (path_c[++i])
 	{

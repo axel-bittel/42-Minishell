@@ -6,12 +6,13 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 20:50:09 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 13:18:45 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "exec_cmd.h"
 #include "parsing.h"
 #include "libft.h"
+#include <readline/readline.h>
 
 void	free_cmd(t_cmd *cmd)
 {
@@ -60,6 +61,7 @@ int	exit_bi(t_cmd *cmd, int i, int fd, t_list *env)
 	if (size_tabstr(cmd->cmd[i]->cmd) == 1)
 	{
 		free_tree(g_sig.tree);
+		rl_clear_history();
 		exit(0);
 	}
 	else if (size_tabstr(cmd->cmd[i]->cmd) == 2)
@@ -71,6 +73,7 @@ int	exit_bi(t_cmd *cmd, int i, int fd, t_list *env)
 		if (stat > 256 || stat < 0)
 			stat = stat % 256;
 		free_cmd(cmd);
+		rl_clear_history();
 		exit (stat);
 	}
 	else
@@ -82,5 +85,6 @@ int	exit_sig(int exit_nb, t_list *env)
 {
 	free_env(env);
 	ft_putstr_fd("exit\n", 1);
+	rl_clear_history();
 	exit(exit_nb);
 }

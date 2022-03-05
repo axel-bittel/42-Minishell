@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/03/04 21:29:09 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 13:23:55 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <term.h>
@@ -97,6 +98,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		rl_on_new_line ();
 		cmd = readline("BISCUIT > ");
+		add_history(cmd);
 		if (!cmd)
 			exit_sig(1, env);
 		parse_cmd (cmd, env);

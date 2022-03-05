@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:44:43 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 20:54:58 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 13:11:06 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -15,6 +15,8 @@
 #include <fcntl.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 void	get_pipes(t_cmd *cmd)
 {
