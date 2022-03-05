@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:41:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 20:56:08 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 19:26:42 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -20,11 +20,11 @@ void	read_heardoc_addline(char *line, char **res, char **inter)
 {
 	if (*res)
 		*inter = *res;
-	*res = ft_strjoin(*res, "\n");
-	if (*inter)
+	*res = ft_strjoin(*res, line);
+	if (*res)
 		free(*inter);
 	*inter = *res;
-	*res = ft_strjoin(*res, line);
+	*res = ft_strjoin(*res, "\n");
 	free(*inter);
 	if (line)
 		free(line);

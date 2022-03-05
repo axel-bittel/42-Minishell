@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 18:06:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 21:11:17 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 19:33:52 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdlib.h>
@@ -44,6 +44,7 @@ void	expand_var(char **cmd, t_list *env)
 {
 	int		i;
 	char	*inter;
+	char	*val;
 
 	i = -1;
 	while (++i < (int)ft_strlen(*cmd) && (*cmd)[i])
@@ -51,8 +52,11 @@ void	expand_var(char **cmd, t_list *env)
 		if ((*cmd)[i] == '$')
 		{
 			inter = ft_substrdup(*cmd, i + 1, get_end_var(*cmd, i));
-			*cmd = insert_str(*cmd, ft_strdup(get_val_var(env, inter)), &i, \
+			val = get_val_var(env, inter);
+			*cmd = insert_str(*cmd, ft_strdup(val), &i, \
 get_end_var(*cmd, i));
+			if (!val[0])
+				free(val);
 			free (inter);
 		}
 	}

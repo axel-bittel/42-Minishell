@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 20:47:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 19:47:08 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 18:49:51 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "build_in.h"
@@ -63,7 +63,7 @@ int	cd_bi(t_list *env, char **cmd)
 		return (1);
 	get_path(env, cmd, &path);
 	folder = opendir(path);
-	res = errno;
+	res = 1;
 	if (folder)
 	{
 		chdir(path);

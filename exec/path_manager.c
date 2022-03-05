@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:34:02 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 13:34:48 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 19:38:06 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h" 
@@ -43,8 +43,6 @@ void	add_file_in_path(char **str, char *add)
 	inter = *str;
 	*str = ft_strjoin(*str, add);
 	free(inter);
-	if (add)
-		free(add);
 }
 
 void	delete_file_in_path(char **str)
@@ -84,6 +82,8 @@ char	*get_absolute_path(t_list *env, char *path)
 				delete_file_in_path(&res);
 			else if (ft_strcmp(inter_w, "."))
 				add_file_in_path(&res, inter_w);
+			if (inter_w)
+				free(inter_w);
 			i = idx_end_word(path_c, i);
 		}
 	}

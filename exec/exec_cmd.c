@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 20:43:47 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 19:28:05 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_tree.h"
@@ -21,6 +21,22 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <readline/readline.h>
+
+void	exec_sys_error(char *inter_path, char **args)
+{
+	char	*f_cmd;
+
+	free(inter_path);
+	if (!is_path(args[0]))
+	{
+		ft_putstr_fd("BISCUIT: COMMAND NOT FOUND\n", 2);
+		exit (127);
+	}
+	f_cmd = ft_strjoin("BISCUIT:", args[0]);
+	if (is_path(args[0]))
+		perror(f_cmd);
+	free(f_cmd);
+}
 
 int	exec_sys_cmd(char **args, t_list *envp)
 {
@@ -45,22 +61,10 @@ int	exec_sys_cmd(char **args, t_list *envp)
 		execve(inter_path, args, 0);
 	else
 		execve(args[0], args, get_env_in_char(envp));
-	if (!is_path(args[0]))
-	{
-		ft_putstr_fd("BISCUIT: COMMAND NOT FOUND\n", 2);
-		exit (127);
-	}
-	free(inter_path);
-	f_cmd = ft_strjoin("BISCUIT:", args[0]);
-	if (is_path(args[0]))
-		perror(f_cmd);
-	else
-	{
-		ft_putstr_fd(f_cmd, 2);
-		ft_putstr_fd(": Command not found\n", 2);
-	}
-	free(f_cmd);
-	exit (1);
+	exec_sys_error(inter_path, args);
+	if (errno != 13)
+		exit (1);
+	exit (126);
 }
 
 int	exec_sub_cmd(t_cmd *cmd, int *i, t_list *env)

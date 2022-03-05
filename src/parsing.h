@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 21:21:12 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 19:03:07 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_cmd_token
 	int				**token;
 }				t_cmd_token;
 
-typedef struct	s_sub_cmd
+typedef struct s_sub_cmd
 {
 	char	**cmd;
 	char	**in;
@@ -55,7 +55,7 @@ typedef struct	s_sub_cmd
 	int		last_is_in;
 }			t_sub_cmd;
 
-typedef struct	s_cmd
+typedef struct s_cmd
 {
 	t_sub_cmd	**cmd;
 	int			**pipes;
@@ -63,8 +63,8 @@ typedef struct	s_cmd
 
 typedef struct s_sig
 {
-	int	run;
-	int	stop_cmd;
+	int			run;
+	int			stop_cmd;
 	int			old_stdin;
 	int			old_stdout;
 	int			new_stdin;
@@ -74,7 +74,7 @@ typedef struct s_sig
 
 t_sig	g_sig;
 
-int			is_token (char c);
+int			is_token(char c);
 int			is_input(t_cmd_token *cmd, int idx);
 int			next_is_input(t_cmd_token *cmd, int idx);
 int			next_is_token(t_cmd_token *cmd, int idx, int token);
@@ -85,7 +85,7 @@ int			is_op(t_cmd_token *cmd, int idx);
 int			is_redir(t_cmd_token *cmd, int idx);
 t_cmd_token	*tokenisation(char *cmd);
 char		*ft_substrdup(char	*str, int start, int end);
-int			**ft_tabintjoin(int **tab, int* num);
+int			**ft_tabintjoin(int **tab, int *num);
 char		**ft_tabjoin(char **tab, char *str);
 void		free_tabstr(char **tab_str);
 void		free_tabint(int **tab_int);
@@ -109,5 +109,6 @@ t_cmd		*init_cmd(void);
 t_sub_cmd	*init_sub_cmd(void);
 t_cmd		*get_cmd(t_cmd_token *cmd, int idx);
 int			idx_end_cmd(t_cmd_token *cmd, int idx);
-void		set_tree_cmd(t_cmd_token *cmd, int *i, t_tree **inter_a, t_tree **final);
+void		set_tree_cmd(t_cmd_token *cmd, int *i, t_tree **inter_a, \
+t_tree **final);
 #endif

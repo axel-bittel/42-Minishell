@@ -6,13 +6,13 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 20:37:09 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 21:02:18 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 19:04:17 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef UTILS_H
 # define UTILS_H
-#include "parsing.h"
+# include "parsing.h"
 
 void		str_join_to_last(char **tab, char *str);
 char		*ft_tabstrjoin(char **tab);

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 20:16:47 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 13:28:16 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 19:03:24 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "libft.h"
 # include "parsing.h"
 
-typedef	struct s_env_var
+typedef struct s_env_var
 {
 	char	*name;
 	char	*value;
