@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:43:09 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 20:57:39 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 22:02:13 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <fcntl.h>
@@ -14,7 +14,7 @@
 #include "parsing.h"
 #include "exec_cmd.h"
 
-void	dup_manager_read(t_cmd *cmd, int i, t_sub_cmd *c)
+void	dup_manager_read(t_cmd *cmd, int i, t_sub_cmd *c, int is_bi)
 {
 	if (cmd->cmd[i]->fd_in || cmd->cmd[i]->fd_hear_doc)
 	{
@@ -37,7 +37,7 @@ size_tabint(c->fd_hear_doc) - 1], 0);
 		g_sig.new_stdin = dup2(cmd->pipes[i - 1][0], 0);
 		g_sig.new_stdin = cmd->pipes[i - 1][0];
 	}
-	else if (size_tabcmd(cmd->cmd) > 1)
+	else if (size_tabcmd(cmd->cmd) > 1 && !is_bi)
 		close(cmd->pipes[i][0]);
 }
 
@@ -72,7 +72,7 @@ void	dup_manager(t_cmd *cmd, int i, int is_bi)
 	t_sub_cmd	*c;
 
 	c = cmd->cmd[i];
-	dup_manager_read(cmd, i, c);
+	dup_manager_read(cmd, i, c, is_bi);
 	if (dup_manager_write(cmd, i, c))
 		return ;
 	else if (i != size_tabint(cmd->pipes))

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:09:32 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/03 16:11:43 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/05 21:50:53 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -26,5 +26,5 @@ int	env_bi(char **env, int fd)
 			write (fd, "\n", 1);
 		}
 	}
-	return (1);
+	return (0);
 }
