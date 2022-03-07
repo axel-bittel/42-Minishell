@@ -13,14 +13,14 @@
 #include "exec_cmd.h"
 #include "build_in.h"
 #include "libft.h"
+#include "utils.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdio.h>
 #include <unistd.h>
 #include <term.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
 t_cmd	*parse_cmd(char *cmd, t_list *env)
 {
