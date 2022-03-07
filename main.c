@@ -22,6 +22,28 @@
 #include <unistd.h>
 #include <term.h>
 
+int	ft_isspace(char c)
+{
+	if (c == ' ' || c == '\n' || c == '\t' || c == '\v' || c == '\f' || c == '\r')
+		return (1);
+	return (0);
+}
+
+int	blank_cmd(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (!ft_isspace(cmd[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+
 t_cmd	*parse_cmd(char *cmd, t_list *env)
 {
 	t_cmd_token	*res;
@@ -96,9 +118,10 @@ int	main(int argc, char **argv, char **envp)
 	{
 		rl_on_new_line ();
 		cmd = readline("BISCUIT > ");
-		add_history(cmd);
 		if (!cmd)
 			exit_sig(1, env);
+		if (!blank_cmd(cmd))
+			add_history(cmd);
 		parse_cmd (cmd, env);
 		free (cmd);
 	}
