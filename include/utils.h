@@ -33,4 +33,6 @@ char		*insert_str(char *str, char *str_ins, int *deb, int end);
 int			is_path(char *str);
 char		get_deb_word(char *str, int i);
 char		get_end_word(char *str, int i);
+int			ft_isspace(char c);
+int			blank_cmd(char *cmd);
 #endif
