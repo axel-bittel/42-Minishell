@@ -6,13 +6,15 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 23:12:55 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/08 17:52:37 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "exec_cmd.h"
 #include "parsing.h"
 #include "libft.h"
-#include <readline/readline.h>
+#include <stdio.h>
+#include "readline/readline.h"
+#include "readline/history.h"
 
 void	free_cmd(t_cmd *cmd)
 {

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 18:00:51 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 21:14:47 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/08 18:07:52 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -105,7 +105,8 @@ t_cmd	*get_cmd(t_cmd_token *cmd, int idx)
 		}
 		idx++;
 	}
-	if (inter->cmd)
+	if (inter->cmd || inter->in || inter->hear_doc || inter->out_add || \
+	inter->out_replace)
 		res->cmd = ft_cmdjoin(res->cmd, inter);
 	else
 		free(inter);

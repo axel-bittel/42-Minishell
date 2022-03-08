@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:21:21 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 20:53:53 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/08 18:13:41 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -18,7 +18,7 @@ void	print_error(char **cmd)
 {
 	ft_putstr_fd("BISCUIT:export ", 2);
 	ft_putstr_fd(cmd[1], 2);
-	ft_putstr_fd(":not a valid identifier\n", 2);
+	ft_putstr_fd(" :not a valid identifier\n", 2);
 }
 
 int	check_export_error(char **cmd, t_list *env, int fd)

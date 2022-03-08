@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 19:28:05 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/08 18:11:28 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_tree.h"
@@ -20,6 +20,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <stdio.h>
 #include <readline/readline.h>
 
 void	exec_sys_error(char *inter_path, char **args)

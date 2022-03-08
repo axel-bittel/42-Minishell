@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/29 05:30:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 19:16:26 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/08 17:52:59 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -16,7 +16,7 @@
 #include "build_in.h"
 #include <unistd.h>
 
-int	print_parse_error(t_cmd_token *cmd, int idx)
+/*int	print_parse_error(t_cmd_token *cmd, int idx)
 {
 	if (cmd->cmd[idx + 1])
 	{
@@ -26,6 +26,14 @@ int	print_parse_error(t_cmd_token *cmd, int idx)
 	}
 	else
 		ft_putstr_fd("SH: parse error near \n", 2);
+	return (1);
+}*/
+
+int	print_parse_error(t_cmd_token *cmd, int idx)
+{
+	(void)cmd;
+	(void)idx;
+	ft_putstr_fd("BISCUIT: parse error\n", 2);
 	return (1);
 }
 

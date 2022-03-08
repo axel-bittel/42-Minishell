@@ -6,13 +6,14 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:41:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 19:26:42 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/08 18:09:56 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 #include <unistd.h>
 #include "exec_cmd.h"
-#include <readline/readline.h>
+#include <stdio.h>
+#include "readline/readline.h"
 #include <fcntl.h>
 #include <errno.h>
 
@@ -83,6 +84,7 @@ int	read_heardocs(t_sub_cmd *cmd, t_list *env)
 		line_heardoc = read_heardoc(cmd->hear_doc[i]);
 		expand_var(&line_heardoc, env);
 		ft_putstr_fd (line_heardoc, *fd);
+		free(line_heardoc);
 		close(*fd);
 		*fd = open(name, O_RDWR);
 		cmd->fd_hear_doc = ft_tabintjoin(cmd->fd_hear_doc, fd);
