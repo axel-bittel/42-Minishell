@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/29 00:11:26 by abittel           #+#    #+#             */
-/*   Updated: 2021/10/22 16:16:36 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/14 17:53:11 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -28,6 +28,8 @@ char	*ft_strdup(const char *s)
 	char	*res;
 
 	i = 0;
+	if (!s)
+		return (0);
 	res = (char *)malloc(sizeof(char) * (ft_strlen((char *)s) + 1));
 	if (!res)
 		return (NULL);

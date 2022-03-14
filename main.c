@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/03/05 21:30:11 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/14 19:03:12 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -49,6 +49,7 @@ void	sig_sigint(int sig)
 	if (sig == SIGINT)
 		g_sig.stop_cmd = 1;
 	write(1, "\n", 1);
+	rl_replace_line("", 0);
 	rl_on_new_line();
 	rl_redisplay();
 }

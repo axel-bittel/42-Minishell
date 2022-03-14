@@ -13,3 +13,338 @@ Manage signals
 
 
 echo -n "$test"oui < ft_tree.h < tesa << biscuitt | cat ft_tree.h | /bin/grep # > test > test3 >> test2
+Last login: Mon Mar 14 16:02:02 on ttys000
+c1r3p8% bash
+bash-3.2$ echo -nnnnnnnnnnnnn test
+testbash-3.2$ echo -nnnnnnnnnnnnn- test
+-nnnnnnnnnnnnn- test
+bash-3.2$ echo -nnnnnn -n -n -n  test -n
+test -nbash-3.2$ exit | non
+bash: non: command not found
+bash-3.2$ exit | non
+bash: non: command not found
+bash-3.2$ exit | non
+bash: non: command not found
+bash-3.2$ exit 242 dada
+exit
+bash: exit: too many arguments
+bash-3.2$ exit dajkhda 42
+exit
+bash: exit: dajkhda: numeric argument required
+c1r3p8% bash
+bash-3.2$ $? + $?
+bash: 0: command not found
+bash-3.2$ ls "-la"
+total 120
+drwxr-xr-x   29 abittel  2021_nice   1054 Mar 14 16:49 .
+drwxr-xr-x  105 root     admin       3360 Mar 14 15:09 ..
+-rw-r--r--@   1 abittel  2021_nice   6148 Feb 12 12:35 .DS_Store
+d--x--x--x    8 root     wheel        272 Mar 14 16:01 .DocumentRevisions-V100
+d-wx-wx-wt    4 root     wheel        136 May 31  2021 .TemporaryItems
+drwx------    4 abittel  2021_nice    136 Feb 12 12:34 .Trash
+-rw-------    1 abittel  2021_nice   3533 Mar 14 16:27 .bash_history
+drwxr-xr-x   31 abittel  2021_nice   1054 Feb 12 12:37 .brew
+drwxr-xr-x    3 abittel  2021_nice    102 Feb 12 13:03 .cache
+drwxr-xr-x    3 abittel  2021_nice    102 Feb 12 12:27 .config
+drwx------  162 root     2021_nice   5508 Mar 14 16:01 .fseventsd
+drwxr-x---    5 abittel  2021_nice    170 Feb 16 17:05 .lldb
+drwx------    5 abittel  2021_nice    170 Feb 12 12:30 .ssh
+drwxr-xr-x    4 abittel  2021_nice    136 Feb 12 13:03 .vim
+-rw-------    1 abittel  2021_nice  31827 Mar 14 16:49 .viminfo
+-rw-r--r--    1 abittel  2021_nice   2683 Feb 16 11:46 .vimrc
+-rw-r--r--    1 abittel  2021_nice   2794 Feb 12 13:03 .vimrc-e
+-rw-r--r--    1 abittel  2021_nice    149 Mar  8 16:59 .zshrc
+drwx------@   3 abittel  2021_nice    102 Feb 12 12:27 Applications
+drwxr-xr-x    4 abittel  2021_nice    136 Feb 12 12:27 Desktop
+drwxr-xr-x    7 abittel  2021_nice    238 Mar  8 19:19 Documents
+drwx------    9 abittel  2021_nice    306 Mar 14 16:46 Downloads
+drwxr-xr-x@  40 abittel  2021_nice   1360 Feb 12 13:57 Library
+drwx------+   3 abittel  2021_nice    102 Feb 12 12:34 Movies
+drwx------+   3 abittel  2021_nice    102 Feb 12 12:34 Music
+drwx------+   3 abittel  2021_nice    102 Feb 12 12:34 Pictures
+lrwxr-xr-x    1 abittel  2021_nice     17 Feb 12 12:27 goinfre -> /goinfre/abittel/
+bash-3.2$ unset PWD
+bash-3.2$ pwd
+/Users/abittel
+bash-3.2$ env
+TERM_PROGRAM=iTerm.app
+TERM=xterm-256color
+SHELL=/bin/zsh
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n0000jgr0004by/T/
+Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.mjUg4t0L3H/Render
+TERM_PROGRAM_VERSION=3.4.12
+TERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+USER=abittel
+COMMAND_MODE=unix2003
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.e5mMeollVD/Listeners
+__CF_USER_TEXT_ENCODING=0x0:0:0
+PATH=/Users/abittel/.brew/bin:/Users/abittel/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+LANG=en_US.UTF-8
+ITERM_PROFILE=Default
+XPC_FLAGS=0x0
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/abittel
+COLORFGBG=7;0
+LC_TERMINAL_VERSION=3.4.12
+ITERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+LOGNAME=abittel
+LC_TERMINAL=iTerm2
+SECURITYSESSIONID=186a7
+COLORTERM=truecolor
+_=/usr/bin/env
+bash-3.2$ ls
+Applications	Desktop		Documents	Downloads	Library		Movies		Music		Pictures	goinfre
+bash-3.2$ cd Documents/
+bash-3.2$ ls
+BISCUIT-SHELL	Project42	rd_mini		rendu		rendu_minishell
+bash-3.2$ env
+TERM_PROGRAM=iTerm.app
+TERM=xterm-256color
+SHELL=/bin/zsh
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n0000jgr0004by/T/
+Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.mjUg4t0L3H/Render
+TERM_PROGRAM_VERSION=3.4.12
+TERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+USER=abittel
+COMMAND_MODE=unix2003
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.e5mMeollVD/Listeners
+__CF_USER_TEXT_ENCODING=0x0:0:0
+PATH=/Users/abittel/.brew/bin:/Users/abittel/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+LANG=en_US.UTF-8
+ITERM_PROFILE=Default
+XPC_FLAGS=0x0
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/abittel
+COLORFGBG=7;0
+LC_TERMINAL_VERSION=3.4.12
+ITERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+LOGNAME=abittel
+LC_TERMINAL=iTerm2
+SECURITYSESSIONID=186a7
+COLORTERM=truecolor
+_=/usr/bin/env
+OLDPWD=
+bash-3.2$ echo $PWD
+/Users/abittel/Documents
+bash-3.2$ env
+TERM_PROGRAM=iTerm.app
+TERM=xterm-256color
+SHELL=/bin/zsh
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n0000jgr0004by/T/
+Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.mjUg4t0L3H/Render
+TERM_PROGRAM_VERSION=3.4.12
+TERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+USER=abittel
+COMMAND_MODE=unix2003
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.e5mMeollVD/Listeners
+__CF_USER_TEXT_ENCODING=0x0:0:0
+PATH=/Users/abittel/.brew/bin:/Users/abittel/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+LANG=en_US.UTF-8
+ITERM_PROFILE=Default
+XPC_FLAGS=0x0
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/abittel
+COLORFGBG=7;0
+LC_TERMINAL_VERSION=3.4.12
+ITERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+LOGNAME=abittel
+LC_TERMINAL=iTerm2
+SECURITYSESSIONID=186a7
+COLORTERM=truecolor
+_=/usr/bin/env
+OLDPWD=
+bash-3.2$ echo $PWD
+/Users/abittel/Documents
+bash-3.2$ unset PWD
+bash-3.2$ echo $PWD
+
+bash-3.2$ cd Documents/
+bash: cd: Documents/: No such file or directory
+bash-3.2$ echo $PWD
+
+bash-3.2$ cd ..
+bash-3.2$ echo $PWD
+/Users/abittel
+bash-3.2$ env
+TERM_PROGRAM=iTerm.app
+TERM=xterm-256color
+SHELL=/bin/zsh
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n0000jgr0004by/T/
+Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.mjUg4t0L3H/Render
+TERM_PROGRAM_VERSION=3.4.12
+TERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+USER=abittel
+COMMAND_MODE=unix2003
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.e5mMeollVD/Listeners
+__CF_USER_TEXT_ENCODING=0x0:0:0
+PATH=/Users/abittel/.brew/bin:/Users/abittel/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+LANG=en_US.UTF-8
+ITERM_PROFILE=Default
+XPC_FLAGS=0x0
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/abittel
+COLORFGBG=7;0
+LC_TERMINAL_VERSION=3.4.12
+ITERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+LOGNAME=abittel
+LC_TERMINAL=iTerm2
+SECURITYSESSIONID=186a7
+COLORTERM=truecolor
+_=/usr/bin/env
+OLDPWD=
+bash-3.2$ export too
+bash-3.2$ export
+declare -x Apple_PubSub_Socket_Render="/private/tmp/com.apple.launchd.mjUg4t0L3H/Render"
+declare -x COLORFGBG="7;0"
+declare -x COLORTERM="truecolor"
+declare -x COMMAND_MODE="unix2003"
+declare -x HOME="/Users/abittel"
+declare -x ITERM_PROFILE="Default"
+declare -x ITERM_SESSION_ID="w1t0p0:99672FD2-9233-44BF-8658-2159099A2498"
+declare -x LANG="en_US.UTF-8"
+declare -x LC_TERMINAL="iTerm2"
+declare -x LC_TERMINAL_VERSION="3.4.12"
+declare -x LOGNAME="abittel"
+declare -x OLDPWD=""
+declare -x PATH="/Users/abittel/.brew/bin:/Users/abittel/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki"
+declare -x SECURITYSESSIONID="186a7"
+declare -x SHELL="/bin/zsh"
+declare -x SHLVL="2"
+declare -x SSH_AUTH_SOCK="/private/tmp/com.apple.launchd.e5mMeollVD/Listeners"
+declare -x TERM="xterm-256color"
+declare -x TERM_PROGRAM="iTerm.app"
+declare -x TERM_PROGRAM_VERSION="3.4.12"
+declare -x TERM_SESSION_ID="w1t0p0:99672FD2-9233-44BF-8658-2159099A2498"
+declare -x TMPDIR="/var/folders/zz/zyxvpxvq6csfxvn_n0000jgr0004by/T/"
+declare -x USER="abittel"
+declare -x XPC_FLAGS="0x0"
+declare -x XPC_SERVICE_NAME="0"
+declare -x __CF_USER_TEXT_ENCODING="0x0:0:0"
+declare -x too
+bash-3.2$ export too=value
+bash-3.2$ export
+declare -x Apple_PubSub_Socket_Render="/private/tmp/com.apple.launchd.mjUg4t0L3H/Render"
+declare -x COLORFGBG="7;0"
+declare -x COLORTERM="truecolor"
+declare -x COMMAND_MODE="unix2003"
+declare -x HOME="/Users/abittel"
+declare -x ITERM_PROFILE="Default"
+declare -x ITERM_SESSION_ID="w1t0p0:99672FD2-9233-44BF-8658-2159099A2498"
+declare -x LANG="en_US.UTF-8"
+declare -x LC_TERMINAL="iTerm2"
+declare -x LC_TERMINAL_VERSION="3.4.12"
+declare -x LOGNAME="abittel"
+declare -x OLDPWD=""
+declare -x PATH="/Users/abittel/.brew/bin:/Users/abittel/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki"
+declare -x SECURITYSESSIONID="186a7"
+declare -x SHELL="/bin/zsh"
+declare -x SHLVL="2"
+declare -x SSH_AUTH_SOCK="/private/tmp/com.apple.launchd.e5mMeollVD/Listeners"
+declare -x TERM="xterm-256color"
+declare -x TERM_PROGRAM="iTerm.app"
+declare -x TERM_PROGRAM_VERSION="3.4.12"
+declare -x TERM_SESSION_ID="w1t0p0:99672FD2-9233-44BF-8658-2159099A2498"
+declare -x TMPDIR="/var/folders/zz/zyxvpxvq6csfxvn_n0000jgr0004by/T/"
+declare -x USER="abittel"
+declare -x XPC_FLAGS="0x0"
+declare -x XPC_SERVICE_NAME="0"
+declare -x __CF_USER_TEXT_ENCODING="0x0:0:0"
+declare -x too="value"
+bash-3.2$ env
+TERM_PROGRAM=iTerm.app
+TERM=xterm-256color
+SHELL=/bin/zsh
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n0000jgr0004by/T/
+Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.mjUg4t0L3H/Render
+TERM_PROGRAM_VERSION=3.4.12
+TERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+USER=abittel
+COMMAND_MODE=unix2003
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.e5mMeollVD/Listeners
+__CF_USER_TEXT_ENCODING=0x0:0:0
+PATH=/Users/abittel/.brew/bin:/Users/abittel/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+LANG=en_US.UTF-8
+ITERM_PROFILE=Default
+too=value
+XPC_FLAGS=0x0
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/abittel
+COLORFGBG=7;0
+LC_TERMINAL_VERSION=3.4.12
+ITERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+LOGNAME=abittel
+LC_TERMINAL=iTerm2
+SECURITYSESSIONID=186a7
+COLORTERM=truecolor
+_=/usr/bin/env
+bash-3.2$ export
+declare -x Apple_PubSub_Socket_Render="/private/tmp/com.apple.launchd.mjUg4t0L3H/Render"
+declare -x COLORFGBG="7;0"
+declare -x COLORTERM="truecolor"
+declare -x COMMAND_MODE="unix2003"
+declare -x HOME="/Users/abittel"
+declare -x ITERM_PROFILE="Default"
+declare -x ITERM_SESSION_ID="w1t0p0:99672FD2-9233-44BF-8658-2159099A2498"
+declare -x LANG="en_US.UTF-8"
+declare -x LC_TERMINAL="iTerm2"
+declare -x LC_TERMINAL_VERSION="3.4.12"
+declare -x LOGNAME="abittel"
+declare -x OLDPWD=""
+declare -x PATH="/Users/abittel/.brew/bin:/Users/abittel/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki"
+declare -x SECURITYSESSIONID="186a7"
+declare -x SHELL="/bin/zsh"
+declare -x SHLVL="2"
+declare -x SSH_AUTH_SOCK="/private/tmp/com.apple.launchd.e5mMeollVD/Listeners"
+declare -x TERM="xterm-256color"
+declare -x TERM_PROGRAM="iTerm.app"
+declare -x TERM_PROGRAM_VERSION="3.4.12"
+declare -x TERM_SESSION_ID="w1t0p0:99672FD2-9233-44BF-8658-2159099A2498"
+declare -x TMPDIR="/var/folders/zz/zyxvpxvq6csfxvn_n0000jgr0004by/T/"
+declare -x USER="abittel"
+declare -x XPC_FLAGS="0x0"
+declare -x XPC_SERVICE_NAME="0"
+declare -x __CF_USER_TEXT_ENCODING="0x0:0:0"
+declare -x too="value"
+bash-3.2$ export too+=tst
+bash-3.2$ env
+TERM_PROGRAM=iTerm.app
+TERM=xterm-256color
+SHELL=/bin/zsh
+TMPDIR=/var/folders/zz/zyxvpxvq6csfxvn_n0000jgr0004by/T/
+Apple_PubSub_Socket_Render=/private/tmp/com.apple.launchd.mjUg4t0L3H/Render
+TERM_PROGRAM_VERSION=3.4.12
+TERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+USER=abittel
+COMMAND_MODE=unix2003
+SSH_AUTH_SOCK=/private/tmp/com.apple.launchd.e5mMeollVD/Listeners
+__CF_USER_TEXT_ENCODING=0x0:0:0
+PATH=/Users/abittel/.brew/bin:/Users/abittel/.brew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/munki
+LANG=en_US.UTF-8
+ITERM_PROFILE=Default
+too=valuetst
+XPC_FLAGS=0x0
+XPC_SERVICE_NAME=0
+SHLVL=2
+HOME=/Users/abittel
+COLORFGBG=7;0
+LC_TERMINAL_VERSION=3.4.12
+ITERM_SESSION_ID=w1t0p0:99672FD2-9233-44BF-8658-2159099A2498
+LOGNAME=abittel
+LC_TERMINAL=iTerm2
+SECURITYSESSIONID=186a7
+COLORTERM=truecolor
+_=/usr/bin/env
+bash-3.2$ cat | cat | ls
+Applications	Desktop		Documents	Downloads	Library		Movies		Music		Pictures	goinfre
+
+
+bash-3.2$ < echo Makefile
+bash: echo: No such file or directory
+bash-3.2$ < Makefile echo
+bash: Makefile: No such file or directory
+bash-3.2$

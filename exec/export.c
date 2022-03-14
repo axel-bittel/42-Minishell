@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:21:21 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/08 18:13:41 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/14 18:32:29 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -44,6 +44,7 @@ int	add_var(char **cmd, int *i, int j, t_list *env)
 	char	*name;
 	char	*data;
 
+	data = 0;
 	name = ft_substrdup(cmd[*i], get_deb_word(cmd[*i], j), j - 1);
 	if (cmd[*i][j + 1])
 		data = ft_substrdup(cmd[*i], j + 1, get_end_word(cmd[*i], j + 1));
@@ -57,7 +58,8 @@ int	add_var(char **cmd, int *i, int j, t_list *env)
 	else
 		add_val(env, name, data);
 	free(name);
-	free(data);
+	if (data)
+		free(data);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/08 17:52:37 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/14 19:22:00 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "exec_cmd.h"
@@ -58,7 +58,7 @@ void	exit_with_arg(t_cmd *cmd, long long i)
 {
 	long long	stat;
 
-	stat = 2;
+	stat = 255;
 	if (is_number(cmd->cmd[i]->cmd[1]) && \
 !((ft_atoi(cmd->cmd[i]->cmd[1]) < 0 && cmd->cmd[i]->cmd[1][0] != '-') || \
 	(ft_atoi(cmd->cmd[i]->cmd[1]) >= 0 && cmd->cmd[i]->cmd[1][0] == '-')))
@@ -74,16 +74,19 @@ void	exit_with_arg(t_cmd *cmd, long long i)
 
 int	exit_bi(t_cmd *cmd, int i, int fd, t_list *env)
 {
-	free_env(env);
 	ft_putstr_fd("exit\n", fd);
 	if (size_tabstr(cmd->cmd[i]->cmd) == 1)
 	{
+		free_env(env);
 		free_tree(g_sig.tree);
 		rl_clear_history();
 		exit(0);
 	}
 	else if (size_tabstr(cmd->cmd[i]->cmd) == 2)
+	{
+		free_env(env);
 		exit_with_arg(cmd, i);
+	}
 	else
 		ft_putstr_fd("BISCUIT: exit: ERROR ARGUMENT\n", 2);
 	return (1);
