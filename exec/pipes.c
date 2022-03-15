@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:44:43 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/15 16:53:10 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 22:15:44 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -47,8 +47,11 @@ void	wait_end_child(t_cmd *cmd, t_list *env, int *status)
 		waitpid(-1, status, 0);
 		if (cmd->cmd[i]->cmd && !is_build_in(cmd->cmd[i]->cmd[0]))
 		{
-			inter_free = ft_itoa(WEXITSTATUS(*status) + WTERMSIG(*status));
-			add_val(env, "?", inter_free, 1);
+			if (WIFSIGNALED(*status))
+				inter_free = ft_itoa(128 +  WTERMSIG(*status));
+			else
+				inter_free = ft_itoa(WEXITSTATUS(*status));
+			add_val(env, "?", inter_free, 0);
 			free(inter_free);
 		}
 	}

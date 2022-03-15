@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/03/15 18:24:04 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 22:11:24 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -18,6 +18,7 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <term.h>
 #include <readline/readline.h>
 #include <readline/history.h>
@@ -54,6 +55,14 @@ void	sig_sigint(int sig)
 	rl_redisplay();
 }
 
+void	sig_sigpipe(int sig)
+{
+	(void)sig;
+	int fd = open("res.txt", O_WRONLY | O_CREAT);
+	ft_putstr_fd("ERROR\n", fd);
+	exit(1);
+}
+
 void	sig_sigkill(int sig)
 {
 	(void)sig;
@@ -64,6 +73,7 @@ void	signal_catching(void)
 	g_sig.run = 1;
 	signal (SIGINT, &sig_sigint);
 	signal (SIGQUIT, &sig_sigkill);
+	//signal (SIGPIPE, &sig_sigpipe);
 }
 /*
 void	print_header(void)
@@ -86,11 +96,16 @@ void	print_header(void)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_list	*env;
-	char	*cmd;
+	t_list			*env;
+	char			*cmd;
+	struct termios	attributes;
 
 	(void)argc;
 	(void)argv;
+    tcgetattr(STDIN_FILENO, &attributes);
+	attributes.c_cc[VQUIT] = 0;
+	attributes.c_cc[VINTR] = 0;
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &attributes);
 	signal_catching();
 	env = get_fst_env(envp, argv[0]);
 	while (g_sig.run)

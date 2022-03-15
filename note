@@ -16,12 +16,13 @@ FIX :
 
 export = env private et env public
 echo = -nnnnnnnnnn
-signaux =	exit signals
-			affichage des Ctrl+
+signaux =				*affichage des Ctrl+
 			finish cat | cat | ls
 -------------------------------------
+FINISH : 
+		exit signals
 
-
+---------------------------------------------
 echo -n "$test"oui < ft_tree.h < tesa << biscuitt | cat ft_tree.h | /bin/grep # > test > test3 >> test2
 Last login: Mon Mar 14 16:02:02 on ttys000
 c1r3p8% bash
