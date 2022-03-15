@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 19:03:07 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 17:04:31 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,5 @@ t_cmd		*get_cmd(t_cmd_token *cmd, int idx);
 int			idx_end_cmd(t_cmd_token *cmd, int idx);
 void		set_tree_cmd(t_cmd_token *cmd, int *i, t_tree **inter_a, \
 t_tree **final);
+void		env_export(t_list *lst, int fd);
 #endif

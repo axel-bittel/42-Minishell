@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/14 19:22:00 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 13:46:46 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "exec_cmd.h"
@@ -74,20 +74,23 @@ void	exit_with_arg(t_cmd *cmd, long long i)
 
 int	exit_bi(t_cmd *cmd, int i, int fd, t_list *env)
 {
-	ft_putstr_fd("exit\n", fd);
-	if (size_tabstr(cmd->cmd[i]->cmd) == 1)
+	if (size_tabstr(cmd->cmd[i]->cmd) == 1 && \
+size_tabcmd(cmd->cmd) == i + 1)
 	{
+		ft_putstr_fd("exit\n", fd);
 		free_env(env);
 		free_tree(g_sig.tree);
 		rl_clear_history();
 		exit(0);
 	}
-	else if (size_tabstr(cmd->cmd[i]->cmd) == 2)
+	else if (size_tabstr(cmd->cmd[i]->cmd) == 2 && \
+size_tabcmd(cmd->cmd) == i + 1)
 	{
+		ft_putstr_fd("exit\n", fd);
 		free_env(env);
 		exit_with_arg(cmd, i);
 	}
-	else
+	else if(size_tabstr(cmd->cmd[i]->cmd) > 2)
 		ft_putstr_fd("BISCUIT: exit: ERROR ARGUMENT\n", 2);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: itaouil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 15:01:11 by itaouil           #+#    #+#             */
-/*   Updated: 2022/03/07 15:01:14 by itaouil          ###   ########.fr       */
+/*   Updated: 2022/03/15 17:00:06 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "utils.h"
@@ -30,5 +30,16 @@ int	blank_cmd(char *cmd)
 			return (0);
 		i++;
 	}
+	return (1);
+}
+
+int	blanck_tabcmd(char **cmd)
+{
+	int	i;
+
+	i = -1;
+	while(cmd[++i])
+		if (!blank_cmd(cmd[i]))
+				return (0);
 	return (1);
 }

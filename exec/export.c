@@ -6,12 +6,13 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:21:21 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/14 18:32:29 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 17:10:27 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
 #include "libft.h"
 #include "build_in.h"
+#include "utils.h"
 #include "exec_cmd.h"
 
 void	print_error(char **cmd)
@@ -56,7 +57,7 @@ int	add_var(char **cmd, int *i, int j, t_list *env)
 	if (!ft_isalpha(name[0]))
 		return (print_error(cmd), free(name), free(data), 1);
 	else
-		add_val(env, name, data);
+		add_val(env, name, data, 1);
 	free(name);
 	if (data)
 		free(data);
@@ -70,7 +71,9 @@ int	export_bi(char **cmd, t_list *env, int fd)
 
 	i = 0;
 	(void)fd;
-	while (cmd[++i])
+	if (blanck_tabcmd(cmd + 1))
+		env_export(env, fd);
+	else while (cmd[++i])
 	{
 		j = -1;
 		while (cmd[i][++j])

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 21:34:04 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 17:33:44 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -30,6 +30,7 @@ t_list	*get_fst_env(char **envp, char *lunch)
 		inter = malloc(sizeof(t_env_var));
 		inter->name = ft_strdup(line_splt[0]);
 		inter->value = ft_tabstrjoin(line_splt + 1);
+		inter->is_export = 0;
 		if (res)
 			ft_lstadd_back(&res, ft_lstnew((void *)inter));
 		else
@@ -60,7 +61,7 @@ char	*get_val_var(t_list *lst, char *name)
 	return (res_null);
 }
 
-void	add_val(t_list *lst, char *name, char *val)
+void	add_val(t_list *lst, char *name, char *val, int is_export)
 {
 	char	*res;
 	t_list	*inter;
@@ -68,7 +69,7 @@ void	add_val(t_list *lst, char *name, char *val)
 	inter = lst;
 	res = get_val_var(lst, name);
 	if (!res[0])
-		add_val_not_exist(lst, name, val, res);
+		(free(res), add_val_not_exist(lst, name, val, is_export));
 	else
 	{
 		while (inter->next)
@@ -128,10 +129,13 @@ char	**get_env_in_char(t_list *env)
 	inter_l = env;
 	while (inter_l->next)
 	{
-		res[++i] = ft_strjoin (((t_env_var *)inter_l->content)->name, "=");
-		inter = res[i];
-		res[i] = ft_strjoin (res[i], ((t_env_var *)inter_l->content)->value);
-		free(inter);
+		if(!(((t_env_var *)inter_l->content)->is_export))
+		{
+			res[++i] = ft_strjoin (((t_env_var *)inter_l->content)->name, "=");
+			inter = res[i];
+			res[i] = ft_strjoin (res[i], ((t_env_var *)inter_l->content)->value);
+			free(inter);
+		}
 		inter_l = (t_list *)inter_l->next;
 	}
 	res[++i] = ft_strjoin(((t_env_var *)inter_l->content)->name, "=");

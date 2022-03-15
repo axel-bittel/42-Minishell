@@ -11,6 +11,16 @@ Find how to fork build_in : remake cd and export
 Make unset build in
 Manage signals
 
+--------------------------------------
+FIX :
+
+export = env private et env public
+echo = -nnnnnnnnnn
+signaux =	exit signals
+			affichage des Ctrl+
+			finish cat | cat | ls
+-------------------------------------
+
 
 echo -n "$test"oui < ft_tree.h < tesa << biscuitt | cat ft_tree.h | /bin/grep # > test > test3 >> test2
 Last login: Mon Mar 14 16:02:02 on ttys000

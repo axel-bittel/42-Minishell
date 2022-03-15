@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/05 13:24:19 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 21:32:40 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 17:56:54 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "exec_cmd.h"
@@ -23,7 +23,7 @@ char	*get_pwd(t_list *env)
 		free(res);
 		res = malloc (sizeof(char) * 250);
 		getcwd(res, 250);
-		add_val(env, "PWD", res);
+		add_val(env, "PWD", res, 0);
 		free(res);
 	}
 	return (ft_strdup(get_val_var(env, "PWD")));

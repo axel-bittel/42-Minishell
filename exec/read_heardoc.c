@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:41:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/08 18:09:56 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 13:26:30 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -46,10 +46,12 @@ char	*read_heardoc(char *end)
 	{
 		rl_on_new_line();
 		line = readline(">");
-		if (!ft_strcmp(line, end))
+		if (!line || !ft_strcmp(line, end))
 			find_end = 1;
 		else
 			read_heardoc_addline(line, &res, &inter);
+		if (!line)
+				ft_putstr_fd("minishell: FIN DU FICHIER\n", 1);
 	}
 	return (res);
 }

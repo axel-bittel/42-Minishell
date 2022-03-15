@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 20:16:47 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 21:34:52 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 16:51:55 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ typedef struct s_env_var
 {
 	char	*name;
 	char	*value;
+	char	is_export;
 }		t_env_var;
 int		is_build_in(char *str);
 int		exec_tree_cmd(t_tree *cmd, t_list *env);
@@ -30,13 +31,13 @@ int		echo_bi(char **cmd, int fd);
 int		env_bi(char **env, int fd);
 t_list	*get_fst_env(char **envp, char *lunch);
 char	*get_val_var(t_list *lst, char *name);
-void	add_val(t_list *lst, char *name, char *val);
+void	add_val(t_list *lst, char *name, char *val, int is_export);
 int		delete_val(t_list **lst, char *name);
 char	**get_env_in_char(t_list *env);
 void	free_env_var(t_env_var *var);
-void	ft_lst_add_back_var(t_list *lst, char *name, char *val);
+void	ft_lst_add_back_var(t_list *lst, char *name, char *val, int is_export);
 void	delete_elem(t_list **lst, t_list *inter, t_list *prec);
-void	add_val_not_exist(t_list *lst, char *name, char *val, char *res);
+void	add_val_not_exist(t_list *lst, char *name, char *val, int is_export);
 void	free_env(t_list *env);
 int		exec_sys_cmd(char **args, t_list *envp);
 int		exec_sub_cmd(t_cmd *cmd, int *i, t_list *env);

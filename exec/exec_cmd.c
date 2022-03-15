@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/08 18:11:28 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 16:52:39 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_tree.h"
@@ -82,7 +82,7 @@ int	exec_sub_cmd(t_cmd *cmd, int *i, t_list *env)
 			i_bis = exec_sub_cmd(cmd, ((++i_bis), &i_bis), env);
 		dup_manager(cmd, *i, 1);
 		res = ft_itoa(exec_build_in(cmd, env, *i, g_sig.new_stdout));
-		add_val(env, "?", res);
+		add_val(env, "?", res, 0);
 		free(res);
 		close_pipes(cmd, *i);
 		re_dup(cmd, *i);
@@ -116,7 +116,7 @@ check_file(cmd->cmd[i]->out_replace, &(cmd->cmd[i]->fd_out_replace), \
 O_WRONLY | O_TRUNC | O_CREAT) || check_file(cmd->cmd[i]->out_add, \
 &(cmd->cmd[i]->fd_out_add), O_WRONLY | O_APPEND | O_CREAT) || \
 read_heardocs(cmd->cmd[i], env))
-			return (add_val(env, "?", "1"), 1);
+			return (add_val(env, "?", "1", 0), 1);
 		i = exec_sub_cmd(cmd, &i, env);
 	}
 	close_pipes(cmd, size_tabcmd(cmd->cmd));

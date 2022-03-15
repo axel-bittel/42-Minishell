@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 20:47:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 18:49:51 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 17:57:14 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "build_in.h"
@@ -67,8 +67,8 @@ int	cd_bi(t_list *env, char **cmd)
 	if (folder)
 	{
 		chdir(path);
-		add_val(env, "OLDPWD", get_val_var(env, "PWD"));
-		add_val(env, "PWD", path);
+		add_val(env, "OLDPWD", get_val_var(env, "PWD"), 0);
+		add_val(env, "PWD", path, 0);
 		res = 0;
 	}
 	else

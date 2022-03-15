@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/03/14 19:03:12 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/15 18:24:04 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -39,7 +39,7 @@ t_cmd	*parse_cmd(char *cmd, t_list *env)
 		free_tree(final);
 	}
 	else
-		add_val(env, "?", "2");
+		add_val(env, "?", "2", 0);
 	free_cmd_token(res);
 	return (0);
 }
@@ -96,7 +96,7 @@ int	main(int argc, char **argv, char **envp)
 	while (g_sig.run)
 	{
 		rl_on_new_line ();
-		cmd = readline("BISCUIT > ");
+		cmd = readline("minishell > ");
 		if (!cmd)
 			exit_sig(1, env);
 		if (!blank_cmd(cmd))
