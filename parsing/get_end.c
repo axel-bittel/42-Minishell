@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:48:23 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 17:48:55 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 17:53:36 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -47,8 +47,7 @@ int	get_idx_until_new_tok(char *cmd, int start)
 	while (cmd[++i])
 	{
 		if ((is_token(cmd[i]) != TOKEN_REST && is_token(cmd[i]) != TOKEN_SPACE \
-	&& is_token(cmd[i]) != TOKEN_ARG) || (old_tok == TOKEN_SPACE \
-	&& is_token(cmd[i]) == TOKEN_REST))
+		&& is_token(cmd[i]) != TOKEN_ARG) || ((old_tok == TOKEN_SPACE) && (is_token(cmd[i]) == TOKEN_ARG || is_token(cmd[i]) == TOKEN_REST)))
 			return (i - 1);
 		old_tok = is_token(cmd[i]);
 	}
@@ -75,8 +74,8 @@ int	get_end_tok(char *cmd, int i)
 	(get_idx_until_c_and_space(cmd, i, cmd[i]) != -1))
 		return (get_idx_until_c_and_space(cmd, i, cmd[i]));
 	else if ((tok == TOKEN_ARG) && \
-	(get_idx_until_diff_tok(cmd, i, TOKEN_REST) != -1))
-		return (get_idx_until_diff_tok(cmd, i, TOKEN_REST));
+	(get_idx_until_c(cmd, i, ' ') != -1))
+		return (get_idx_until_c(cmd, i, ' '));
 	else if ((tok == TOKEN_REDIR || tok == TOKEN_INDIR || \
 tok == TOKEN_AND || tok == TOKEN_OR) && \
 	(get_idx_until_diff_tok(cmd, i, is_token(cmd[i])) != -1))

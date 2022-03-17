@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/03/15 22:11:24 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 17:01:48 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -73,7 +73,7 @@ void	signal_catching(void)
 	g_sig.run = 1;
 	signal (SIGINT, &sig_sigint);
 	signal (SIGQUIT, &sig_sigkill);
-	//signal (SIGPIPE, &sig_sigpipe);
+	signal (SIGPIPE, &sig_sigpipe);
 }
 /*
 void	print_header(void)
@@ -103,9 +103,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
     tcgetattr(STDIN_FILENO, &attributes);
-	attributes.c_cc[VQUIT] = 0;
-	attributes.c_cc[VINTR] = 0;
-    tcsetattr(STDIN_FILENO, TCSAFLUSH, &attributes);
+	attributes.c_iflag &= ~(ECHOCTL);
+    tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
 	signal_catching();
 	env = get_fst_env(envp, argv[0]);
 	while (g_sig.run)

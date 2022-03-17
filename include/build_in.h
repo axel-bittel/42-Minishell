@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 21:19:32 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 19:03:44 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 17:58:46 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int		cd_bi(t_list *env, char **cmd);
 int		echo_bi(char **cmd, int fd);
 int		pwd_bi(t_list *env, int fd);
-int		env_bi(char **env, int fd);
+int		env_bi(t_list *env, int fd);
 int		export_bi(char **cmd, t_list *env, int fd);
 int		unset_bi(char **cmd, t_list *env);
 int		is_absolute_path(char *cmd);

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 20:16:47 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/15 16:51:55 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 17:59:38 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int		is_error(char **cmd);
 void	get_path(t_list *env, char **cmd, char **path);
 int		cd_bi(t_list *env, char **cmd);
 int		echo_bi(char **cmd, int fd);
-int		env_bi(char **env, int fd);
+int		env_bi(t_list *lst, int fd);
 t_list	*get_fst_env(char **envp, char *lunch);
 char	*get_val_var(t_list *lst, char *name);
 void	add_val(t_list *lst, char *name, char *val, int is_export);
