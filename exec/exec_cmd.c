@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/15 16:52:39 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 20:07:02 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "ft_tree.h"
@@ -30,10 +30,10 @@ void	exec_sys_error(char *inter_path, char **args)
 	free(inter_path);
 	if (!is_path(args[0]))
 	{
-		ft_putstr_fd("BISCUIT: COMMAND NOT FOUND\n", 2);
+		ft_putstr_fd("minishell: COMMAND NOT FOUND\n", 2);
 		exit (127);
 	}
-	f_cmd = ft_strjoin("BISCUIT:", args[0]);
+	f_cmd = ft_strjoin("minishell:", args[0]);
 	if (is_path(args[0]))
 		perror(f_cmd);
 	free(f_cmd);
@@ -59,7 +59,7 @@ int	exec_sys_cmd(char **args, t_list *envp)
 	}
 	inter_path = get_absolute_path(envp, args[0]);
 	if (!is_absolute_path(args[0]))
-		execve(inter_path, args, 0);
+		execve(inter_path, args, get_env_in_char(envp));
 	else
 		execve(args[0], args, get_env_in_char(envp));
 	exec_sys_error(inter_path, args);

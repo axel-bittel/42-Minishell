@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:44:43 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/15 22:15:44 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 19:56:42 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -48,7 +48,7 @@ void	wait_end_child(t_cmd *cmd, t_list *env, int *status)
 		if (cmd->cmd[i]->cmd && !is_build_in(cmd->cmd[i]->cmd[0]))
 		{
 			if (WIFSIGNALED(*status))
-				inter_free = ft_itoa(128 +  WTERMSIG(*status));
+				inter_free = ft_itoa(128 + WTERMSIG(*status));
 			else
 				inter_free = ft_itoa(WEXITSTATUS(*status));
 			add_val(env, "?", inter_free, 0);
@@ -64,9 +64,11 @@ void	close_pipes(t_cmd *cmd, int idx)
 	i = -1;
 	if (!cmd->pipes)
 		return ;
-	while (cmd->pipes[++i] && i < idx)
+	while (cmd->pipes[++i])
 	{
-		close(cmd->pipes[i][0]);
-		close(cmd->pipes[i][1]);
+		if (i != idx - 1)
+			close(cmd->pipes[i][0]);
+		if (i != idx)
+			close(cmd->pipes[i][1]);
 	}
 }

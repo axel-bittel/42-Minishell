@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/10 14:32:19 by root              #+#    #+#             */
-/*   Updated: 2022/03/17 17:01:48 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 19:53:12 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -55,14 +55,6 @@ void	sig_sigint(int sig)
 	rl_redisplay();
 }
 
-void	sig_sigpipe(int sig)
-{
-	(void)sig;
-	int fd = open("res.txt", O_WRONLY | O_CREAT);
-	ft_putstr_fd("ERROR\n", fd);
-	exit(1);
-}
-
 void	sig_sigkill(int sig)
 {
 	(void)sig;
@@ -73,26 +65,7 @@ void	signal_catching(void)
 	g_sig.run = 1;
 	signal (SIGINT, &sig_sigint);
 	signal (SIGQUIT, &sig_sigkill);
-	signal (SIGPIPE, &sig_sigpipe);
 }
-/*
-void	print_header(void)
-{
-	ft_putstr_fd("\n██████╗░██╗░██████╗░█████╗░██╗░░░██╗██╗████████╗ \
- ░██████╗██╗░░██╗███████╗██╗░░░░░██╗░░░░░\n", 1);
-	ft_putstr_fd("██╔══██╗██║██╔════╝██╔══██╗██║░░░██║██║╚══██╔══╝  ██\
-╔════╝██║░░██║██╔════╝██║░░░░░██║░░░░░\n", 1);
-	ft_putstr_fd("██████╦╝██║╚█████╗░██║░░╚═╝██║░░░██║██║░░░██║░░░  ╚█\
-████╗░███████║█████╗░░██║░░░░░██║░░░░░\n", 1);
-	ft_putstr_fd("██╔══██╗██║░╚═══██╗██║░░██╗██║░░░██║██║░░░██║░░░  ░╚\
-═══██╗██╔══██║██╔══╝░░██║░░░░░██║░░░░░\n", 1);
-	ft_putstr_fd("██████╦╝██║██████╔╝╚█████╔╝╚██████╔╝██║░░░██║░░░  ██\
-████╔╝██║░░██║███████╗███████╗███████╗\n", 1);
-	ft_putstr_fd("╚═════╝░╚═╝╚═════╝░░╚════╝░░╚═════╝░╚═╝░░░╚═╝░░░  ╚═\
-════╝░╚═╝░░╚═╝╚══════╝╚══════╝╚══════╝\n", 1);
-	ft_putstr_fd("-----------------------------------------------------\
-------------------------------------\n\n\n\n", 1);
-}*/
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -102,9 +75,9 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-    tcgetattr(STDIN_FILENO, &attributes);
-	attributes.c_iflag &= ~(ECHOCTL);
-    tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
+	tcgetattr(STDIN_FILENO, &attributes);
+	attributes.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &attributes);
 	signal_catching();
 	env = get_fst_env(envp, argv[0]);
 	while (g_sig.run)

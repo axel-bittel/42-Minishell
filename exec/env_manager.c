@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/15 17:33:44 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 19:58:58 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -113,35 +113,4 @@ int	delete_val(t_list **lst, char *name)
 		free(inter);
 	}
 	return (1);
-}
-
-char	**get_env_in_char(t_list *env)
-{
-	int		i;
-	t_list	*inter_l;
-	char	**res;
-	char	*inter;
-
-	i = -1;
-	if (!env)
-		return (0);
-	res = malloc(sizeof(char *) * (ft_lstsize(env) + 1));
-	inter_l = env;
-	while (inter_l->next)
-	{
-		if(!(((t_env_var *)inter_l->content)->is_export))
-		{
-			res[++i] = ft_strjoin (((t_env_var *)inter_l->content)->name, "=");
-			inter = res[i];
-			res[i] = ft_strjoin (res[i], ((t_env_var *)inter_l->content)->value);
-			free(inter);
-		}
-		inter_l = (t_list *)inter_l->next;
-	}
-	res[++i] = ft_strjoin(((t_env_var *)inter_l->content)->name, "=");
-	inter = res[i];
-	res[i] = ft_strjoin(res[i], ((t_env_var *)inter_l->content)->value);
-	free(inter);
-	res[++i] = NULL;
-	return (res);
 }

@@ -6,7 +6,7 @@
 /*   By: itaouil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 15:01:11 by itaouil           #+#    #+#             */
-/*   Updated: 2022/03/15 17:00:06 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 19:52:06 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "utils.h"
@@ -38,8 +38,8 @@ int	blanck_tabcmd(char **cmd)
 	int	i;
 
 	i = -1;
-	while(cmd[++i])
+	while (cmd[++i])
 		if (!blank_cmd(cmd[i]))
-				return (0);
+			return (0);
 	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/15 13:46:46 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/17 19:53:33 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "exec_cmd.h"
@@ -90,7 +90,7 @@ size_tabcmd(cmd->cmd) == i + 1)
 		free_env(env);
 		exit_with_arg(cmd, i);
 	}
-	else if(size_tabstr(cmd->cmd[i]->cmd) > 2)
+	else if (size_tabstr(cmd->cmd[i]->cmd) > 2)
 		ft_putstr_fd("BISCUIT: exit: ERROR ARGUMENT\n", 2);
 	return (1);
 }
