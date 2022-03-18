@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:21:21 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/17 19:55:21 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/18 11:24:56 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -64,13 +64,37 @@ int	add_var(char **cmd, int *i, int j, t_list *env)
 	return (0);
 }
 
-int	export_bi(char **cmd, t_list *env, int fd)
+int	export_bi_old(char **cmd, t_list *env, int fd)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	(void)fd;
+	if (blanck_tabcmd(cmd + 1))
+		env_export(env, fd);
+	else
+	{
+		while (cmd[++i])
+		{
+			j = -1;
+			while (cmd[i][++j])
+			{
+				if (cmd[i][j] == '=')
+					if (add_var(cmd, &i, j, env))
+						return (1);
+			}
+		}
+	}
+	return (0);
+}
+
+int	export_bi(char **cmd, t_list *env, int fd)
+{
+	int	i;
+	int	j;
+
+	i = 0;
 	if (blanck_tabcmd(cmd + 1))
 		env_export(env, fd);
 	else

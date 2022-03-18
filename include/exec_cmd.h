@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 20:16:47 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/17 17:59:38 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/18 11:35:17 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ typedef struct s_env_var
 int		is_build_in(char *str);
 int		exec_tree_cmd(t_tree *cmd, t_list *env);
 int		exec_build_in(t_cmd *cmd, t_list *env, int i, int fd);
-int		is_error(char **cmd);
 void	get_path(t_list *env, char **cmd, char **path);
 int		cd_bi(t_list *env, char **cmd);
 int		echo_bi(char **cmd, int fd);

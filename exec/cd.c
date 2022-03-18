@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 20:47:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/15 17:57:14 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/18 11:41:03 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "build_in.h"
@@ -17,21 +17,36 @@
 #include <stdio.h>
 #include <unistd.h>
 
+int	go_home(t_list *env)
+{
+	char	*home;
+
+	home = get_val_var(env, "HOME");
+	if (!home[0])
+	{
+		free (home);
+		ft_putstr_fd("minishell:cd: HOME not declared\n", 2);
+		return (1);
+	}
+	chdir(home);
+	add_val(env, "OLDPWD", get_val_var(env, "PWD"), 0);
+	add_val(env, "PWD", home, 0);
+	return (0);
+}
+
 int	is_error(char **cmd)
 {
-	int		size;
 	char	**inter;
 	char	*inter_free;
 
-	size = size_tabstr(cmd);
-	if (size < 2)
-		return (1);
+	if (size_tabstr(cmd) == 1)
+		return (0);
 	inter_free = ft_tabstrjoin(cmd + 1);
 	inter = ft_split(inter_free, ' ');
 	free(inter_free);
 	if (size_tabstr(inter) > 1)
 	{
-		ft_putstr_fd("cd: Too mutch argument", 2);
+		ft_putstr_fd("minishell:cd: Too mutch argument\n", 2);
 		free_tabstr(inter);
 		return (1);
 	}
@@ -61,6 +76,8 @@ int	cd_bi(t_list *env, char **cmd)
 
 	if (is_error(cmd))
 		return (1);
+	if (size_tabstr(cmd) == 1)
+		return (go_home(env));
 	get_path(env, cmd, &path);
 	folder = opendir(path);
 	res = 1;
