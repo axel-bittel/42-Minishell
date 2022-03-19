@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 20:47:28 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/18 11:41:03 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 16:52:46 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "build_in.h"
@@ -86,11 +86,11 @@ int	cd_bi(t_list *env, char **cmd)
 		chdir(path);
 		add_val(env, "OLDPWD", get_val_var(env, "PWD"), 0);
 		add_val(env, "PWD", path, 0);
+		closedir(folder);
 		res = 0;
 	}
 	else
 		perror("BISCUIT:cd");
-	closedir(folder);
 	free (path);
 	return (res);
 }

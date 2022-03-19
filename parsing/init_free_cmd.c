@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:56:15 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/04 21:18:18 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 23:16:34 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -40,6 +40,7 @@ t_sub_cmd	*init_sub_cmd(void)
 	res->fd_out_add = 0;
 	res->out_replace = 0;
 	res->fd_out_replace = 0;
+	res->token = 0;
 	return (res);
 }
 

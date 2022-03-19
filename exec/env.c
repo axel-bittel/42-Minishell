@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/15 10:09:32 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/17 18:03:28 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 15:32:22 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -25,9 +25,9 @@ int	env_bi(t_list *lst, int fd)
 !((t_env_var *)inter->content)->is_export)
 		{
 			ft_putstr_fd(((t_env_var *)inter->content)->name, fd);
-			ft_putstr_fd("=\"", fd);
+			ft_putstr_fd("=", fd);
 			ft_putstr_fd(((t_env_var *)inter->content)->value, fd);
-			ft_putstr_fd("\"\n", fd);
+			ft_putstr_fd("\n", fd);
 		}
 		inter = inter->next;
 	}

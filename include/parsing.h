@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/27 16:37:22 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/17 19:51:35 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 23:05:45 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_sub_cmd
 	int		**fd_out_replace;
 	int		last_is_add;
 	int		last_is_in;
+	int		**token;
 }			t_sub_cmd;
 
 typedef struct s_cmd

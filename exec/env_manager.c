@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 15:38:38 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/17 19:58:58 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 22:05:07 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -70,7 +70,7 @@ void	add_val(t_list *lst, char *name, char *val, int is_export)
 	res = get_val_var(lst, name);
 	if (!res[0])
 		(free(res), add_val_not_exist(lst, name, val, is_export));
-	else
+	else if (!is_export)
 	{
 		while (inter->next)
 		{
@@ -78,6 +78,7 @@ void	add_val(t_list *lst, char *name, char *val, int is_export)
 			{
 				free(((t_env_var *)inter->content)->value);
 				((t_env_var *)inter->content)->value = ft_strdup(val);
+				((t_env_var *)inter->content)->is_export = is_export;
 			}
 			inter = inter->next;
 		}
@@ -85,6 +86,7 @@ void	add_val(t_list *lst, char *name, char *val, int is_export)
 		{
 			free(((t_env_var *)inter->content)->value);
 			((t_env_var *)inter->content)->value = ft_strdup(val);
+			((t_env_var *)inter->content)->is_export = is_export;
 		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/14 20:16:47 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/18 11:35:17 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 23:23:32 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		exec_tree_cmd(t_tree *cmd, t_list *env);
 void	free_cmd(t_cmd *cmd);
 int		exit_bi(t_cmd *cmd, int i, int fd, t_list *env);
 int		exit_sig(int exit_nb, t_list *env);
-int		export_bi(char **cmd, t_list *env, int fd);
+int		export_bi(char **cmd, t_list *env, int fd, int **tok);
 int		is_absolute_path(char *cmd);
 int		idx_end_word(char *str, int i);
 void	add_file_in_path(char **str, char *add);
@@ -71,4 +71,7 @@ char	get_deb_word(char *str, int i);
 char	get_end_word(char *str, int i);
 void	create_base_env(t_list **res, char *lunch);
 char	*get_pwd(t_list *env);
+int		get_end(char *cmd, int idx);
+char	*get_name(char **cmd, int *i, int *j);
+char	*get_val(char **cmd, int *i, int *j);
 #endif

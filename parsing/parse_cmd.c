@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 18:00:51 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/08 18:07:52 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 23:20:51 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "parsing.h"
@@ -49,6 +49,11 @@ ft_strdup(cmd->cmd[(*idx)++ + 1]));
 ft_strdup(cmd->cmd[(*idx)++ + 1]));
 		(*inter)->last_is_in = 0;
 	}
+	else if (((*cmd->token[*idx] & TOKEN_DQUOTE) || (*cmd->token[*idx] & \
+TOKEN_QUOTE)) && *idx && ((*cmd->token[*idx - 1] & TOKEN_DQUOTE) || \
+	(*cmd->token[*idx - 1] & TOKEN_QUOTE)))
+		(*inter)->cmd[size_tabstr((*inter)->cmd) - 1] = ft_strjoin2((*inter)->\
+cmd[size_tabstr((*inter)->cmd) - 1], cmd->cmd[*idx]);
 	else if (get_cond_elem_redir_token(cmd, idx, inter))
 		return (1);
 	else
@@ -63,6 +68,8 @@ int	get_cmd_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, t_sub_cmd **inter)
 		if (!(*inter)->cmd)
 			*cmd->token[idx] = TOKEN_CMD;
 		(*inter)->cmd = ft_tabjoin((*inter)->cmd, ft_strdup(cmd->cmd[idx]));
+		(*inter)->token = ft_tabintjoin((*inter)->token, \
+		ft_intdup(cmd->token[idx]));
 	}
 	else if (*cmd->token[idx] == TOKEN_PIPE && (next_is_input(cmd, idx) \
 	|| next_is_token(cmd, idx, TOKEN_BRACK_OP)))
@@ -74,8 +81,7 @@ int	get_cmd_add_rest(t_cmd_token *cmd, int idx, t_cmd *res, t_sub_cmd **inter)
 	&& (next_is_input(cmd, idx) || next_is_token(cmd, idx, TOKEN_BRACK_OP)))
 	{
 		res->cmd = ft_cmdjoin(res->cmd, *inter);
-		*inter = init_sub_cmd();
-		return (2);
+		return (*inter = init_sub_cmd(), 2);
 	}
 	else if (*cmd->token[idx] == TOKEN_BRACK_CL)
 		return (2);

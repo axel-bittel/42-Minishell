@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 19:38:46 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/17 19:53:33 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 23:06:50 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "exec_cmd.h"
@@ -34,6 +34,7 @@ void	free_cmd(t_cmd *cmd)
 		free_tabint(cmd->cmd[i]->fd_hear_doc);
 		free_tabint(cmd->cmd[i]->fd_out_add);
 		free_tabint(cmd->cmd[i]->fd_out_replace);
+		free_tabint(cmd->cmd[i]->token);
 		free(cmd->cmd[i]);
 	}
 	if (cmd->cmd)

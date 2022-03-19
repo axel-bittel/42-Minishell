@@ -6,7 +6,7 @@
 /*   By: itaouil <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 15:01:11 by itaouil           #+#    #+#             */
-/*   Updated: 2022/03/17 19:52:06 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 23:19:03 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "utils.h"
@@ -42,4 +42,13 @@ int	blanck_tabcmd(char **cmd)
 		if (!blank_cmd(cmd[i]))
 			return (0);
 	return (1);
+}
+
+int	*ft_intdup(int *val)
+{
+	int	*res;
+
+	res = malloc (sizeof(int));
+	*res = *val;
+	return (res);
 }

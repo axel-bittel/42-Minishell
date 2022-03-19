@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/19 15:25:59 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 22:35:06 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 15:25:42 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ char			*ft_substr(char const *s, unsigned int start, size_t len);
 int				ft_tolower(int c);
 int				ft_toupper(int c);
 int				ft_strcmp(char *str1, char *str2);
+char			*ft_strjoin2(char *s1, char *s2);
 typedef struct s_args_idx
 {
 	int	i;
