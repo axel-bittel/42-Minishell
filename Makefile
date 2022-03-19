@@ -6,10 +6,10 @@
 #    By: abittel <abittel@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/18 10:24:03 by abittel           #+#    #+#              #
-#    Updated: 2022/03/19 22:43:11 by abittel          ###   ########.fr        #
+#    Updated: 2022/03/20 00:42:44 by abittel          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-SRCS = main.c exec/export_utils.c exec/get_pwd.c exec/env_to_char.c exec/build_in.c exec/cd.c exec/echo.c exec/env.c exec/env_manager.c exec/env_utils.c exec/exec_cmd.c exec/exit.c exec/export.c exec/path_manager.c exec/pipes.c exec/pwd.c exec/read_heardoc.c exec/redir.c exec/unset.c parsing/expander.c parsing/expander_algo.c parsing/get_end.c parsing/init_free_cmd.c parsing/is_token.c parsing/lexer.c parsing/parse_cmd.c parsing/parser.c utils/blank_cmd.c utils/ft_treeadd_f.c utils/ft_treenew.c utils/ft_treeprof.c utils/str_utils.c utils/tab_free.c utils/tab_manip.c utils/tab_manip_str.c
+SRCS = main.c exec/add_val.c exec/export_utils.c exec/get_pwd.c exec/env_to_char.c exec/build_in.c exec/cd.c exec/echo.c exec/env.c exec/env_manager.c exec/env_utils.c exec/exec_cmd.c exec/exit.c exec/export.c exec/path_manager.c exec/pipes.c exec/pwd.c exec/read_heardoc.c exec/redir.c exec/unset.c parsing/expander.c parsing/expander_algo.c parsing/get_end.c parsing/init_free_cmd.c parsing/is_token.c parsing/lexer.c parsing/parse_cmd.c parsing/parser.c utils/blank_cmd.c utils/ft_treeadd_f.c utils/ft_treenew.c utils/ft_treeprof.c utils/str_utils.c utils/tab_free.c utils/tab_manip.c utils/tab_manip_str.c
 OSRCS	=	${SRCS:.c=.o}
 NAME_S	= minishell
 

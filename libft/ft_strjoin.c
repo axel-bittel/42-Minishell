@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/07/01 10:17:18 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/19 15:25:21 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/20 00:33:53 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stddef.h>
@@ -75,6 +75,33 @@ char	*ft_strjoin2(char *s1, char *s2)
 		j++;
 	}
 	res[i + j] = 0;
-	free(s1);
+	if (s1)
+		free(s1);
+	return (res);
+}
+
+char	*ft_strjoin3(char *s1, char *s2)
+{
+	int		i;
+	int		j;
+	char	*res;
+
+	i = -1;
+	res = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!res)
+		return (NULL);
+	while (s1[++i])
+		res[i] = s1[i];
+	j = 0;
+	while (s2[j])
+	{
+		res[i + j] = s2[j];
+		j++;
+	}
+	res[i + j] = 0;
+	if (s1)
+		free(s1);
+	if (s2)
+		free(s2);
 	return (res);
 }

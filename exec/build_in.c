@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 17:46:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/17 17:58:15 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/19 23:47:28 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
@@ -45,7 +45,7 @@ int	exec_build_in(t_cmd *cmd, t_list *env, int i, int fd)
 	if (!ft_strcmp("env", cmd_trim))
 		res = env_bi(env, fd);
 	if (!ft_strcmp("export", cmd_trim))
-		res = export_bi(cmd->cmd[i]->cmd, env, fd);
+		res = export_bi(cmd->cmd[i], env, fd);
 	if (!ft_strcmp("unset", cmd_trim))
 		res = unset_bi(cmd->cmd[i]->cmd, env);
 	if (!ft_strcmp("exit", cmd_trim))
