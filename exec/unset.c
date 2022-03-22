@@ -6,10 +6,10 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/26 16:24:42 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/14 22:39:59 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/22 22:49:11 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include "parsing.h"
+
 #include "build_in.h"
 #include "exec_cmd.h"
 
@@ -20,7 +20,13 @@ int	unset_bi(char **cmd, t_list *env)
 	i = 0;
 	while (cmd[++i])
 	{
-		delete_val(&env, cmd[i]);
+		if (ft_isalpha(cmd[i][0]))
+			delete_val(&env, cmd[i]);
+		else
+		{
+			ft_putstr_fd("minishell:unset:ARG ERROR\n", 2);
+			return (1);
+		}
 	}
 	return (0);
 }
