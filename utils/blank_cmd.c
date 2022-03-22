@@ -3,12 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   blank_cmd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itaouil <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 15:01:11 by itaouil           #+#    #+#             */
-/*   Updated: 2022/03/19 23:19:03 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/22 23:02:47 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
+#include "exec_cmd.h"
+#include "parsing.h"
 #include "utils.h"
 
 int	ft_isspace(char c)
@@ -50,5 +54,24 @@ int	*ft_intdup(int *val)
 
 	res = malloc (sizeof(int));
 	*res = *val;
+	return (res);
+}
+
+char	**ft_tabsplit(char **tab, char chr)
+{
+	char	**res;
+	char	**inter;
+	int		i;
+	int		j;
+
+	i = -1;
+	while (tab[++i])
+	{
+		j = -1;
+		inter = ft_split(tab[i], chr);
+		while (inter[++j])
+			res = ft_tabjoin(res, inter[j]);
+		//free_tabstr(inter);
+	}
 	return (res);
 }
