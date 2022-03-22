@@ -6,10 +6,10 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/04 18:06:26 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/05 19:33:52 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/22 23:34:35 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdlib.h>
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -100,8 +100,10 @@ char	*get_corespond_words(t_list *env, char *corres)
 		if (is_correspond(f_read->d_name, corres))
 		{
 			inter = res;
-			res = ft_strjoin(res, " ");
-			free(inter);
+			if (res[0])
+				res = ft_strjoin(res, " ");
+			if (res[0])
+				free(inter);
 			inter = res;
 			res = ft_strjoin(res, f_read->d_name);
 			free(inter);

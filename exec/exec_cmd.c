@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 18:28:35 by abittel           #+#    #+#             */
-/*   Updated: 2022/03/22 23:01:44 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/22 23:55:15 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	exec_sys_cmd(char **args, t_list *envp)
 		inter_path = ft_strjoin(paths[i], "/");
 		f_cmd = ft_strjoin(inter_path, args[0]);
 		if (access(f_cmd, F_OK | X_OK) == 0)
-			execve(f_cmd, ft_tabsplit(args, ' '), get_env_in_char(envp));
+			execve(f_cmd, args, get_env_in_char(envp));
 		free(inter_path);
 		free(f_cmd);
 	}

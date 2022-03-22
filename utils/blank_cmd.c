@@ -6,7 +6,7 @@
 /*   By: abittel <abittel@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/07 15:01:11 by itaouil           #+#    #+#             */
-/*   Updated: 2022/03/22 23:02:47 by abittel          ###   ########.fr       */
+/*   Updated: 2022/03/22 23:24:06 by abittel          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,8 @@ char	**ft_tabsplit(char **tab, char chr)
 	{
 		j = -1;
 		inter = ft_split(tab[i], chr);
-		while (inter[++j])
+		while (inter[++j] && !blank_cmd(inter[j]))
 			res = ft_tabjoin(res, inter[j]);
-		//free_tabstr(inter);
 	}
 	return (res);
 }
